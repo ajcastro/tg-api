@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Queries\Client\ClientQuery;
 use App\Http\Requests\Api\Admin\ClientStoreRequest;
 use App\Http\Requests\Api\Admin\ClientUpdateRequest;
 use App\Http\Resources\Api\Admin\ClientCollection;
@@ -16,20 +17,7 @@ class ClientController extends Controller
 {
     public function index(Request $request)
     {
-        $collection = QueryBuilder::for(Client::class)
-            ->allowedFilters([
-                AllowedFilter::scope('search'),
-            ])
-            ->allowedFields([
-                ...Client::tableColumns(),
-                ...fields('created_by', ['id', 'name']),
-                ...fields('updated_by', ['id', 'name']),
-            ])
-            ->allowedIncludes([
-                'created_by', 'updated_by',
-            ])
-            ->defaultSort('id')
-            ->paginate();
+        $collection = (new ClientQuery)->withAllDeclarations()->paginate();
 
         return JsonResource::collection($collection);
     }

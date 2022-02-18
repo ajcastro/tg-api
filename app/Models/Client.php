@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Queries\Client\ClientQuery;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -47,5 +48,14 @@ class Client extends Model
     public function scopeSearch($query, $search)
     {
         $query->where('code', 'like', "%{$search}%");
+    }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return (new ClientQuery)
+            ->withFields()
+            ->withInclude()
+            ->withFilter()
+            ->findOrFail($value);
     }
 }

@@ -22,8 +22,8 @@ class ClientController extends Controller
             ])
             ->allowedFields([
                 ...Client::tableColumns(),
-                'created_by.id', 'created_by.name',
-                'updated_by.id', 'updated_by.name',
+                ...fields_for('created_by', ['id', 'name']),
+                ...fields_for('updated_by', ['id', 'name']),
             ])
             ->allowedIncludes([
                 'created_by', 'updated_by',

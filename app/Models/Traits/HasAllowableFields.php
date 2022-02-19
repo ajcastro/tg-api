@@ -5,7 +5,7 @@ namespace App\Models\Traits;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
 
-trait ReturnsTableColumns
+trait HasAllowableFields
 {
     public static function tableColumns()
     {

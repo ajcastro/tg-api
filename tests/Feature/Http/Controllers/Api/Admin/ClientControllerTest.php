@@ -23,23 +23,18 @@ class ClientControllerTest extends TestCase
     {
         Client::factory()->count(3)->create();
 
-        $response = $this->getJson(route('clients.index'));
+        $response = $this->getJson(route('clients.index', ['include' => 'created_by,updated_by']));
 
         $response->assertOk();
-        $response->assertJsonStructure([]);
-    }
-
-
-    /**
-     * @test
-     */
-    public function store_uses_form_request_validation()
-    {
-        $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\Api\Admin\ClientController::class,
-            'store',
-            \App\Http\Requests\Api\Admin\ClientStoreRequest::class
-        );
+        $response->assertJsonStructure([
+            'data' => [
+                [
+                    ...Client::allowableFields(),
+                    'created_by' => User::allowableFields(),
+                    'updated_by' => User::allowableFields(),
+                ]
+            ]
+        ]);
     }
 
     /**

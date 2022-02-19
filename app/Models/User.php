@@ -10,7 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, Traits\ReturnsTableColumns;
+    use HasApiTokens, HasFactory, Notifiable, Traits\HasAllowableFields;
 
     /**
      * The attributes that are mass assignable.

@@ -4,7 +4,7 @@ namespace App\Http\Queries;
 
 use Spatie\QueryBuilder\QueryBuilder;
 
-class BaseQuery extends QueryBuilder
+abstract class BaseQuery extends QueryBuilder
 {
     public function withAllDeclarations()
     {

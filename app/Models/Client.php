@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
 {
-    use HasFactory, Traits\ReturnsTableColumns;
+    use HasFactory, Traits\HasAllowableFields;
 
     /**
      * The attributes that are mass assignable.

@@ -3,11 +3,12 @@
 namespace App\Http\Queries\Client;
 
 use App\Http\Queries\BaseQuery;
+use App\Http\Queries\QueryContract;
 use App\Models\Client;
 use App\Models\User;
 use Spatie\QueryBuilder\AllowedFilter;
 
-class ClientQuery extends BaseQuery
+class ClientQuery extends BaseQuery implements QueryContract
 {
     public function __construct()
     {

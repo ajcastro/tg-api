@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Queries\Client\ClientQuery;
+use App\Observers\SetsCreatedByAndUpdatedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -34,6 +35,11 @@ class Client extends Model
         'created_by_id' => 'integer',
         'updated_by_id' => 'integer',
     ];
+
+    public static function booted()
+    {
+        static::observe(SetsCreatedByAndUpdatedBy::class);
+    }
 
     public function createdBy()
     {

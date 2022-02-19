@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PaginateOrListResource;
 use App\Http\Queries\Client\ClientQuery;
-use App\Http\Requests\Api\Admin\ClientStoreRequest;
-use App\Http\Requests\Api\Admin\ClientUpdateRequest;
+use App\Http\Requests\Api\Admin\ClientRequest;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -27,14 +26,14 @@ class ClientController extends Controller
         return new JsonResource($client);
     }
 
-    public function store(ClientStoreRequest $request)
+    public function store(ClientRequest $request)
     {
         $client = Client::create($request->validated());
 
         return new JsonResource($client);
     }
 
-    public function update(ClientUpdateRequest $request, Client $client)
+    public function update(ClientRequest $request, Client $client)
     {
         $client->update($request->validated());
 

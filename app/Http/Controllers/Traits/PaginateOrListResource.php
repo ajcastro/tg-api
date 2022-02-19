@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Traits;
 
 use App\Http\Queries\Contracts\QueryContract;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 trait PaginateOrListResource
 {
-    protected QueryContract $query;
+    protected QueryContract|Builder $query;
 
     public function index(Request $request)
     {

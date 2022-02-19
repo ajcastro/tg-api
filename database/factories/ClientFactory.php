@@ -26,7 +26,7 @@ class ClientFactory extends Factory
         return [
             'code' => $this->faker->word,
             'remarks' => $this->faker->word,
-            'percentage_share' => $this->faker->randomFloat(2, 0, 99999999.99),
+            'percentage_share' => $this->faker->randomFloat(2, 5, 80),
             'created_by_id' => User::factory(),
             'updated_by_id' => User::factory(),
         ];

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Http\Queries\Client\ClientQuery;
+use App\Http\Queries\ClientQuery;
 use App\Observers\SetsCreatedByAndUpdatedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -41,6 +41,15 @@ class Client extends Model
         static::observe(SetsCreatedByAndUpdatedBy::class);
     }
 
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return (new ClientQuery)
+            ->withFields()
+            ->withInclude()
+            ->withFilter()
+            ->findOrFail($value);
+    }
+
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by_id');
@@ -54,14 +63,5 @@ class Client extends Model
     public function scopeSearch($query, $search)
     {
         $query->where('code', 'like', "%{$search}%");
-    }
-
-    public function resolveRouteBinding($value, $field = null)
-    {
-        return (new ClientQuery)
-            ->withFields()
-            ->withInclude()
-            ->withFilter()
-            ->findOrFail($value);
     }
 }

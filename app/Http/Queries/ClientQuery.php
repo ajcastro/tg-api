@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Queries\Client;
+namespace App\Http\Queries;
 
 use App\Http\Queries\BaseQuery;
-use App\Http\Queries\QueryContract;
+use App\Http\Queries\Contracts\QueryContract;
 use App\Models\Client;
 use App\Models\User;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -47,9 +47,8 @@ class ClientQuery extends BaseQuery implements QueryContract
     public function withSort()
     {
         $this->allowedSorts([
-            'id', 'code', 'percentage_share',
-        ])
-        ->defaultSort('id');
+            ...Client::allowableFields(),
+        ]);
 
         return $this;
     }

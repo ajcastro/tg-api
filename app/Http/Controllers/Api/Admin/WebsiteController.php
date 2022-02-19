@@ -3,24 +3,24 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\ResourceController;
-use App\Http\Queries\ClientQuery;
-use App\Http\Requests\Api\Admin\ClientRequest;
-use App\Models\Client;
+use App\Http\Queries\WebsiteQuery;
+use App\Http\Requests\Api\Admin\WebsiteRequest;
+use App\Models\Website;
 
-class ClientController extends ResourceController
+class WebsiteController extends ResourceController
 {
     public function __construct()
     {
         $this->hook(function () {
-            $this->model = Client::class;
+            $this->model = Website::class;
         });
 
         $this->hook(function () {
-            $this->query = new ClientQuery;
+            $this->query = new WebsiteQuery;
         })->only(['index', 'show']);
 
         $this->hook(function () {
-            $this->request = ClientRequest::class;
+            $this->request = WebsiteRequest::class;
         })->only(['store', 'update']);
     }
 }

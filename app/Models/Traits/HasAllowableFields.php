@@ -8,9 +8,10 @@ trait HasAllowableFields
 {
     public static function tableColumns()
     {
-        return remember([__CLASS__, __METHOD__], now()->addMinute(15), function () {
-            return Schema::getColumnListing((new static)->getTable());
-        });
+        return Schema::getColumnListing((new static)->getTable());
+        // return memo([__CLASS__, __METHOD__], function () {
+        //     return Schema::getColumnListing((new static)->getTable());
+        // });
     }
 
     public static function allowableFields()

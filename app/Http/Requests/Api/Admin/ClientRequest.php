@@ -32,12 +32,12 @@ class ClientRequest extends FormRequest
                 'string',
                 Rule::unique('clients', 'code')->ignore($client),
             ],
-            'remarks' => [
-                'nullable',
-            ],
             'percentage_share' => [
                 'required',
                 'numeric',
+            ],
+            'remarks' => [
+                'nullable',
             ],
         ]);
     }

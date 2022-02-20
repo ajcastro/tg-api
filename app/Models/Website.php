@@ -61,4 +61,9 @@ class Website extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function scopeSearch($query, $search)
+    {
+        $query->where('code', 'like', "%{$search}%");
+    }
 }

@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 trait ResolvesModel
 {
+    /**
+     * The resource model
+     *
+     * @var string|\Illuminate\Database\Eloquent\Model
+     */
     protected $model;
 
     protected function model(): Model

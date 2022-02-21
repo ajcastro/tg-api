@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
 {
-    use HasFactory, Traits\HasAllowableFields;
+    use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus;
 
     /**
      * The attributes that are mass assignable.
@@ -34,6 +34,11 @@ class Client extends Model
         'percentage_share' => 'decimal:2',
         'created_by_id' => 'integer',
         'updated_by_id' => 'integer',
+        'is_active' => 'boolean',
+    ];
+
+    protected $attributes = [
+        'is_active' => 1,
     ];
 
     public static function booted()

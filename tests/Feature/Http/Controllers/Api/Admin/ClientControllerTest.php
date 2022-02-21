@@ -41,11 +41,7 @@ class ClientControllerTest extends TestCase
 
     public function test_store_should_create()
     {
-        $payload = [
-            'code' => $this->faker->word,
-            'percentage_share' => $this->faker->randomFloat(2),
-            'remarks' => $this->faker->words(3, true),
-        ];
+        $payload = Client::factory()->make()->only(['code', 'percentage_share', 'remarks']);
 
         $response = $this->postJson(route('clients.store'), $payload);
 
@@ -58,12 +54,9 @@ class ClientControllerTest extends TestCase
 
     public function test_update_should_update()
     {
-        $payload = [
-            'code' => $this->faker->word,
-            'percentage_share' => $this->faker->randomFloat(2),
-            'remarks' => $this->faker->words(3, true),
-        ];
+        $payload = Client::factory()->make()->only(['code', 'percentage_share', 'remarks']);
         $client = tap(Client::factory()->make())->saveQuietly();
+
         $response = $this->putJson(route('clients.update', $client), $payload);
 
         $this->assertDatabaseHas('clients', $payload);
@@ -81,5 +74,25 @@ class ClientControllerTest extends TestCase
         $response->assertNoContent();
 
         $this->assertDeleted($client);
+    }
+
+    public function test_set_active_should_set_active_true()
+    {
+        $client = Client::factory()->create(['is_active' => false]);
+
+        $response = $this->postJson(route('clients.set_active', $client));
+        $response->assertSuccessful();
+
+        $this->assertTrue($client->refresh()->is_active);
+    }
+
+    public function test_set_active_should_set_active_false()
+    {
+        $client = Client::factory()->create(['is_active' => true]);
+
+        $response = $this->postJson(route('clients.set_active', $client), ['is_active' => false]);
+        $response->assertSuccessful();
+
+        $this->assertFalse($client->refresh()->is_active);
     }
 }

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Website extends Model
 {
-    use HasFactory, Traits\HasAllowableFields;
+    use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus;
 
     /**
      * The attributes that are mass assignable.
@@ -36,6 +36,10 @@ class Website extends Model
         'is_active' => 'boolean',
         'created_by_id' => 'integer',
         'updated_by_id' => 'integer',
+    ];
+
+    protected $attributes = [
+        'is_active' => 1,
     ];
 
     public static function booted()

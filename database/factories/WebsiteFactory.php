@@ -25,8 +25,8 @@ class WebsiteFactory extends Factory
     {
         return [
             'code' => $this->faker->unique()->words(5, true),
-            'ip_address' => $this->faker->word(),
-            'domain_name' => $this->faker->word(),
+            'ip_address' => $this->faker->ipv4(),
+            'domain_name' => $this->faker->domainName(),
             'remarks' => $this->faker->word(),
             'is_active' => $this->faker->boolean(),
             'created_by_id' => User::factory(),

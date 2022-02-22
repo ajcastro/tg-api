@@ -27,6 +27,10 @@ class WebsiteRequest extends FormRequest
         $website = $this->route('website');
 
         return sometimes_if($website, [
+            'assigned_client_id' => [
+                'required',
+                'exists:clients,id',
+            ],
             'code' => [
                 'required',
                 'string',

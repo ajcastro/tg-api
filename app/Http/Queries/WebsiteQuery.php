@@ -5,6 +5,7 @@ namespace App\Http\Queries;
 use App\Http\Queries\BaseQuery;
 use App\Http\Queries\Contracts\QueryContract;
 use App\Http\Queries\CustomSorts\SortBySub;
+use App\Models\Client;
 use App\Models\User;
 use App\Models\Website;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -21,6 +22,7 @@ class WebsiteQuery extends BaseQuery implements QueryContract
     {
         $this->allowedFields([
             ...Website::allowableFields(),
+            ...fields('assigned_client', Client::allowableFields()),
             ...fields('created_by', User::allowableFields()),
             ...fields('updated_by', User::allowableFields()),
         ]);
@@ -31,7 +33,7 @@ class WebsiteQuery extends BaseQuery implements QueryContract
     public function withInclude()
     {
         $this->allowedIncludes([
-            'created_by', 'updated_by',
+            'assigned_client', 'created_by', 'updated_by',
         ]);
 
         return $this;
@@ -50,6 +52,12 @@ class WebsiteQuery extends BaseQuery implements QueryContract
     {
         $this->allowedSorts([
             ...Website::allowableFields(),
+            AllowedSort::custom('assigned_client', SortBySub::make(
+                '__assigned_client',
+                Client::query()
+                ->select('code')
+                ->whereColumn('websites.assigned_client_id', 'clients.id')
+            )),
             AllowedSort::custom('created_by', SortBySub::make(
                 '__created_by',
                 User::query()

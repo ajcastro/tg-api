@@ -19,8 +19,8 @@ class CreateClientsTable extends Migration
             $table->string('remarks')->nullable();
             $table->decimal('percentage_share', 10, 2)->default(0);
             $table->boolean('is_active')->default(1);
-            $table->unsignedBigInteger('created_by_id');
-            $table->unsignedBigInteger('updated_by_id');
+            $table->unsignedBigInteger('created_by_id')->index();
+            $table->unsignedBigInteger('updated_by_id')->index();
             $table->timestamps();
         });
     }

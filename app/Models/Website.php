@@ -18,6 +18,7 @@ class Website extends Model
      */
     protected $fillable = [
         'code',
+        'assigned_client_id',
         'ip_address',
         'domain_name',
         'remarks',
@@ -33,6 +34,7 @@ class Website extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'assigned_client_id' => 'integer',
         'is_active' => 'boolean',
         'created_by_id' => 'integer',
         'updated_by_id' => 'integer',
@@ -54,6 +56,11 @@ class Website extends Model
             ->withInclude()
             ->withFilter()
             ->findOrFail($value);
+    }
+
+    public function assignedClient()
+    {
+        return $this->belongsTo(Client::class);
     }
 
     public function createdBy()

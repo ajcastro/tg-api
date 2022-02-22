@@ -15,13 +15,14 @@ class CreateWebsitesTable extends Migration
     {
         Schema::create('websites', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('assigned_client_id')->index();
             $table->string('code')->unique();
             $table->string('ip_address');
             $table->string('domain_name');
             $table->string('remarks')->nullable();
             $table->boolean('is_active')->default(0);
-            $table->unsignedBigInteger('created_by_id');
-            $table->unsignedBigInteger('updated_by_id');
+            $table->foreignId('created_by_id')->index();
+            $table->foreignId('updated_by_id')->index();
             $table->timestamps();
         });
     }

@@ -40,7 +40,7 @@ class WebsiteControllerTest extends TestCase
 
     public function test_store_should_create()
     {
-        $payload = Website::factory()->make()->only(['code', 'ip_address', 'domain_name', 'remarks']);
+        $payload = Website::factory()->make()->only(['assigned_client_id', 'code', 'ip_address', 'domain_name', 'remarks']);
 
         $response = $this->postJson(route('websites.store'), $payload);
 
@@ -53,7 +53,7 @@ class WebsiteControllerTest extends TestCase
 
     public function test_update_should_update()
     {
-        $payload = Website::factory()->make()->only(['code', 'ip_address', 'domain_name', 'remarks']);
+        $payload = Website::factory()->make()->only(['assigned_client_id', 'code', 'ip_address', 'domain_name', 'remarks']);
 
         $website = tap(Website::factory()->make())->saveQuietly();
         $response = $this->putJson(route('websites.update', $website), $payload);

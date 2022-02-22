@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Client;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\User;
@@ -24,6 +25,7 @@ class WebsiteFactory extends Factory
     public function definition()
     {
         return [
+            'assigned_client_id' => Client::factory(),
             'code' => $this->faker->unique()->words(5, true),
             'ip_address' => $this->faker->ipv4(),
             'domain_name' => $this->faker->domainName(),

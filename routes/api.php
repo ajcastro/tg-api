@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\ValidationException;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +23,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function () {
     require __DIR__.'/admin/clients.php';
     require __DIR__.'/admin/websites.php';
+});
+
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('register', [AuthController::class, 'register']);
+
+    Route::group(['middleware' => 'auth:sanctum'], function() {
+      Route::post('logout', [AuthController::class, 'logout']);
+      Route::get('user', [AuthController::class, 'user']);
+      Route::get('me', [AuthController::class, 'user']); // alias of user
+    });
 });

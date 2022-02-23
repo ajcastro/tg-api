@@ -44,10 +44,10 @@ class WebsiteControllerTest extends TestCase
 
         $response = $this->postJson(route('websites.store'), $payload);
 
-        $this->assertDatabaseHas('websites', $payload);
-
         $response->assertCreated();
         $response->assertJsonStructure(['data' => Website::allowableFields()]);
+
+        $this->assertDatabaseHas('websites', $payload);
     }
 
 

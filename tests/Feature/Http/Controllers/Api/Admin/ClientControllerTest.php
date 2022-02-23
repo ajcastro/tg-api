@@ -59,10 +59,10 @@ class ClientControllerTest extends TestCase
 
         $response = $this->putJson(route('clients.update', $client), $payload);
 
-        $this->assertDatabaseHas('clients', $payload);
-
         $response->assertSuccessful();
         $response->assertJsonStructure(['data' => Client::allowableFields()]);
+
+        $this->assertDatabaseHas('clients', $payload);
     }
 
     public function test_destroy_should_delete()

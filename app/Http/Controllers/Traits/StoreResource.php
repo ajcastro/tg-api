@@ -5,14 +5,19 @@ namespace App\Http\Controllers\Traits;
 use App\Http\Requests\Api\Admin\ClientRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin \App\Http\Controllers\Traits\SaveResource
+ * @mixin \App\Http\Controllers\Traits\ResolvesModel
+ * @mixin \App\Http\Controllers\Traits\ResolvesRequest
+ */
 trait StoreResource
 {
     public function store()
     {
         $request = $this->request();
+        $model = $this->model()->make($request->validated());
+        $this->save($model);
 
-        $instance = $this->model()->create($request->validated());
-
-        return new JsonResource($instance);
+        return new JsonResource($model);
     }
 }

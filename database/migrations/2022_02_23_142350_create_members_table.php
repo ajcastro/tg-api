@@ -36,7 +36,7 @@ class CreateMembersTable extends Migration
             $table->timestamp('logout_time')->index()->nullable();
             $table->timestamp('suspended_at')->index()->nullable();
             $table->unsignedBigInteger('suspended_by_id')->index()->nullable();
-            $table->timestamp('suspended_reason')->index()->nullable();
+            $table->text('suspended_reason')->nullable();
             $table->timestamp('blacklisted_at')->index()->nullable();
             $table->unsignedBigInteger('blacklisted_by_id')->index()->nullable();
             $table->text('blacklisted_reason')->nullable();

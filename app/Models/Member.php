@@ -68,12 +68,11 @@ class Member extends Model
         'warning_status' => 'integer',
         'total_deposit' => 'decimal:2',
         'total_withdrawal' => 'decimal:2',
-        'login_time' => 'timestamp',
-        'logout_time' => 'timestamp',
-        'suspended_at' => 'timestamp',
+        'login_time' => 'datetime',
+        'logout_time' => 'datetime',
+        'suspended_at' => 'datetime',
         'suspended_by_id' => 'integer',
-        'suspended_reason' => 'timestamp',
-        'blacklisted_at' => 'timestamp',
+        'blacklisted_at' => 'datetime',
         'blacklisted_by_id' => 'integer',
     ];
 
@@ -140,5 +139,32 @@ class Member extends Model
         if ($this->warning_status === WarningStatus::Blacklist) {
             return 'Blacklist';
         }
+    }
+
+    public function suspend($reason, $user = null)
+    {
+        $this->warning_status = WarningStatus::Suspend;
+        $this->suspended_at = now();
+        $this->suspended_by_id = $user->id ?? auth()->user()->id ?? 0;
+        $this->suspended_reason = $reason;
+        $this->save();
+    }
+
+    public function blacklist($reason, $user = null)
+    {
+        $this->warning_status = WarningStatus::Blacklist;
+        $this->blacklisted_at = now();
+        $this->blacklisted_by_id = $user->id ?? auth()->user()->id ?? 0;
+        $this->blacklisted_reason = $reason;
+        $this->save();
+    }
+
+    public function removeSuspension()
+    {
+        $this->warning_status = WarningStatus::NoWarning;
+        $this->suspended_at = null;
+        $this->suspended_by_id = null;
+        $this->suspended_reason = null;
+        $this->save();
     }
 }

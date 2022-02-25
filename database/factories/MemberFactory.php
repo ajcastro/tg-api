@@ -48,10 +48,10 @@ class MemberFactory extends Factory
             'logout_time' => $this->faker->dateTime(),
             'suspended_at' => $this->faker->dateTime(),
             'suspended_by_id' => User::factory(),
-            'suspended_reason' => $this->faker->dateTime(),
+            'suspended_reason' => $this->faker->text(),
             'blacklisted_at' => $this->faker->dateTime(),
             'blacklisted_by_id' => User::factory(),
-            'blacklisted_reason' => $this->faker->text,
+            'blacklisted_reason' => $this->faker->text(),
         ];
     }
 }

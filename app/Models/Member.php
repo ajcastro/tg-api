@@ -111,6 +111,16 @@ class Member extends Model
         return $this->hasMany(MemberBank::class);
     }
 
+    public function scopeSearch($query, $search)
+    {
+        $query->where(function ($query) use ($search) {
+            $query->where('username', 'like', "%{$search}%");
+            $query->orWhere('referral_number', 'like', "%{$search}%");
+            $query->orWhere('email', 'like', "%{$search}%");
+            $query->orWhere('phone_number', 'like', "%{$search}%");
+        });
+    }
+
     public function getMemberLevelDisplayAttribute()
     {
         if ($this->member_level === MemberLevel::Regular) {

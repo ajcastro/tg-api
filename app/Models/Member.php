@@ -1,0 +1,144 @@
+<?php
+
+namespace App\Models;
+
+use App\Enums\MemberLevel;
+use App\Enums\WarningStatus;
+use App\Http\Queries\MemberQuery;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Member extends Model
+{
+    use HasFactory, Traits\HasAllowableFields;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'website_id',
+        'upline_referral_id',
+        'referral_number',
+        'username',
+        'password',
+        'email',
+        'phone_number',
+        'member_level',
+        'bank_group',
+        'balance_amount',
+        'balance_credit',
+        'warning_status',
+        'warning_notes',
+        'redeem_point',
+        'total_deposit',
+        'total_withdrawal',
+        'rebate_group',
+        'login_time',
+        'logout_time',
+        'suspended_at',
+        'suspended_by_id',
+        'suspended_reason',
+        'blacklisted_at',
+        'blacklisted_by_id',
+        'blacklisted_reason',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'upline_referral_id' => 'integer',
+        'member_level' => 'integer',
+        'balance_amount' => 'decimal:2',
+        'balance_credit' => 'decimal:2',
+        'warning_status' => 'integer',
+        'total_deposit' => 'decimal:2',
+        'total_withdrawal' => 'decimal:2',
+        'login_time' => 'timestamp',
+        'logout_time' => 'timestamp',
+        'suspended_at' => 'timestamp',
+        'suspended_by_id' => 'integer',
+        'suspended_reason' => 'timestamp',
+        'blacklisted_at' => 'timestamp',
+        'blacklisted_by_id' => 'integer',
+    ];
+
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return (new MemberQuery)
+            ->withFields()
+            ->withInclude()
+            ->withFilter()
+            ->findOrFail($value);
+    }
+
+    public function website()
+    {
+        return $this->belongsTo(Website::class);
+    }
+
+    public function uplineReferral()
+    {
+        return $this->belongsTo(Member::class);
+    }
+
+    public function suspendedBy()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function blacklistedBy()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function banks()
+    {
+        return $this->hasMany(MemberBank::class);
+    }
+
+    public function getMemberLevelDisplayAttribute()
+    {
+        if ($this->member_level === MemberLevel::Regular) {
+            return 'Regular';
+        }
+
+        if ($this->member_level === MemberLevel::VIP) {
+            return 'VIP';
+        }
+
+        if ($this->member_level === MemberLevel::VVIP) {
+            return 'VVIP';
+        }
+    }
+
+    public function getWarningStatusDisplayAttribute()
+    {
+        if ($this->warning_status === WarningStatus::NoWarning) {
+            return 'No Warning';
+        }
+
+        if ($this->warning_status === WarningStatus::Suspend) {
+            return 'Suspend';
+        }
+
+        if ($this->warning_status === WarningStatus::Blacklist) {
+            return 'Blacklist';
+        }
+    }
+}

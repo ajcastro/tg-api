@@ -24,9 +24,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function () {
-    require __DIR__.'/admin/parent_groups.php';
     require __DIR__.'/admin/clients.php';
+    require __DIR__.'/admin/parent_groups.php';
     require __DIR__.'/admin/websites.php';
+    require __DIR__.'/admin/members.php';
 });
 
 Route::group(['prefix' => 'auth'], function () {

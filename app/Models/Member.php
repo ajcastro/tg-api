@@ -129,7 +129,7 @@ class Member extends Model
     public function getWarningStatusDisplayAttribute()
     {
         if ($this->warning_status === WarningStatus::NoWarning) {
-            return 'No Warning';
+            return '';
         }
 
         if ($this->warning_status === WarningStatus::Suspend) {

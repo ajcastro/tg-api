@@ -37,6 +37,7 @@ class MemberQuery extends BaseQuery implements QueryContract
     {
         $this->allowedIncludes([
             'website', 'upline_referral', 'suspended_by', 'blacklisted_by', 'banks',
+            'active_log.website',
         ]);
 
         return $this;
@@ -46,6 +47,11 @@ class MemberQuery extends BaseQuery implements QueryContract
     {
         $this->allowedFilters([
             AllowedFilter::scope('search'),
+            AllowedFilter::callback('active_log', function ($query, $value) {
+                if (boolean($value)) {
+                    $query->whereHas('activeLog');
+                }
+            }),
         ]);
 
         return $this;

@@ -111,6 +111,11 @@ class Member extends Model
         return $this->hasMany(MemberBank::class);
     }
 
+    public function activeLog()
+    {
+        return $this->hasOne(MemberLog::class)->whereNull('kicked_at');
+    }
+
     public function scopeSearch($query, $search)
     {
         $query->where(function ($query) use ($search) {

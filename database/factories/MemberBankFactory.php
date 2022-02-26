@@ -25,9 +25,9 @@ class MemberBankFactory extends Factory
     {
         return [
             'member_id' => Member::factory(),
-            'account_name' => $this->faker->word,
-            'account_code' => $this->faker->word,
-            'account_number' => $this->faker->word,
+            'account_name' => ucfirst($this->faker->word),
+            'account_code' => $this->faker->randomNumber(4, true),
+            'account_number' => $this->faker->randomNumber(4, true),
         ];
     }
 }

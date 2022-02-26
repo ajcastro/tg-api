@@ -42,4 +42,16 @@ class MemberController extends ResourceController
     {
         $member->removeSuspension();
     }
+
+    public function kick(Member $member)
+    {
+        $activeLog = $member->activeLog;
+        $activeLog->kicked_at = now();
+        $activeLog->save();
+    }
+
+    public function kickAll()
+    {
+        Member::kickAll();
+    }
 }

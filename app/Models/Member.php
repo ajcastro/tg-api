@@ -77,6 +77,13 @@ class Member extends Model
     ];
 
 
+    public static function kickAll()
+    {
+        return MemberLog::whereNull('kicked_at')->update([
+            'kicked_at' => now(),
+        ]);
+    }
+
     public function resolveRouteBinding($value, $field = null)
     {
         return (new MemberQuery)

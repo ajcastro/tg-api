@@ -103,6 +103,11 @@ class Member extends Model
         return $this->belongsTo(Member::class);
     }
 
+    public function referrals()
+    {
+        return $this->hasMany(Member::class, 'upline_referral_id');
+    }
+
     public function suspendedBy()
     {
         return $this->belongsTo(User::class);

@@ -37,7 +37,7 @@ class MemberQuery extends BaseQuery implements QueryContract
     {
         $this->allowedIncludes([
             'website', 'upline_referral', 'suspended_by', 'blacklisted_by', 'banks',
-            'active_log.website',
+            'active_log.website', 'referrals',
         ]);
 
         return $this;
@@ -61,6 +61,7 @@ class MemberQuery extends BaseQuery implements QueryContract
     {
         $this->allowedSorts([
             ...Member::allowableFields(),
+            'referrals_count',
             AllowedSort::custom('website', SortBySub::make(
                 '__website',
                 Website::query()

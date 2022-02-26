@@ -46,6 +46,7 @@ class MemberQuery extends BaseQuery implements QueryContract
     public function withFilter()
     {
         $this->allowedFilters([
+            AllowedFilter::exact('warning_status'),
             AllowedFilter::scope('search'),
             AllowedFilter::callback('active_log', function ($query, $value) {
                 if (boolean($value)) {

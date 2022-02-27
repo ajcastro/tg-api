@@ -55,6 +55,8 @@ class MemberQuery extends BaseQuery implements QueryContract
             }),
             AllowedFilter::callback('join_date', function ($query, array $value) {
                 [$start_date, $end_date] = $value;
+                $start_date = carbon($start_date)->startOfDay();
+                $end_date = carbon($end_date)->endOfDay();
                 $query->whereBetween('members.created_at', [$start_date, $end_date]);
             }),
         ]);

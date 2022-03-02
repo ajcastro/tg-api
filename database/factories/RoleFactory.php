@@ -24,7 +24,6 @@ class RoleFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'text' => $this->faker->word,
             'is_active' => true,
         ];
     }

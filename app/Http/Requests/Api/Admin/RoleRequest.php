@@ -32,11 +32,6 @@ class RoleRequest extends FormRequest
                 'string',
                 Rule::unique('roles', 'name')->ignore($role),
             ],
-            'text' => [
-                'required',
-                'string',
-                Rule::unique('roles', 'text')->ignore($role),
-            ],
         ]);
     }
 }

@@ -43,6 +43,7 @@ class RoleQuery extends BaseQuery implements QueryContract
     {
         $this->allowedFilters([
             AllowedFilter::scope('search'),
+            AllowedFilter::exact('parent_group_id'),
         ]);
 
         return $this;

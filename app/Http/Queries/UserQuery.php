@@ -44,8 +44,9 @@ class UserQuery extends BaseQuery implements QueryContract
     public function withFilter()
     {
         $this->allowedFilters([
-            AllowedFilter::exact('is_active'),
+            AllowedFilter::exact('parent_group_id'),
             AllowedFilter::exact('role_id'),
+            AllowedFilter::exact('is_active'),
             AllowedFilter::scope('search'),
         ]);
 

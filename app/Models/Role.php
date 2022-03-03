@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\SetsCreatedByAndUpdatedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,4 +32,19 @@ class Role extends Model
         'id' => 'integer',
         'is_active' => 'boolean',
     ];
+
+    public static function booted()
+    {
+        static::observe(SetsCreatedByAndUpdatedBy::class);
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by_id');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by_id');
+    }
 }

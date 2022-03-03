@@ -54,4 +54,11 @@ class Role extends Model
     {
         return $this->belongsTo(User::class, 'updated_by_id');
     }
+
+    public function scopeSearch($query, $search)
+    {
+        $query->where(function ($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        });
+    }
 }

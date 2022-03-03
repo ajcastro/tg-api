@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->seedDefaultParentGroup();
         $this->call(RolesTableSeeder::class);
         $this->seedAdminUser();
+        $this->seedDemoClientAndParentGroup();
     }
 
     private function seedDefaultClient()
@@ -57,6 +58,24 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@demo.com',
             'name' => 'Admin User',
             'password' => bcrypt('password'),
+        ]);
+    }
+
+    private function seedDemoClientAndParentGroup()
+    {
+        $client = Client::firstOrCreate([
+            'code' => 'demo',
+        ], [
+            'remarks' => 'demo client',
+            'is_active' => true,
+        ]);
+
+        ParentGroup::firstOrCreate([
+            'code' => 'demo',
+        ], [
+            'client_id' => $client->id,
+            'created_by_id' => User::ADMIN_ID,
+            'updated_by_id' => User::ADMIN_ID,
         ]);
     }
 }

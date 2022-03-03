@@ -41,8 +41,9 @@ class RoleQuery extends BaseQuery implements QueryContract
 
     public function withFilter()
     {
-        // $this->allowedFilters([
-        // ]);
+        $this->allowedFilters([
+            AllowedFilter::scope('search'),
+        ]);
 
         return $this;
     }

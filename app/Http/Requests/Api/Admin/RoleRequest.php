@@ -27,10 +27,16 @@ class RoleRequest extends FormRequest
         $role = $this->route('role');
 
         return sometimes_if($role, [
+            'parent_group_id' => [
+                'required',
+                'exists:parent_groups,id'
+            ],
             'name' => [
                 'required',
                 'string',
-                Rule::unique('roles', 'name')->ignore($role),
+                Rule::unique('roles', 'name')->ignore($role)->where(function ($query) {
+                    $query->where('parent_group_id', $this->parent_group_id);
+                }),
             ],
         ]);
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\DeleteResource;
+use App\Http\Controllers\Traits\FillResource;
 use App\Http\Controllers\Traits\GetsModel;
 use App\Http\Controllers\Traits\PaginateOrListResource;
 use App\Http\Controllers\Traits\ResolvesModel;
@@ -21,6 +22,7 @@ class ResourceController extends Controller
     use ShowResource;
     use StoreResource;
     use UpdateResource;
+    use FillResource;
     use SaveResource;
     use DeleteResource;
 }

@@ -32,21 +32,31 @@ class UserRequest extends FormRequest
                 'required',
                 'string',
             ],
+            'username' => [
+                'required',
+                'string',
+                Rule::unique('users', 'username')->ignore($user)->where(function ($query) {
+                    $query->where('parent_group_id', $this->parent_group_id);
+                }),
+            ],
             'email' => [
                 'required',
                 'string',
                 'email',
-                Rule::unique('users', 'name')->ignore($user),
             ],
             'role_id' => [
                 'required',
                 'exists:roles,id',
             ],
-            'password' => [
-                $user ? [] : 'required',
+            'parent_group_id' => [
+                'required',
+                'exists:parent_groups,id',
+            ],
+            'password' => Rule::when(is_null($user), [
+                'required',
                 Password::min(8),
-                'confirmed',
-            ]
+                'confirmed'
+            ])
         ]);
     }
 }

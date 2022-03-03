@@ -26,4 +26,14 @@ class UserController extends ResourceController
             $this->request = UserRequest::class;
         })->only(['store', 'update']);
     }
+
+    protected function fill($user, $request)
+    {
+        $data = $request->validated();
+        $data['password'] = bcrypt($data['password'] ?? '');
+        if (blank($data['password'])) {
+            unset($data['password']);
+        }
+        $user->fill($data);
+    }
 }

@@ -38,6 +38,11 @@ class Role extends Model
         static::observe(SetsCreatedByAndUpdatedBy::class);
     }
 
+    public function parentGroup()
+    {
+        return $this->belongsTo(ParentGroup::class);
+    }
+
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by_id');

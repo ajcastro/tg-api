@@ -11,6 +11,9 @@ class ParentGroup extends Model
 {
     use HasFactory, Traits\HasAllowableFields;
 
+    const DEFAULT_ID = 1;
+    const DEFAULT_CODE = 'default';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -39,6 +42,16 @@ class ParentGroup extends Model
     public static function booted()
     {
         static::observe(SetsCreatedByAndUpdatedBy::class);
+    }
+
+    public static function getDefault()
+    {
+        return static::where('code', static::DEFAULT_CODE)->firstOrFail();
+    }
+
+    public static function findByCode($code)
+    {
+        return static::where('code', $code)->first();
     }
 
     public function resolveRouteBinding($value, $field = null)

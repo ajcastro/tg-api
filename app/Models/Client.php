@@ -11,6 +11,9 @@ class Client extends Model
 {
     use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus;
 
+    const DEFAULT_ID = 1;
+    const DEFAULT_CODE = 'default';
+
     /**
      * The attributes that are mass assignable.
      *

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ParentGroup;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -38,13 +39,23 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        $parentGroup = ParentGroup::findByCode($request->parent_group_code);
+
         $request->validate([
-            'email' => 'required|string|email',
+            'parent_group_code' => [
+                'required', 'string',
+                function ($attribute, $value, $fail) use ($parentGroup) {
+                    if (is_null($parentGroup)) {
+                        abort(401, 'Unauthorized');
+                    }
+                }
+            ],
+            'username' => 'required|string',
             'password' => 'required|string',
-            'remember_me' => 'boolean'
+            // 'remember_me' => 'boolean'
         ]);
 
-        $credentials = $request->only(['email', 'password']);
+        $credentials = $request->only(['username', 'password']) + ['parent_group_id' => $parentGroup->id];
 
         if (!auth()->attempt($credentials)) {
             return response()->json([

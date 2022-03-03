@@ -10,12 +10,14 @@ class Role extends Model
 {
     use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus;
 
+    const ADMINISTRATOR_ID = 1;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
+        'parent_group_id',
         'name',
     ];
 

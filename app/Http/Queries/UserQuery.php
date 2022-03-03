@@ -5,6 +5,7 @@ namespace App\Http\Queries;
 use App\Http\Queries\BaseQuery;
 use App\Http\Queries\Contracts\QueryContract;
 use App\Http\Queries\CustomSorts\SortBySub;
+use App\Models\ParentGroup;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Website;
@@ -22,6 +23,7 @@ class UserQuery extends BaseQuery implements QueryContract
     {
         $this->allowedFields([
             ...User::allowableFields(),
+            ...fields('parent_group', ParentGroup::allowableFields()),
             ...fields('role', Role::allowableFields()),
             ...fields('created_by', User::allowableFields()),
             ...fields('updated_by', User::allowableFields()),
@@ -33,7 +35,7 @@ class UserQuery extends BaseQuery implements QueryContract
     public function withInclude()
     {
         $this->allowedIncludes([
-            'role', 'created_by', 'updated_by',
+            'parent_group', 'role', 'created_by', 'updated_by',
         ]);
 
         return $this;
@@ -54,6 +56,12 @@ class UserQuery extends BaseQuery implements QueryContract
     {
         $this->allowedSorts([
             ...User::allowableFields(),
+            AllowedSort::custom('parent_group_code', SortBySub::make(
+                '__parent_group_code',
+                Role::query()
+                ->select('parent_groups.name')
+                ->whereColumn('users.parent_group_id', 'parent_groups.id')
+            )),
             AllowedSort::custom('role', SortBySub::make(
                 '__role',
                 Role::query()

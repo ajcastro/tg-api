@@ -15,6 +15,8 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
+            'parent_group_id' => 1,
+            'username' => 'a'.Str::random(10).$this->faker->unique()->safeEmail(),
             'name' => $this->faker->name(),
             'email' => 'a'.Str::random(10).$this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),

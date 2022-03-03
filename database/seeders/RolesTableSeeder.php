@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ParentGroup;
 use App\Models\Role;
 use Illuminate\Database\Seeder;
 
@@ -26,6 +27,7 @@ class RolesTableSeeder extends Seeder
 
         foreach ($rows as $row) {
             Role::firstOrCreate([
+                'parent_group_id' => ParentGroup::DEFAULT_ID,
                 'id' => $row['id']
             ], $row);
         }

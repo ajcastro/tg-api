@@ -13,12 +13,15 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, Traits\HasAllowableFields, Traits\SetActiveStatus;
 
+    const ADMIN_ID = 1;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
+        'parent_group_id',
         'name',
         'email',
         'password',
@@ -55,6 +58,11 @@ class User extends Authenticatable
     public static function booted()
     {
         static::observe(SetsCreatedByAndUpdatedBy::class);
+    }
+
+    public function parentGroup()
+    {
+        return $this->belongsTo(ParentGroup::class);
     }
 
     public function createdBy()

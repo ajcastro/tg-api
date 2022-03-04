@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Queries\RoleQuery;
 use App\Observers\SetsCreatedByAndUpdatedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -38,6 +39,15 @@ class Role extends Model
     public static function booted()
     {
         static::observe(SetsCreatedByAndUpdatedBy::class);
+    }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return (new RoleQuery)
+            ->withFields()
+            ->withInclude()
+            ->withFilter()
+            ->findOrFail($value);
     }
 
     public function parentGroup()

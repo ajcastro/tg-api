@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->seedDefaultClient();
         $this->seedDefaultParentGroup();
         $this->call(RolesTableSeeder::class);
+        $this->call(PermissionsTableSeeder::class);
         $this->seedAdminUser();
         $this->seedDemoClientAndParentGroup();
         $this->seedDummyData();

@@ -63,6 +63,11 @@ class Website extends Model
         return $this->belongsTo(Client::class);
     }
 
+    public function members()
+    {
+        return $this->hasMany(Member::class);
+    }
+
     public function createdBy()
     {
         return $this->belongsTo(User::class);

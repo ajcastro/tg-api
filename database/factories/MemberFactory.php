@@ -29,9 +29,9 @@ class MemberFactory extends Factory
         return [
             'website_id' => Website::factory(),
             'upline_referral_id' => null,
-            'referral_number' => $this->faker->word,
+            'referral_number' => $this->faker->unique()->words(3, true),
             'username' => $this->faker->userName,
-            'password' => $this->faker->password,
+            'password' => bcrypt('password'),
             'email' => $this->faker->safeEmail,
             'phone_number' => $this->faker->phoneNumber,
             'member_level' => $this->faker->numberBetween(MemberLevel::Regular, MemberLevel::VVIP),

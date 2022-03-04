@@ -29,6 +29,12 @@ class RoleController extends ResourceController
         })->only(['store', 'update']);
     }
 
+    public function save($model)
+    {
+        $model->save();
+        $model->load('parentGroup');
+    }
+
     public function permissions(Request $request, Role $role)
     {
         return JsonResource::make($role->permissions);

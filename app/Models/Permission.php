@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class Permission extends Model
 {
-    use HasFactory;
+    use HasFactory, Traits\HasAllowableFields;
 
     /**
      * The attributes that are mass assignable.
@@ -34,5 +34,17 @@ class Permission extends Model
         static::creating(function (Permission $permission) {
             $permission->name = $permission->name ?? Str::slug($permission->label, '_');
         });
+    }
+
+    public function getGroupAttribute()
+    {
+        [$group] = explode('.', $this->name);
+
+        return $group;
+    }
+
+    public function getGroupDisplayAttribute()
+    {
+        return Str::title($this->group);
     }
 }

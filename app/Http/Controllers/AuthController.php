@@ -96,7 +96,8 @@ class AuthController extends Controller
      */
     public function user(Request $request)
     {
-        return JsonResource::make($request->user());
+        $user = User::make()->resolveRouteBinding($request->user()->id);
+        return JsonResource::make($user);
     }
 
     /**

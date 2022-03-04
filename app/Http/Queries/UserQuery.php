@@ -35,7 +35,7 @@ class UserQuery extends BaseQuery implements QueryContract
     public function withInclude()
     {
         $this->allowedIncludes([
-            'parent_group', 'role', 'created_by', 'updated_by',
+            'parent_group', 'role.permissions', 'created_by', 'updated_by',
         ]);
 
         return $this;

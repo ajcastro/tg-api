@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Queries\UserQuery;
 use App\Observers\SetsCreatedByAndUpdatedBy;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -59,6 +60,15 @@ class User extends Authenticatable
     public static function booted()
     {
         static::observe(SetsCreatedByAndUpdatedBy::class);
+    }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return (new UserQuery)
+            ->withFields()
+            ->withInclude()
+            ->withFilter()
+            ->findOrFail($value);
     }
 
     public function parentGroup()

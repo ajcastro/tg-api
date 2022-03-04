@@ -7,6 +7,8 @@ use App\Http\Controllers\Traits\SetActiveStatus;
 use App\Http\Queries\RoleQuery;
 use App\Http\Requests\Api\Admin\RoleRequest;
 use App\Models\Role;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class RoleController extends ResourceController
 {
@@ -25,5 +27,15 @@ class RoleController extends ResourceController
         $this->hook(function () {
             $this->request = RoleRequest::class;
         })->only(['store', 'update']);
+    }
+
+    public function permissions(Request $request, Role $role)
+    {
+        return JsonResource::make($role->permissions);
+    }
+
+    public function setPermissions(Request $request, Role $role)
+    {
+        $role->permissions()->sync($request->permission_ids);
     }
 }

@@ -31,7 +31,7 @@ return [
     ],
     [
         'name' => 'members.suspend',
-        'label' => 'Blacklist Member',
+        'label' => 'Suspend Member',
     ],
     [
         'name' => 'members.remove_suspension',

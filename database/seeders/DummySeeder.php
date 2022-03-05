@@ -66,4 +66,12 @@ class DummySeeder extends Seeder
             'status' => 0,
         ]);
     }
+
+    private function seedDummyMemberTransactionsForAdjustments()
+    {
+        MemberTransaction::factory(30)->create([
+            'is_adjustment' => 1,
+            'status' => 0,
+        ]);
+    }
 }

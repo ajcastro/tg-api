@@ -56,6 +56,9 @@ class DummySeeder extends Seeder
             'type' => 'deposit',
             'is_adjustment' => 0,
             'status' => 0,
+            'remarks' => '',
+            'approved_at' => null,
+            'approved_by_id' => null,
         ]);
     }
 
@@ -65,6 +68,9 @@ class DummySeeder extends Seeder
             'type' => 'withdraw',
             'is_adjustment' => 0,
             'status' => 0,
+            'remarks' => '',
+            'approved_at' => null,
+            'approved_by_id' => null,
         ]);
     }
 
@@ -73,6 +79,9 @@ class DummySeeder extends Seeder
         MemberTransaction::factory(30)->create([
             'is_adjustment' => 1,
             'status' => 0,
+            'remarks' => '',
+            'approved_at' => null,
+            'approved_by_id' => null,
         ]);
     }
 }

@@ -26,6 +26,7 @@ class DummySeeder extends Seeder
         $this->seedDummyMembersAndWebsites();
         $this->seedDummyMemberTransactionsForNewDeposits();
         $this->seedDummyMemberTransactionsForNewWithdrawals();
+        $this->seedDummyMemberTransactionsForAdjustments();
     }
 
     private function clean()

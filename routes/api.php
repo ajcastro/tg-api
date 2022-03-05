@@ -28,6 +28,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function (
     require __DIR__.'/admin/parent_groups.php';
     require __DIR__.'/admin/websites.php';
     require __DIR__.'/admin/members.php';
+    require __DIR__.'/admin/member_transactions.php';
     require __DIR__.'/admin/users.php';
     require __DIR__.'/admin/roles.php';
     require __DIR__.'/admin/permissions.php';

@@ -8,7 +8,6 @@ use App\Http\Queries\Contracts\QueryContract;
 use App\Http\Queries\CustomSorts\SortBySub;
 use App\Models\Member;
 use App\Models\MemberTransaction;
-use App\Models\MemberTransactionBank;
 use App\Models\User;
 use App\Models\Website;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -18,7 +17,7 @@ class MemberTransactionQuery extends BaseQuery implements QueryContract
 {
     public function __construct()
     {
-        parent::__construct(MemberTransaction::query());
+        parent::__construct(MemberTransaction::applyAccessibilityFilter());
     }
 
     public function withFields()

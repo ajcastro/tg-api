@@ -24,7 +24,7 @@ class ClientFactory extends Factory
     public function definition()
     {
         return [
-            'code' => Str::of($this->faker->unique()->words(3, true))->replace(' ', '-').'',
+            'code' => Str::random(8),
             'remarks' => $this->faker->word(),
             'percentage_share' => $this->faker->randomFloat(2, 5, 80),
             'created_by_id' => User::factory(),

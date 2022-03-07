@@ -16,7 +16,7 @@ class MemberQuery extends BaseQuery implements QueryContract
 {
     public function __construct()
     {
-        parent::__construct(Member::query());
+        parent::__construct(Member::applyAccessibilityFilter());
     }
 
     public function withFields()

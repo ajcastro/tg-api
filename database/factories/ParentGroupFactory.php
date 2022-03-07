@@ -26,7 +26,7 @@ class ParentGroupFactory extends Factory
     {
         return [
             'client_id' => Client::factory(),
-            'code' => $this->faker->unique()->words(5, true),
+            'code' => Str::random(8),
             'remarks' => $this->faker->word,
             'created_by_id' => User::factory(),
             'updated_by_id' => User::factory(),

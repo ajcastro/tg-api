@@ -15,7 +15,7 @@ class RoleQuery extends BaseQuery implements QueryContract
 {
     public function __construct()
     {
-        parent::__construct(Role::query());
+        parent::__construct(Role::applyAccessibilityFilter());
     }
 
     public function withFields()

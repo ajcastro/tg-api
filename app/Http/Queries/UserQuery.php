@@ -16,7 +16,7 @@ class UserQuery extends BaseQuery implements QueryContract
 {
     public function __construct()
     {
-        parent::__construct(User::query());
+        parent::__construct(User::applyAccessibilityFilter());
     }
 
     public function withFields()

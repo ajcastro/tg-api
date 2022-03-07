@@ -26,7 +26,7 @@ class WebsiteFactory extends Factory
     {
         return [
             'assigned_client_id' => Client::factory(),
-            'code' => $this->faker->unique()->words(5, true),
+            'code' => Str::random(8),
             'ip_address' => $this->faker->ipv4(),
             'domain_name' => $this->faker->domainName(),
             'remarks' => $this->faker->word(),

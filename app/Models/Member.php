@@ -5,12 +5,15 @@ namespace App\Models;
 use App\Enums\MemberLevel;
 use App\Enums\WarningStatus;
 use App\Http\Queries\MemberQuery;
+use App\Models\Contracts\RelatesToWebsite;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class Member extends Model
+class Member extends Model implements RelatesToWebsite
 {
-    use HasFactory, Traits\HasAllowableFields;
+    use HasFactory, Traits\HasAllowableFields, Traits\RelatesToWebsiteTrait, Traits\AccessibilityFilter;
 
     /**
      * The attributes that are mass assignable.
@@ -136,6 +139,11 @@ class Member extends Model
             $query->orWhere('email', 'like', "%{$search}%");
             $query->orWhere('phone_number', 'like', "%{$search}%");
         });
+    }
+
+    public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
+    {
+        $query->where('website_id', $website->id);
     }
 
     public function getMemberLevelDisplayAttribute()

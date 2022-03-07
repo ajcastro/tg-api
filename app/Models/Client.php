@@ -47,6 +47,15 @@ class Client extends Model
     public static function booted()
     {
         static::observe(SetsCreatedByAndUpdatedBy::class);
+
+        static::created(function (Client $client) {
+            ParentGroup::create([
+                'client_id' => $client->id,
+                'code' => $client->code,
+                'created_by_id' => $client->created_by_id,
+                'updated_by_id' => $client->updated_by_id,
+            ]);
+        });
     }
 
     public function resolveRouteBinding($value, $field = null)

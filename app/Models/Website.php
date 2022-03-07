@@ -58,6 +58,11 @@ class Website extends Model
             ->findOrFail($value);
     }
 
+    public function parentGroups()
+    {
+        return $this->belongsToMany(ParentGroup::class, 'parent_groups_websites');
+    }
+
     public function assignedClient()
     {
         return $this->belongsTo(Client::class);
@@ -81,5 +86,10 @@ class Website extends Model
     public function scopeSearch($query, $search)
     {
         $query->where('code', 'like', "%{$search}%");
+    }
+
+    public function scopeAccessibleBy($query, User $user)
+    {
+        $query->where('assigned_client_id', $user->parentGroup->client_id);
     }
 }

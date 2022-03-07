@@ -6,9 +6,6 @@ use App\Models\Website;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-/**
- * @method static void applyWebsiteSelectorFilter(Builder|QueryBuilder $query)
- */
 trait RelatesToWebsiteTrait
 {
     public function getParentGroupIdsFromWebsitesSubquery(Website $website)

@@ -15,16 +15,13 @@ trait AccessibilityFilter
     {
         $request = $request ?? request();
 
-        logger('start jere');
 
         if ($this->shouldQueryByWebsiteRelation($query, $request)) {
             $query->ofWebsite(id_to_model(Website::class, $request->input('website_selector_website_id')));
-            logger('relates to website filter');
         }
 
         if ($this->implementsAccessibleBy($query)) {
             $query->accessibleBy($request->user());
-            logger('accessible by user filter');
         }
     }
 

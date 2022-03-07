@@ -14,7 +14,7 @@ class ClientQuery extends BaseQuery implements QueryContract
 {
     public function __construct()
     {
-        parent::__construct(Client::query());
+        parent::__construct(Client::applyAccessibilityFilter());
     }
 
     public function withFields()

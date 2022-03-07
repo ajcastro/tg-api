@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use App\Enums\MemberTransactionStatus;
+use App\Models\Contracts\RelatesToWebsite;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class MemberTransaction extends Model
+class MemberTransaction extends Model implements RelatesToWebsite
 {
-    use HasFactory, Traits\HasAllowableFields;
+    use HasFactory, Traits\HasAllowableFields, Traits\RelatesToWebsiteTrait, Traits\AccessibilityFilter;
 
     /**
      * The attributes that are mass assignable.
@@ -86,6 +89,11 @@ class MemberTransaction extends Model
             });
             $query->orWhere('company_bank', 'like', "%{$search}%");
         });
+    }
+
+    public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
+    {
+        $query->where('website_id', $website->id);
     }
 
     public function approve($user)

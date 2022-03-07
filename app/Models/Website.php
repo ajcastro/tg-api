@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Http\Queries\WebsiteQuery;
+use App\Models\Contracts\AccessibleByUser;
 use App\Observers\SetsCreatedByAndUpdatedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Website extends Model
+class Website extends Model implements AccessibleByUser
 {
-    use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus;
+    use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus, Traits\AccessibilityFilter;
 
     /**
      * The attributes that are mass assignable.

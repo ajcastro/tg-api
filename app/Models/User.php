@@ -3,16 +3,20 @@
 namespace App\Models;
 
 use App\Http\Queries\UserQuery;
+use App\Models\Contracts\RelatesToWebsite;
 use App\Observers\SetsCreatedByAndUpdatedBy;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements RelatesToWebsite
 {
-    use HasApiTokens, HasFactory, Notifiable, Traits\HasAllowableFields, Traits\SetActiveStatus;
+    use HasApiTokens, HasFactory, Notifiable;
+    use Traits\HasAllowableFields, Traits\SetActiveStatus, Traits\RelatesToWebsiteTrait, Traits\AccessibilityFilter;
 
     const ADMIN_ID = 1;
 
@@ -92,5 +96,10 @@ class User extends Authenticatable
             $query->where('username', 'like', "%{$search}%");
             $query->orWhere('email', 'like', "%{$search}%");
         });
+    }
+
+    public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
+    {
+        $query->whereIn('users.parent_group_id', $this->getParentGroupIdsFromWebsitesSubquery($website));
     }
 }

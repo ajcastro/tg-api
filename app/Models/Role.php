@@ -3,13 +3,16 @@
 namespace App\Models;
 
 use App\Http\Queries\RoleQuery;
+use App\Models\Contracts\RelatesToWebsite;
 use App\Observers\SetsCreatedByAndUpdatedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class Role extends Model
+class Role extends Model implements RelatesToWebsite
 {
-    use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus;
+    use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus, Traits\RelatesToWebsiteTrait, Traits\AccessibilityFilter;
 
     const ADMINISTRATOR_ID = 1;
     /**
@@ -76,5 +79,10 @@ class Role extends Model
         $query->where(function ($query) use ($search) {
             $query->where('name', 'like', "%{$search}%");
         });
+    }
+
+    public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
+    {
+        $query->whereIn('roles.parent_group_id', $this->getParentGroupIdsFromWebsitesSubquery($website));
     }
 }

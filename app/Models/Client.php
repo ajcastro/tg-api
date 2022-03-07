@@ -3,13 +3,16 @@
 namespace App\Models;
 
 use App\Http\Queries\ClientQuery;
+use App\Models\Contracts\RelatesToWebsite;
 use App\Observers\SetsCreatedByAndUpdatedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class Client extends Model
+class Client extends Model implements RelatesToWebsite
 {
-    use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus;
+    use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus, Traits\RelatesToWebsiteTrait, Traits\AccessibilityFilter;
 
     const DEFAULT_ID = 1;
     const DEFAULT_CODE = 'default';
@@ -80,5 +83,14 @@ class Client extends Model
     public function scopeSearch($query, $search)
     {
         $query->where('code', 'like', "%{$search}%");
+    }
+
+    public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
+    {
+        $query->whereIn('clients.id', function (Builder|QueryBuilder $query) use ($website) {
+            $query->select('assigned_client_id')
+                ->from('websites')
+                ->where('id', $website->id);
+        });
     }
 }

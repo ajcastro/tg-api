@@ -15,7 +15,6 @@ trait AccessibilityFilter
     {
         $request = $request ?? request();
 
-
         if ($this->shouldQueryByWebsiteRelation($query, $request)) {
             $query->ofWebsite(id_to_model(Website::class, $request->input('website_selector_website_id')));
         }

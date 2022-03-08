@@ -7,6 +7,7 @@ use App\Models\ParentGroup;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,35 +18,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->seedDefaultClient();
-        $this->seedDefaultParentGroup();
         $this->call(RolesTableSeeder::class);
         $this->call(PermissionsTableSeeder::class);
         $this->seedAdminUser();
-        $this->seedDemoClientAndParentGroup();
-    }
-
-    private function seedDefaultClient()
-    {
-        Client::firstOrCreate([
-            'id' => Client::DEFAULT_ID,
-            'code' => Client::DEFAULT_CODE,
-        ], [
-            'remarks' => 'Default client',
-            'is_active' => true,
-        ]);
-    }
-
-    private function seedDefaultParentGroup()
-    {
-        ParentGroup::firstOrCreate([
-            'id' => ParentGroup::DEFAULT_ID,
-            'code' => ParentGroup::DEFAULT_CODE,
-        ], [
-            'client_id' => Client::DEFAULT_ID,
-            'created_by_id' => User::ADMIN_ID,
-            'updated_by_id' => User::ADMIN_ID,
-        ]);
+        $this->seedDefaultClientAndParentGroup();
     }
 
     private function seedAdminUser()
@@ -62,21 +38,15 @@ class DatabaseSeeder extends Seeder
         ]);
     }
 
-    private function seedDemoClientAndParentGroup()
+    private function seedDefaultClientAndParentGroup()
     {
-        $client = Client::firstOrCreate([
-            'code' => 'demo',
+        Client::firstOrCreate([
+            'id' => Client::DEFAULT_ID,
+            'code' => Client::DEFAULT_CODE,
         ], [
-            'remarks' => 'demo client',
+            'remarks' => 'Default client',
             'is_active' => true,
-        ]);
-
-        ParentGroup::firstOrCreate([
-            'code' => 'demo',
-        ], [
-            'client_id' => $client->id,
-            'created_by_id' => User::ADMIN_ID,
-            'updated_by_id' => User::ADMIN_ID,
+            'is_hidden' => true,
         ]);
     }
 }

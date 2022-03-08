@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Client;
 use App\Models\Member;
 use App\Models\MemberTransaction;
+use App\Models\ParentGroup;
 use App\Models\User;
 use App\Models\Website;
 use Illuminate\Database\Seeder;
@@ -23,6 +24,7 @@ class DummySeeder extends Seeder
         }
 
         $this->clean();
+        $this->seedDemoClientAndParentGroup();
         $this->seedDummyMembersAndWebsites();
         $this->seedDummyMemberTransactionsForNewDeposits();
         $this->seedDummyMemberTransactionsForNewWithdrawals();
@@ -34,6 +36,24 @@ class DummySeeder extends Seeder
         Website::query()->truncate();
         Member::query()->truncate();
         MemberTransaction::query()->truncate();
+    }
+
+    private function seedDemoClientAndParentGroup()
+    {
+        $client = Client::firstOrCreate([
+            'code' => 'demo',
+        ], [
+            'remarks' => 'demo client',
+            'is_active' => true,
+        ]);
+
+        ParentGroup::firstOrCreate([
+            'code' => 'demo',
+        ], [
+            'client_id' => $client->id,
+            'created_by_id' => User::ADMIN_ID,
+            'updated_by_id' => User::ADMIN_ID,
+        ]);
     }
 
     private function seedDummyMembersAndWebsites()

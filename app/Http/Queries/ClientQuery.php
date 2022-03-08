@@ -14,7 +14,7 @@ class ClientQuery extends BaseQuery implements QueryContract
 {
     public function __construct()
     {
-        parent::__construct(Client::applyAccessibilityFilter()->where('id', '>', 0));
+        parent::__construct(Client::applyAccessibilityFilter()->where('is_hidden', 0));
     }
 
     public function withFields()

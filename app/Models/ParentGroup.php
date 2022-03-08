@@ -12,7 +12,7 @@ class ParentGroup extends Model
     use HasFactory, Traits\HasAllowableFields;
 
     const DEFAULT_ID = 1;
-    const DEFAULT_CODE = 'default';
+    const DEFAULT_CODE = 'spvadmin';
 
     /**
      * The attributes that are mass assignable.
@@ -25,6 +25,7 @@ class ParentGroup extends Model
         'remarks',
         'created_by_id',
         'updated_by_id',
+        'is_hidden',
     ];
 
     /**
@@ -36,6 +37,7 @@ class ParentGroup extends Model
         'id' => 'integer',
         'created_by_id' => 'integer',
         'updated_by_id' => 'integer',
+        'is_hidden' => 'boolean',
     ];
 
 

@@ -15,7 +15,7 @@ class Client extends Model implements RelatesToWebsite
     use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus, Traits\RelatesToWebsiteTrait, Traits\AccessibilityFilter;
 
     const DEFAULT_ID = 1;
-    const DEFAULT_CODE = 'default';
+    const DEFAULT_CODE = 'spvadmin';
 
     /**
      * The attributes that are mass assignable.
@@ -28,6 +28,7 @@ class Client extends Model implements RelatesToWebsite
         'percentage_share',
         'created_by_id',
         'updated_by_id',
+        'is_hidden',
     ];
 
     /**
@@ -41,6 +42,7 @@ class Client extends Model implements RelatesToWebsite
         'created_by_id' => 'integer',
         'updated_by_id' => 'integer',
         'is_active' => 'boolean',
+        'is_hidden' => 'boolean',
     ];
 
     protected $attributes = [
@@ -57,6 +59,7 @@ class Client extends Model implements RelatesToWebsite
                 'code' => $client->code,
                 'created_by_id' => $client->created_by_id,
                 'updated_by_id' => $client->updated_by_id,
+                'is_hidden' => $client->is_hidden,
             ]);
         });
     }

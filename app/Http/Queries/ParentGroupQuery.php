@@ -15,7 +15,7 @@ class ParentGroupQuery extends BaseQuery implements QueryContract
 {
     public function __construct()
     {
-        parent::__construct(ParentGroup::query());
+        parent::__construct(ParentGroup::query()->where('id', '>', 0));
     }
 
     public function withFields()

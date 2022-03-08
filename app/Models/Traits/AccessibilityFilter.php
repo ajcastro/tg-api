@@ -7,7 +7,7 @@ use App\Models\Contracts\RelatesToWebsite;
 use App\Models\Website;
 
 /**
- * @method static void applyAccessibilityFilter($request = null)
+ * @method static \Illuminate\Database\Eloquent\Builder applyAccessibilityFilter($request = null)
  */
 trait AccessibilityFilter
 {

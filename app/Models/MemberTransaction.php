@@ -61,6 +61,21 @@ class MemberTransaction extends Model implements RelatesToWebsite
         'approved_at' => 'timestamp',
     ];
 
+
+    public static function booted()
+    {
+        static::creating(function (MemberTransaction $transaction) {
+            $transaction->sequence = static::getNextSequence($transaction->type, $transaction->website_id);
+        });
+    }
+
+    public static function getNextSequence($type, $website_id)
+    {
+        return static::where(['type' => $type, 'website_id' => $website_id])
+            ->orderByDesc('created_at')
+            ->value('sequence')+1;
+    }
+
     public function website()
     {
         return $this->belongsTo(Website::class);

@@ -47,6 +47,7 @@ class MemberQuery extends BaseQuery implements QueryContract
     {
         $this->allowedFilters([
             AllowedFilter::exact('warning_status'),
+            AllowedFilter::exact('website_id'),
             AllowedFilter::exact('upline_referral_id'),
             AllowedFilter::scope('search'),
             AllowedFilter::callback('active_log', function ($query, $value) {

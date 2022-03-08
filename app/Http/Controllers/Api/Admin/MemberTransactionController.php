@@ -3,21 +3,14 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\PaginateOrListResource;
-use App\Http\Controllers\Traits\ResolvesModel;
-use App\Http\Controllers\Traits\ResolvesRequest;
-use App\Http\Controllers\Traits\ShowResource;
+use App\Http\Controllers\ResourceController;
 use App\Http\Queries\MemberTransactionQuery;
+use App\Http\Requests\Api\Admin\MemberTransactionRequest;
 use App\Models\MemberTransaction;
 use Illuminate\Http\Request;
 
-class MemberTransactionController extends Controller
+class MemberTransactionController extends ResourceController
 {
-    use ResolvesModel;
-    use ResolvesRequest;
-    use PaginateOrListResource;
-    use ShowResource;
-
     public function __construct()
     {
         $this->hook(function () {
@@ -27,13 +20,16 @@ class MemberTransactionController extends Controller
         $this->hook(function () {
             $this->query = new MemberTransactionQuery;
         })->only(['index', 'show']);
+
+        $this->hook(function () {
+            $this->request = MemberTransactionRequest::class;
+        })->only(['store']);
     }
 
     public function approve(Request $request, MemberTransaction $memberTransaction)
     {
         $memberTransaction->approve($request->user());
     }
-
 
     public function reject(Request $request, MemberTransaction $memberTransaction)
     {

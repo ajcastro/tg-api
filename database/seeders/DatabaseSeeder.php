@@ -23,14 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionsTableSeeder::class);
         $this->seedAdminUser();
         $this->seedDemoClientAndParentGroup();
-        $this->seedDummyData();
-    }
-
-    private function seedDummyData()
-    {
-        if (app()->isProduction()) {return;}
-
-        $this->call(DummySeeder::class);
     }
 
     private function seedDefaultClient()

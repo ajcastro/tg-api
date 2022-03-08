@@ -5,6 +5,7 @@ namespace App\Http\Queries;
 use App\Enums\MemberTransactionStatus;
 use App\Http\Queries\BaseQuery;
 use App\Http\Queries\Contracts\QueryContract;
+use App\Http\Queries\CustomSorts\SortByRaw;
 use App\Http\Queries\CustomSorts\SortBySub;
 use App\Models\Member;
 use App\Models\MemberTransaction;
@@ -62,6 +63,9 @@ class MemberTransactionQuery extends BaseQuery implements QueryContract
                     $query->where('member_transactions.status', '!=', MemberTransactionStatus::NEW);
                 }
             }),
+            AllowedFilter::callback('ticket_id', function ($query, $value) {
+                $query->ofTicketId($value);
+            }),
         ]);
 
         return $this;
@@ -88,6 +92,10 @@ class MemberTransactionQuery extends BaseQuery implements QueryContract
                 User::query()
                 ->select('name')
                 ->whereColumn('member_transactions.approved_by_id', 'users.id')
+            )),
+            AllowedSort::custom('ticket_id', SortByRaw::make(
+                '__ticket_id',
+                'CONCAT(IF(type="deposit", "D", "W"), LPAD(website_id,4,"0"), LPAD(sequence,6,"0"))'
             )),
         ]);
 

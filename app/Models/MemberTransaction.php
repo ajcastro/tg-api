@@ -96,6 +96,43 @@ class MemberTransaction extends Model implements RelatesToWebsite
         $query->where('website_id', $website->id);
     }
 
+    public function scopeOfTicketId(Builder|QueryBuilder $query, $ticket_id)
+    {
+        [$type, $website_id, $sequence] = static::destructTicketId($ticket_id);
+
+        $query->where('type', $type)
+            ->where('website_id', $website_id)
+            ->where('sequence', $sequence);
+    }
+
+    public static function destructTicketId($ticket_id)
+    {
+        $prefix = $ticket_id[0] ?? null;
+        $type = is_null($prefix) || !in_array(strtoupper($prefix), ['D', 'W'])
+            ? null
+            : (strtoupper($prefix) === 'D' ? 'deposit' : 'withdraw');
+        $websiteId = (int) substr($ticket_id, 1, 4);
+        $sequence = (int) last(explode('-', $ticket_id));
+
+        return [$type, $websiteId, $sequence];
+    }
+
+    public static function parseToTicketId($type, $websiteId, $sequence)
+    {
+        $prefix = $type === 'deposit' ? 'D' : 'W';
+
+        $websiteId = num_zero_pad($websiteId, 4);
+
+        $sequence = num_zero_pad($sequence, 6);
+
+        return "{$prefix}{$websiteId}-{$sequence}";
+    }
+
+    public function getTicketIdAttribute()
+    {
+        return static::parseToTicketId($this->type, $this->website_id, $this->sequence);
+    }
+
     public function approve($user)
     {
         $this->status = MemberTransactionStatus::APPROVED;

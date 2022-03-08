@@ -40,6 +40,10 @@ class ParentGroup extends Model
         'is_hidden' => 'boolean',
     ];
 
+    protected $attributes = [
+        'is_hidden' => 0,
+    ];
+
 
     public static function booted()
     {

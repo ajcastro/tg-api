@@ -47,6 +47,7 @@ class Client extends Model implements RelatesToWebsite
 
     protected $attributes = [
         'is_active' => 1,
+        'is_hidden' => 0,
     ];
 
     public static function booted()

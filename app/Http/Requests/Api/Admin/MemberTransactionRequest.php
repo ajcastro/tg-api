@@ -31,10 +31,6 @@ class MemberTransactionRequest extends FormRequest
                 'required',
                 'in:deposit,withdraw',
             ],
-            'website_id' => [
-                'required',
-                'exists:websites,id'
-            ],
             'member_id' => [
                 'required',
                 'exists:members,id'

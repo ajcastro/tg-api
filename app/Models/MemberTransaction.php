@@ -65,6 +65,7 @@ class MemberTransaction extends Model implements RelatesToWebsite
     public static function booted()
     {
         static::creating(function (MemberTransaction $transaction) {
+            $transaction->website_id = $transaction->website_id ?? $transaction->member->website_id;
             $transaction->sequence = static::getNextSequence($transaction->type, $transaction->website_id);
         });
     }

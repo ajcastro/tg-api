@@ -77,4 +77,11 @@ class ParentGroup extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function scopeSearch($query, $search)
+    {
+        $query->where(function ($query) use ($search) {
+            $query->where('code', 'like', "%{$search}%");
+        });
+    }
 }

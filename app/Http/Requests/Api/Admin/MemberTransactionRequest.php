@@ -41,16 +41,7 @@ class MemberTransactionRequest extends FormRequest
             ],
             'is_adjustment' => [
                 'required',
-                'in:1',
-            ],
-            'account_code' => [
-                'required',
-            ],
-            'account_name' => [
-                'required',
-            ],
-            'account_number' => [
-                'required',
+                'in:1', // only adjustments are created in admin
             ],
             'company_bank' => [
                 'required',

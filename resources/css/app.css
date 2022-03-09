@@ -88,3 +88,7 @@ body {
 .card-main label {
     color: #fff;
 }
+
+.card-main .btn-link {
+    color: #fff;
+}

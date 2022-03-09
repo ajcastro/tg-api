@@ -11374,6 +11374,10 @@ body {
     color: #fff;
 }
 
+.card-main .btn-link {
+    color: #fff;
+}
+
 
 .swiper-pagination-bullet {
     height: 8px;

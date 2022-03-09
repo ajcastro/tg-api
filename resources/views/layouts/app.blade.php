@@ -32,7 +32,7 @@
             @yield('content')
         </main>
     </div>
-    @include('partials.banner-slider')
+    @includeWhen(request()->is('/'), 'partials.banner-slider')
 @stack('scripts')
 </body>
 </html>

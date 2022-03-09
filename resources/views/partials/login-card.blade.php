@@ -1,8 +1,8 @@
 <div class="card login-card card-main">
     <div class="card-body">
-        <div class="mb-3 text-center">
+        <div class="mb-3 text-center text-uppercase">
             <h5>
-                LOGIN
+                Login
             </h5>
         </div>
         <div class="mb-3">
@@ -15,7 +15,7 @@
         </div>
         <div class="mb-2">
             <button type="submit" class="btn btn-primary">Login</button>
-            <button type="submit" class="btn btn-link float-end">Register</button>
+            <a href="{{url('/register')}}" class="btn btn-link float-end">Register</a>
         </div>
     </div>
 </div>

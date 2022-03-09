@@ -77,4 +77,4 @@
         },
     });
 </script>
-    @endpush
+@endpush

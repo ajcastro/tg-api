@@ -6,12 +6,12 @@
             </h5>
         </div>
         <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Username</label>
-            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+            <label for="username-form-control" class="form-label">Username</label>
+            <input type="email" class="form-control" id="username-form-control" placeholder="">
         </div>
         <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Password</label>
-            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+            <label for="password-form-control" class="form-label">Password</label>
+            <input type="email" class="form-control" id="password-form-control" placeholder="">
         </div>
         <div class="mb-2">
             <button type="submit" class="btn btn-primary">Login</button>

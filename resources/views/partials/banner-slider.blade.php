@@ -1,4 +1,4 @@
-<section class="banner" id="banner">
+<section class="banner" id="banner" style="margin: 0px 10vw;">
     <div class="swiper banner-slider">
         <div class="swiper-wrapper slide-wrapper">
             <div class="swiper-slide slide">

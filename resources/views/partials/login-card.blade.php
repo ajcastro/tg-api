@@ -14,7 +14,8 @@
             <input type="email" class="form-control" id="password-form-control" placeholder="">
         </div>
         <div class="mb-2">
-            <button type="submit" class="btn btn-primary">Login</button>
+            {{-- <button type="submit" class="btn btn-primary">Login</button> --}}
+            <a href="{{url('/login')}}" class="btn btn-primary">Login</a>
             <a href="{{url('/register')}}" class="btn btn-link float-end">Register</a>
         </div>
     </div>

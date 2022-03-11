@@ -25,14 +25,17 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
+    @include('layouts.icons-svg')
     <div id="app">
         @include('layouts.menu')
 
-        <main class="py-4">
+        <main>
+            @includeWhen(is_auth(), 'layouts.sidebar')
+
             @yield('content')
         </main>
     </div>
-    @includeWhen(request()->is('/'), 'partials.banner-slider')
+    @includeWhen(is_guest() && request()->is('/'), 'partials.banner-slider')
 @stack('scripts')
 </body>
 </html>

@@ -15,7 +15,23 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
+    if (is_auth()) {
+        return view('home_auth');
+    }
+
     return view('home');
+});
+
+Route::get('/login', function () {
+    cache(['is_auth' => true]);
+
+    return redirect('/');
+});
+
+Route::get('/logout', function () {
+    cache(['is_auth' => false]);
+
+    return redirect('/');
 });
 
 Route::get('/register', function () {

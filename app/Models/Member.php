@@ -8,10 +8,10 @@ use App\Http\Queries\MemberQuery;
 use App\Models\Contracts\RelatesToWebsite;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class Member extends Model implements RelatesToWebsite
+class Member extends Authenticatable implements RelatesToWebsite
 {
     use HasFactory, Traits\HasAllowableFields, Traits\RelatesToWebsiteTrait, Traits\AccessibilityFilter;
 

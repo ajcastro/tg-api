@@ -7,7 +7,7 @@ use App\Observers\SetsCreatedByAndUpdatedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ParentGroup extends Model
+class ParentGroup extends Model implements Contracts\AccessibleByUser
 {
     use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus;
 
@@ -53,7 +53,9 @@ class ParentGroup extends Model
         static::observe(SetsCreatedByAndUpdatedBy::class);
 
         static::creating(function (ParentGroup $parentGroup) {
-            $parentGroup->client_id = $parentGroup->client_id ?? auth()->user()->getClient()->id;
+            /** @var User */
+            $user = auth()->user();
+            $parentGroup->client_id = $parentGroup->client_id ?? $user->getClient()->id;
         });
     }
 
@@ -96,5 +98,10 @@ class ParentGroup extends Model
         $query->where(function ($query) use ($search) {
             $query->where('code', 'like', "%{$search}%");
         });
+    }
+
+    public function scopeAccessibleBy($query, User $user)
+    {
+        $query->where('client_id', $user->getClient()->id);
     }
 }

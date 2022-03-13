@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\Traits\SetActiveStatus;
 use App\Http\Queries\ParentGroupQuery;
 use App\Http\Requests\Api\Admin\ParentGroupRequest;
 use App\Models\ParentGroup;
 
 class ParentGroupController extends ResourceController
 {
+    use SetActiveStatus;
+
     public function __construct()
     {
         $this->hook(function () {

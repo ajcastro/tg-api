@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ParentGroup extends Model
 {
-    use HasFactory, Traits\HasAllowableFields;
+    use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus;
 
     const DEFAULT_ID = 1;
     const DEFAULT_CODE = 'spvadmin';
@@ -25,6 +25,7 @@ class ParentGroup extends Model
         'remarks',
         'created_by_id',
         'updated_by_id',
+        'is_active',
         'is_hidden',
     ];
 
@@ -37,10 +38,12 @@ class ParentGroup extends Model
         'id' => 'integer',
         'created_by_id' => 'integer',
         'updated_by_id' => 'integer',
+        'is_active' => 'boolean',
         'is_hidden' => 'boolean',
     ];
 
     protected $attributes = [
+        'is_active' => 1,
         'is_hidden' => 0,
     ];
 
@@ -48,6 +51,10 @@ class ParentGroup extends Model
     public static function booted()
     {
         static::observe(SetsCreatedByAndUpdatedBy::class);
+
+        static::creating(function (ParentGroup $parentGroup) {
+            $parentGroup->client_id = $parentGroup->client_id ?? auth()->user()->getClient()->id;
+        });
     }
 
     public static function getDefault()

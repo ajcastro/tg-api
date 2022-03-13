@@ -27,10 +27,6 @@ class ParentGroupRequest extends FormRequest
         $parent_group = $this->route('parent_group');
 
         return sometimes_if($parent_group, [
-            'client_id' => [
-                'required',
-                'exists:clients,id',
-            ],
             'code' => [
                 'required',
                 'string',

@@ -79,7 +79,7 @@ class Client extends Model implements RelatesToWebsite
 
         $user = User::create([
             'parent_group_id' => $pg->id,
-            'username' => $client->code,
+            'username' => 'adm_master',
             'name' => 'Admin User',
             'role_id' => $role->id,
             'email' => '',

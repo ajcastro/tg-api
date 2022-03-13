@@ -15,6 +15,8 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
+        return; // disable this seeder for now
+
         $rows = [
             [
                 'id' => 1,

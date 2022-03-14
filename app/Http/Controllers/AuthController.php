@@ -40,7 +40,7 @@ class AuthController extends Controller
         /** @var User */
         $user = $request->user();
 
-        $parentGroup = ParentGroup::findByCode($request->parent_group_code) ?? optional();
+        $parentGroup = ParentGroup::findByCode($request->parent_group_code) ?? new ParentGroup();
 
         $userAccess = $user->findUserAccess($parentGroup);
 

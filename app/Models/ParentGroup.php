@@ -83,6 +83,16 @@ class ParentGroup extends Model implements Contracts\AccessibleByUser
         return $this->belongsTo(Client::class);
     }
 
+    public function websites()
+    {
+        return $this->belongsToMany(Website::class, 'parent_groups_websites')->withTimestamps();
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'parent_groups_users')->withTimestamps();
+    }
+
     public function createdBy()
     {
         return $this->belongsTo(User::class);

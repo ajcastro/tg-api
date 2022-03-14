@@ -28,12 +28,10 @@ class User extends Authenticatable implements RelatesToWebsite
      * @var array<int, string>
      */
     protected $fillable = [
-        'parent_group_id',
         'username',
         'name',
         'email',
         'password',
-        'role_id',
         'is_active',
     ];
 
@@ -58,11 +56,6 @@ class User extends Authenticatable implements RelatesToWebsite
     ];
 
 
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
-
     public static function booted()
     {
         static::observe(SetsCreatedByAndUpdatedBy::class);
@@ -82,9 +75,9 @@ class User extends Authenticatable implements RelatesToWebsite
             ->findOrFail($value);
     }
 
-    public function parentGroup()
+    public function parentGroups()
     {
-        return $this->belongsTo(ParentGroup::class);
+        return $this->belongsToMany(ParentGroup::class, 'parent_groups_users')->withTimestamps();
     }
 
     public function createdBy()
@@ -110,14 +103,13 @@ class User extends Authenticatable implements RelatesToWebsite
         $query->whereIn('users.parent_group_id', $this->getParentGroupIdsFromWebsitesSubquery($website));
     }
 
-    public function createToken(string $name, array $abilities = ['*'], ParentGroup $parentGroup)
+    public function createToken(string $name, array $abilities = ['*'], $tokenAttributes = [])
     {
         $token = $this->tokens()->create([
             'name' => $name,
             'token' => hash('sha256', $plainTextToken = Str::random(40)),
             'abilities' => $abilities,
-            'parent_group_id' => $parentGroup->id,
-        ]);
+        ] + $tokenAttributes);
 
         return new NewAccessToken($token, $token->getKey().'|'.$plainTextToken);
     }
@@ -135,5 +127,15 @@ class User extends Authenticatable implements RelatesToWebsite
     public function getCurrentParentGroup()
     {
         return $this->currentAccessToken()->parentGroup;
+    }
+
+    public function getCurrentRole()
+    {
+        return $this->currentAccessToken()->role;
+    }
+
+    public function findUserAccess(ParentGroup $parentGroup): ?UserAccess
+    {
+        return UserAccess::where(['user_id' => $this->id, 'parent_group_id' => $parentGroup->id])->first();
     }
 }

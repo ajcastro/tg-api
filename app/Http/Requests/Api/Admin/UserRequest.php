@@ -44,14 +44,6 @@ class UserRequest extends FormRequest
                 'string',
                 'email',
             ],
-            'role_id' => [
-                'required',
-                'exists:roles,id',
-            ],
-            'parent_group_id' => [
-                'required',
-                'exists:parent_groups,id',
-            ],
             'password' => Rule::when(is_null($user), [
                 'required',
                 Password::min(8),

@@ -15,10 +15,16 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
         'token',
         'abilities',
         'parent_group_id',
+        'role_id',
     ];
 
     public function parentGroup()
     {
         return $this->belongsTo(ParentGroup::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 }

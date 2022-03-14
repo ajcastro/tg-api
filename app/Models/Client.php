@@ -77,14 +77,26 @@ class Client extends Model implements RelatesToWebsite
             'updated_by_id' => User::ADMIN_ID,
         ]);
 
-        $user = User::create([
-            'parent_group_id' => $pg->id,
-            'username' => 'adm_master',
-            'name' => 'Admin User',
-            'role_id' => $role->id,
-            'email' => '',
-            'password' => bcrypt('password'),
+        $users = collect([
+            User::create([
+                'username' => 'adm_master',
+                'name' => 'Admin User',
+                'email' => '',
+                'password' => bcrypt('password'),
+            ]),
+            User::create([
+                'username' => $pg->code.'_master',
+                'name' => 'Admin User',
+                'email' => '',
+                'password' => bcrypt('password'),
+            ])
         ]);
+
+        $usersSync = $users->mapWithKeys(function ($user) use ($role) {
+            return [$user->id => ['role_id' => $role->id]];
+        });
+
+        $pg->users()->sync($usersSync);
     }
 
     public function resolveRouteBinding($value, $field = null)
@@ -94,6 +106,11 @@ class Client extends Model implements RelatesToWebsite
             ->withInclude()
             ->withFilter()
             ->findOrFail($value);
+    }
+
+    public function parentGroups()
+    {
+        return $this->hasMany(ParentGroup::class);
     }
 
     public function createdBy()

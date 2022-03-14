@@ -36,8 +36,12 @@ class UserRequest extends FormRequest
                 'required',
                 'string',
                 Rule::unique('users', 'username')->ignore($user)->where(function ($query) {
-                    $query->where('parent_group_id', $this->parent_group_id);
+                    $query->where('client_id', $this->client_id);
                 }),
+            ],
+            'client_id' => [
+                'required',
+                'exists:clients,id'
             ],
             'email' => [
                 'required',

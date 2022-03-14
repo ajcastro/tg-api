@@ -28,6 +28,7 @@ class User extends Authenticatable implements RelatesToWebsite
      * @var array<int, string>
      */
     protected $fillable = [
+        'client_id',
         'username',
         'name',
         'email',
@@ -73,6 +74,11 @@ class User extends Authenticatable implements RelatesToWebsite
             ->withInclude()
             ->withFilter()
             ->findOrFail($value);
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
     }
 
     public function parentGroups()

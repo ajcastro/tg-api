@@ -79,12 +79,14 @@ class Client extends Model implements RelatesToWebsite
 
         $users = collect([
             User::create([
+                'client_id' => $client->id,
                 'username' => 'adm_master',
                 'name' => 'Admin User',
                 'email' => '',
                 'password' => bcrypt('password'),
             ]),
             User::create([
+                'client_id' => $client->id,
                 'username' => $pg->code.'_master',
                 'name' => 'Admin User',
                 'email' => '',

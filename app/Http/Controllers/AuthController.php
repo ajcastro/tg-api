@@ -14,24 +14,7 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|unique:users',
-            'password' => 'required|string',
-        ]);
-
-        $user = new User([
-            'name'  => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
-        $user->save();
-
-        $tokenResult = $this->createToken($user, $request);
-        $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->plainTextToken;
-
-        return $this->respondWithToken($token, $user);
+        // No register feature in admin panel
     }
 
     /**
@@ -64,7 +47,7 @@ class AuthController extends Controller
         }
 
         $user = $request->user();
-        $tokenResult = $this->createToken($user, $request);
+        $tokenResult = $this->createToken($user, $request, $parentGroup);
         $token = $tokenResult->plainTextToken;
 
         return $this->respondWithToken($token, $user);
@@ -86,9 +69,9 @@ class AuthController extends Controller
         ]);
     }
 
-    private function createToken(User $user, $request)
+    private function createToken(User $user, $request, ParentGroup $parentGroup)
     {
-        return $user->createToken($request->device_name ?? $request->header('user-agent'));
+        return $user->createToken($request->device_name ?? $request->header('user-agent'), ['*'], $parentGroup);
     }
 
     /**

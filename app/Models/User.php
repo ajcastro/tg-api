@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\NewAccessToken;
 
 class User extends Authenticatable implements RelatesToWebsite
 {
@@ -108,8 +110,30 @@ class User extends Authenticatable implements RelatesToWebsite
         $query->whereIn('users.parent_group_id', $this->getParentGroupIdsFromWebsitesSubquery($website));
     }
 
+    public function createToken(string $name, array $abilities = ['*'], ParentGroup $parentGroup)
+    {
+        $token = $this->tokens()->create([
+            'name' => $name,
+            'token' => hash('sha256', $plainTextToken = Str::random(40)),
+            'abilities' => $abilities,
+            'parent_group_id' => $parentGroup->id,
+        ]);
+
+        return new NewAccessToken($token, $token->getKey().'|'.$plainTextToken);
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->id === static::ADMIN_ID;
+    }
+
     public function getClient()
     {
         return $this->parentGroup->client;
+    }
+
+    public function getCurrentParentGroup()
+    {
+        return $this->currentAccessToken()->parentGroup;
     }
 }

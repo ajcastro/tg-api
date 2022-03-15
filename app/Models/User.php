@@ -82,7 +82,9 @@ class User extends Authenticatable implements RelatesToWebsite
 
     public function parentGroups()
     {
-        return $this->belongsToMany(ParentGroup::class, 'parent_groups_users')->withTimestamps();
+        return $this->belongsToMany(ParentGroup::class, 'parent_groups_users')
+            ->withTimestamps()
+            ->withPivot('role_id');
     }
 
     public function createdBy()

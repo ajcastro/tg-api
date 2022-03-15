@@ -14,24 +14,7 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|unique:users',
-            'password' => 'required|string',
-        ]);
-
-        $user = new User([
-            'name'  => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
-        $user->save();
-
-        $tokenResult = $this->createToken($user, $request);
-        $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->plainTextToken;
-
-        return $this->respondWithToken($token, $user);
+        // No register feature in admin panel
     }
 
     /**
@@ -39,23 +22,14 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $parentGroup = ParentGroup::findByCode($request->parent_group_code);
-
         $request->validate([
-            'parent_group_code' => [
-                'required', 'string',
-                function ($attribute, $value, $fail) use ($parentGroup) {
-                    if (is_null($parentGroup)) {
-                        abort(401, 'Unauthorized');
-                    }
-                }
-            ],
+            'parent_group_code' => 'required|string',
             'username' => 'required|string',
             'password' => 'required|string',
             // 'remember_me' => 'boolean'
         ]);
 
-        $credentials = $request->only(['username', 'password']) + ['parent_group_id' => $parentGroup->id];
+        $credentials = $request->only(['username', 'password']);
 
         if (!auth()->attempt($credentials)) {
             return response()->json([
@@ -63,11 +37,25 @@ class AuthController extends Controller
             ], 401);
         }
 
+        /** @var User */
         $user = $request->user();
-        $tokenResult = $this->createToken($user, $request);
-        $token = $tokenResult->plainTextToken;
 
-        return $this->respondWithToken($token, $user);
+        $parentGroup = ParentGroup::findByCode($request->parent_group_code) ?? new ParentGroup();
+
+        $userAccess = $user->findUserAccess($parentGroup);
+
+        if (empty($userAccess)) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
+        $tokenResult = $user->createToken($this->getTokenName($request), ['*'], [
+            'parent_group_id' => $userAccess->parent_group_id,
+            'role_id' => $userAccess->role_id,
+        ]);
+
+        return $this->respondWithToken($tokenResult->plainTextToken, $user);
     }
 
     public function respondWithToken($token, User $user)
@@ -86,9 +74,9 @@ class AuthController extends Controller
         ]);
     }
 
-    private function createToken(User $user, $request)
+    private function getTokenName(Request $request)
     {
-        return $user->createToken($request->device_name ?? $request->header('user-agent'));
+        return $request->device_name ?? $request->header('user-agent');
     }
 
     /**

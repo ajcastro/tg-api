@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Queries\UserQuery;
+use App\Models\Contracts\AccessibleByUser;
 use App\Models\Contracts\RelatesToWebsite;
 use App\Observers\SetsCreatedByAndUpdatedBy;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -11,9 +12,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\NewAccessToken;
 
-class User extends Authenticatable implements RelatesToWebsite
+class User extends Authenticatable implements RelatesToWebsite, AccessibleByUser
 {
     use HasApiTokens, HasFactory, Notifiable;
     use Traits\HasAllowableFields, Traits\SetActiveStatus, Traits\RelatesToWebsiteTrait, Traits\AccessibilityFilter;
@@ -26,13 +29,13 @@ class User extends Authenticatable implements RelatesToWebsite
      * @var array<int, string>
      */
     protected $fillable = [
-        'parent_group_id',
+        'client_id',
         'username',
         'name',
         'email',
         'password',
-        'role_id',
         'is_active',
+        'is_hidden',
     ];
 
     /**
@@ -53,22 +56,17 @@ class User extends Authenticatable implements RelatesToWebsite
     protected $casts = [
         'email_verified_at' => 'datetime',
         'is_active' => 'boolean',
+        'is_hidden' => 'boolean',
     ];
 
-
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
 
     public static function booted()
     {
         static::observe(SetsCreatedByAndUpdatedBy::class);
 
-        // static::creating(function (User $user) {
-        //     $user->username = $user->username ?? $user->email;
-        //     $user->role_id = 1;
-        // });
+        static::creating(function (User $user) {
+            $user->client_id = $user->client_id ?? request()->user()->getCurrentClient()->id ?? null;
+        });
     }
 
     public function resolveRouteBinding($value, $field = null)
@@ -80,9 +78,16 @@ class User extends Authenticatable implements RelatesToWebsite
             ->findOrFail($value);
     }
 
-    public function parentGroup()
+    public function client()
     {
-        return $this->belongsTo(ParentGroup::class);
+        return $this->belongsTo(Client::class);
+    }
+
+    public function parentGroups()
+    {
+        return $this->belongsToMany(ParentGroup::class, 'parent_groups_users')
+            ->withTimestamps()
+            ->withPivot('role_id');
     }
 
     public function createdBy()
@@ -108,8 +113,48 @@ class User extends Authenticatable implements RelatesToWebsite
         $query->whereIn('users.parent_group_id', $this->getParentGroupIdsFromWebsitesSubquery($website));
     }
 
-    public function getClient()
+    public function scopeAccessibleBy($query, User $user)
     {
-        return $this->parentGroup->client;
+        if ($user->isSuperAdmin()) {
+            return;
+        }
+
+        $query->where('client_id', $user->getCurrentClient()->id ?? null);
+    }
+
+    public function createToken(string $name, array $abilities = ['*'], $tokenAttributes = [])
+    {
+        $token = $this->tokens()->create([
+            'name' => $name,
+            'token' => hash('sha256', $plainTextToken = Str::random(40)),
+            'abilities' => $abilities,
+        ] + $tokenAttributes);
+
+        return new NewAccessToken($token, $token->getKey().'|'.$plainTextToken);
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->id === static::ADMIN_ID;
+    }
+
+    public function getCurrentClient(): ?Client
+    {
+        return $this->getCurrentParentGroup()->client;
+    }
+
+    public function getCurrentParentGroup(): ?ParentGroup
+    {
+        return $this->currentAccessToken()->parentGroup;
+    }
+
+    public function getCurrentRole(): ?Role
+    {
+        return $this->currentAccessToken()->role;
+    }
+
+    public function findUserAccess(ParentGroup $parentGroup): ?UserAccess
+    {
+        return UserAccess::where(['user_id' => $this->id, 'parent_group_id' => $parentGroup->id])->first();
     }
 }

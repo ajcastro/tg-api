@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Queries\ClientQuery;
+use App\Models\Contracts\AccessibleByUser;
 use App\Models\Contracts\RelatesToWebsite;
 use App\Observers\SetsCreatedByAndUpdatedBy;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class Client extends Model implements RelatesToWebsite
+class Client extends Model implements RelatesToWebsite, AccessibleByUser
 {
     use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus, Traits\RelatesToWebsiteTrait, Traits\AccessibilityFilter;
 
@@ -77,14 +78,29 @@ class Client extends Model implements RelatesToWebsite
             'updated_by_id' => User::ADMIN_ID,
         ]);
 
-        $user = User::create([
-            'parent_group_id' => $pg->id,
-            'username' => 'adm_master',
-            'name' => 'Admin User',
-            'role_id' => $role->id,
-            'email' => '',
-            'password' => bcrypt('password'),
+        $users = collect([
+            User::create([
+                'client_id' => $client->id,
+                'username' => 'adm_master',
+                'name' => 'Admin User',
+                'email' => '',
+                'password' => bcrypt('password'),
+                'is_hidden' => true,
+            ]),
+            User::create([
+                'client_id' => $client->id,
+                'username' => $pg->code.'_master',
+                'name' => 'Admin User',
+                'email' => '',
+                'password' => bcrypt('password'),
+            ])
         ]);
+
+        $usersSync = $users->mapWithKeys(function ($user) use ($role) {
+            return [$user->id => ['role_id' => $role->id]];
+        });
+
+        $pg->users()->sync($usersSync);
     }
 
     public function resolveRouteBinding($value, $field = null)
@@ -94,6 +110,11 @@ class Client extends Model implements RelatesToWebsite
             ->withInclude()
             ->withFilter()
             ->findOrFail($value);
+    }
+
+    public function parentGroups()
+    {
+        return $this->hasMany(ParentGroup::class);
     }
 
     public function createdBy()
@@ -118,5 +139,14 @@ class Client extends Model implements RelatesToWebsite
                 ->from('websites')
                 ->where('id', $website->id);
         });
+    }
+
+    public function scopeAccessibleBy($query, User $user)
+    {
+        if ($user->isSuperAdmin()) {
+            return;
+        }
+
+        $query->where('id', $user->getCurrentClient()->id ?? null);
     }
 }

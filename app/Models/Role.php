@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Queries\RoleQuery;
+use App\Models\Contracts\AccessibleByUser;
 use App\Models\Contracts\RelatesToWebsite;
 use App\Observers\SetsCreatedByAndUpdatedBy;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class Role extends Model implements RelatesToWebsite
+class Role extends Model implements RelatesToWebsite, AccessibleByUser
 {
     use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus, Traits\RelatesToWebsiteTrait, Traits\AccessibilityFilter;
 
@@ -84,5 +85,14 @@ class Role extends Model implements RelatesToWebsite
     public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
     {
         $query->whereIn('roles.parent_group_id', $this->getParentGroupIdsFromWebsitesSubquery($website));
+    }
+
+    public function scopeAccessibleBy($query, User $user)
+    {
+        if ($user->isSuperAdmin()) {
+            return;
+        }
+
+        $query->where('parent_group_id', $user->getCurrentParentGroup()->id ?? null);
     }
 }

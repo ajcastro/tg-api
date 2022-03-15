@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ParentGroup extends Model implements Contracts\AccessibleByUser
 {
-    use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus;
+    use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus, Traits\AccessibilityFilter;
 
     const DEFAULT_ID = 1;
     const DEFAULT_CODE = 'spvadmin';
@@ -55,7 +55,7 @@ class ParentGroup extends Model implements Contracts\AccessibleByUser
         static::creating(function (ParentGroup $parentGroup) {
             /** @var User */
             $user = auth()->user();
-            $parentGroup->client_id = $parentGroup->client_id ?? $user->getClient()->id;
+            $parentGroup->client_id = $parentGroup->client_id ?? $user->getCurrentClient()->id;
         });
     }
 
@@ -83,6 +83,16 @@ class ParentGroup extends Model implements Contracts\AccessibleByUser
         return $this->belongsTo(Client::class);
     }
 
+    public function websites()
+    {
+        return $this->belongsToMany(Website::class, 'parent_groups_websites')->withTimestamps();
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'parent_groups_users')->withTimestamps();
+    }
+
     public function createdBy()
     {
         return $this->belongsTo(User::class);
@@ -102,6 +112,10 @@ class ParentGroup extends Model implements Contracts\AccessibleByUser
 
     public function scopeAccessibleBy($query, User $user)
     {
-        $query->where('client_id', $user->getClient()->id);
+        if ($user->isSuperAdmin()) {
+            return;
+        }
+
+        return $query->where('client_id', $user->getCurrentClient()->id);
     }
 }

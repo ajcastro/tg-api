@@ -6,6 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
+/**
+ * @method \App\Models\User user()
+ */
 class UserRequest extends FormRequest
 {
     /**
@@ -36,21 +39,13 @@ class UserRequest extends FormRequest
                 'required',
                 'string',
                 Rule::unique('users', 'username')->ignore($user)->where(function ($query) {
-                    $query->where('parent_group_id', $this->parent_group_id);
+                    $query->where('client_id', $this->user()->getCurrentClient()->id ?? null);
                 }),
             ],
             'email' => [
                 'required',
                 'string',
                 'email',
-            ],
-            'role_id' => [
-                'required',
-                'exists:roles,id',
-            ],
-            'parent_group_id' => [
-                'required',
-                'exists:parent_groups,id',
             ],
             'password' => Rule::when(is_null($user), [
                 'required',

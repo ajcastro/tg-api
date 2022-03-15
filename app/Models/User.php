@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Queries\UserQuery;
+use App\Models\Contracts\AccessibleByUser;
 use App\Models\Contracts\RelatesToWebsite;
 use App\Observers\SetsCreatedByAndUpdatedBy;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -15,7 +16,7 @@ use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\NewAccessToken;
 
-class User extends Authenticatable implements RelatesToWebsite
+class User extends Authenticatable implements RelatesToWebsite, AccessibleByUser
 {
     use HasApiTokens, HasFactory, Notifiable;
     use Traits\HasAllowableFields, Traits\SetActiveStatus, Traits\RelatesToWebsiteTrait, Traits\AccessibilityFilter;
@@ -34,6 +35,7 @@ class User extends Authenticatable implements RelatesToWebsite
         'email',
         'password',
         'is_active',
+        'is_hidden',
     ];
 
     /**
@@ -54,6 +56,7 @@ class User extends Authenticatable implements RelatesToWebsite
     protected $casts = [
         'email_verified_at' => 'datetime',
         'is_active' => 'boolean',
+        'is_hidden' => 'boolean',
     ];
 
 
@@ -108,6 +111,15 @@ class User extends Authenticatable implements RelatesToWebsite
     public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
     {
         $query->whereIn('users.parent_group_id', $this->getParentGroupIdsFromWebsitesSubquery($website));
+    }
+
+    public function scopeAccessibleBy($query, User $user)
+    {
+        if ($user->isSuperAdmin()) {
+            return;
+        }
+
+        $query->where('client_id', $user->getCurrentClient()->id ?? null);
     }
 
     public function createToken(string $name, array $abilities = ['*'], $tokenAttributes = [])

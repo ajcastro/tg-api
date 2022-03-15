@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Queries\ClientQuery;
+use App\Models\Contracts\AccessibleByUser;
 use App\Models\Contracts\RelatesToWebsite;
 use App\Observers\SetsCreatedByAndUpdatedBy;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class Client extends Model implements RelatesToWebsite
+class Client extends Model implements RelatesToWebsite, AccessibleByUser
 {
     use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus, Traits\RelatesToWebsiteTrait, Traits\AccessibilityFilter;
 
@@ -84,6 +85,7 @@ class Client extends Model implements RelatesToWebsite
                 'name' => 'Admin User',
                 'email' => '',
                 'password' => bcrypt('password'),
+                'is_hidden' => true,
             ]),
             User::create([
                 'client_id' => $client->id,
@@ -137,5 +139,14 @@ class Client extends Model implements RelatesToWebsite
                 ->from('websites')
                 ->where('id', $website->id);
         });
+    }
+
+    public function scopeAccessibleBy($query, User $user)
+    {
+        if ($user->isSuperAdmin()) {
+            return;
+        }
+
+        $query->where('id', $user->getCurrentClient()->id ?? null);
     }
 }

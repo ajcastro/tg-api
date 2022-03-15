@@ -55,14 +55,36 @@ class Client extends Model implements RelatesToWebsite
         static::observe(SetsCreatedByAndUpdatedBy::class);
 
         static::created(function (Client $client) {
-            ParentGroup::create([
-                'client_id' => $client->id,
-                'code' => $client->code,
-                'created_by_id' => $client->created_by_id,
-                'updated_by_id' => $client->updated_by_id,
-                'is_hidden' => $client->is_hidden,
-            ]);
+            static::createDefaulParentGroupAndAdministratorUser($client);
         });
+    }
+
+    public static function createDefaulParentGroupAndAdministratorUser(Client $client)
+    {
+        $pg = ParentGroup::create([
+            'client_id' => $client->id,
+            'code' => $client->code,
+            'created_by_id' => $client->created_by_id,
+            'updated_by_id' => $client->updated_by_id,
+            'is_hidden' => $client->is_hidden,
+        ]);
+
+        $role = Role::create([
+            'parent_group_id' => $pg->id,
+            'name' => 'Administrator',
+            'is_active' => 1,
+            'created_by_id' => User::ADMIN_ID,
+            'updated_by_id' => User::ADMIN_ID,
+        ]);
+
+        $user = User::create([
+            'parent_group_id' => $pg->id,
+            'username' => 'adm_master',
+            'name' => 'Admin User',
+            'role_id' => $role->id,
+            'email' => '',
+            'password' => bcrypt('password'),
+        ]);
     }
 
     public function resolveRouteBinding($value, $field = null)

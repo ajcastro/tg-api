@@ -15,7 +15,7 @@ class ParentGroupQuery extends BaseQuery implements QueryContract
 {
     public function __construct()
     {
-        parent::__construct(ParentGroup::query()->where('is_hidden', 0));
+        parent::__construct(ParentGroup::query());
     }
 
     public function withFields()
@@ -43,6 +43,9 @@ class ParentGroupQuery extends BaseQuery implements QueryContract
     {
         $this->allowedFilters([
             AllowedFilter::scope('search'),
+            AllowedFilter::callback('accessible_by_me', function ($query) {
+                $query->accessibleBy(request()->user());
+            }),
         ]);
 
         return $this;

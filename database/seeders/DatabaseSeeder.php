@@ -6,6 +6,7 @@ use App\Models\Client;
 use App\Models\ParentGroup;
 use App\Models\Role;
 use App\Models\User;
+use finfo;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -18,27 +19,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(RolesTableSeeder::class);
         $this->call(PermissionsTableSeeder::class);
-        $this->seedAdminUser();
-        $this->seedDefaultClientAndParentGroup();
+        $this->seedDefaultClientSetupWithAdminUser();
     }
 
-    private function seedAdminUser()
-    {
-        User::firstOrCreate([
-            'id' => User::ADMIN_ID,
-            'parent_group_id' => ParentGroup::DEFAULT_ID,
-            'username' => 'admin',
-        ], [
-            'role_id' => Role::ADMINISTRATOR_ID,
-            'email' => 'admin@demo.com',
-            'name' => 'Admin User',
-            'password' => bcrypt('password'),
-        ]);
-    }
-
-    private function seedDefaultClientAndParentGroup()
+    /** @see Client createDefaulParentGroupAndAdministratorUser() */
+    private function seedDefaultClientSetupWithAdminUser()
     {
         Client::firstOrCreate([
             'id' => Client::DEFAULT_ID,

@@ -56,9 +56,9 @@ class RoleQuery extends BaseQuery implements QueryContract
             ...Role::allowableFields(),
             AllowedSort::custom('parent_group_code', SortBySub::make(
                 '__parent_group_code',
-                User::query()
+                ParentGroup::query()
                 ->select('code')
-                ->whereColumn('roles.updated_by_id', 'parent_groups.id')
+                ->whereColumn('roles.parent_group_id', 'parent_groups.id')
             )),
             AllowedSort::custom('updated_by', SortBySub::make(
                 '__updated_by',

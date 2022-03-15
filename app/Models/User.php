@@ -107,4 +107,9 @@ class User extends Authenticatable implements RelatesToWebsite
     {
         $query->whereIn('users.parent_group_id', $this->getParentGroupIdsFromWebsitesSubquery($website));
     }
+
+    public function getClient()
+    {
+        return $this->parentGroup->client;
+    }
 }

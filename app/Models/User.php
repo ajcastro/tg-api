@@ -61,10 +61,9 @@ class User extends Authenticatable implements RelatesToWebsite
     {
         static::observe(SetsCreatedByAndUpdatedBy::class);
 
-        // static::creating(function (User $user) {
-        //     $user->username = $user->username ?? $user->email;
-        //     $user->role_id = 1;
-        // });
+        static::creating(function (User $user) {
+            $user->client_id = $user->client_id ?? request()->user()->getCurrentClient()->id ?? null;
+        });
     }
 
     public function resolveRouteBinding($value, $field = null)
@@ -120,22 +119,22 @@ class User extends Authenticatable implements RelatesToWebsite
         return new NewAccessToken($token, $token->getKey().'|'.$plainTextToken);
     }
 
-    public function isSuperAdmin()
+    public function isSuperAdmin(): bool
     {
         return $this->id === static::ADMIN_ID;
     }
 
-    public function getClient()
+    public function getCurrentClient(): ?Client
     {
-        return $this->parentGroup->client;
+        return $this->getCurrentParentGroup()->client;
     }
 
-    public function getCurrentParentGroup()
+    public function getCurrentParentGroup(): ?ParentGroup
     {
         return $this->currentAccessToken()->parentGroup;
     }
 
-    public function getCurrentRole()
+    public function getCurrentRole(): ?Role
     {
         return $this->currentAccessToken()->role;
     }

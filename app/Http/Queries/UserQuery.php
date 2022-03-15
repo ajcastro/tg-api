@@ -23,8 +23,6 @@ class UserQuery extends BaseQuery implements QueryContract
     {
         $this->allowedFields([
             ...User::allowableFields(),
-            ...fields('parent_group', ParentGroup::allowableFields()),
-            ...fields('role', Role::allowableFields()),
             ...fields('created_by', User::allowableFields()),
             ...fields('updated_by', User::allowableFields()),
         ]);
@@ -35,7 +33,7 @@ class UserQuery extends BaseQuery implements QueryContract
     public function withInclude()
     {
         $this->allowedIncludes([
-            'parent_group', 'role.permissions', 'created_by', 'updated_by',
+            'created_by', 'updated_by',
         ]);
 
         return $this;
@@ -44,8 +42,12 @@ class UserQuery extends BaseQuery implements QueryContract
     public function withFilter()
     {
         $this->allowedFilters([
-            AllowedFilter::exact('parent_group_id'),
-            AllowedFilter::exact('role_id'),
+            AllowedFilter::callback('parent_group_id', function () {
+                // todo
+            }),
+            AllowedFilter::callback('role_id', function () {
+                // todo
+            }),
             AllowedFilter::exact('is_active'),
             AllowedFilter::scope('search'),
         ]);

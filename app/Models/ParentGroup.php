@@ -55,7 +55,7 @@ class ParentGroup extends Model implements Contracts\AccessibleByUser
         static::creating(function (ParentGroup $parentGroup) {
             /** @var User */
             $user = auth()->user();
-            $parentGroup->client_id = $parentGroup->client_id ?? $user->getClient()->id;
+            $parentGroup->client_id = $parentGroup->client_id ?? $user->getCurrentClient()->id;
         });
     }
 
@@ -112,6 +112,6 @@ class ParentGroup extends Model implements Contracts\AccessibleByUser
 
     public function scopeAccessibleBy($query, User $user)
     {
-        $query->where('client_id', $user->getClient()->id);
+        $query->where('client_id', $user->getCurrentClient()->id);
     }
 }

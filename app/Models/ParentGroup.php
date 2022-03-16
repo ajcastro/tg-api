@@ -112,10 +112,6 @@ class ParentGroup extends Model implements Contracts\AccessibleByUser
 
     public function scopeAccessibleBy($query, User $user)
     {
-        if ($user->isSuperAdmin()) {
-            return;
-        }
-
         return $query->where('client_id', $user->getCurrentClient()->id);
     }
 }

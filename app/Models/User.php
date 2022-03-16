@@ -120,10 +120,6 @@ class User extends Authenticatable implements RelatesToWebsite, AccessibleByUser
 
     public function scopeAccessibleBy($query, User $user)
     {
-        if ($user->isSuperAdmin()) {
-            return;
-        }
-
         $query->where('client_id', $user->getCurrentClient()->id ?? null);
     }
 

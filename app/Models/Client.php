@@ -143,10 +143,6 @@ class Client extends Model implements RelatesToWebsite, AccessibleByUser
 
     public function scopeAccessibleBy($query, User $user)
     {
-        if ($user->isSuperAdmin()) {
-            return;
-        }
-
         $query->where('id', $user->getCurrentClient()->id ?? null);
     }
 }

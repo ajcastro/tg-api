@@ -48,6 +48,11 @@ class Website extends Model implements AccessibleByUser
     public static function booted()
     {
         static::observe(SetsCreatedByAndUpdatedBy::class);
+
+        static::created(function (Website $website) {
+            $pg = $website->client->getDefaultParentGroup();
+            $pg && $pg->websites()->attach($website);
+        });
     }
 
     public function resolveRouteBinding($value, $field = null)
@@ -67,6 +72,11 @@ class Website extends Model implements AccessibleByUser
     public function assignedClient()
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function client()
+    {
+        return $this->assignedClient();
     }
 
     public function members()
@@ -95,6 +105,13 @@ class Website extends Model implements AccessibleByUser
             return;
         }
 
-        $query->where('assigned_client_id', $user->getCurrentClient()->id);
+        if ($user->isClientSuperAdmin()) {
+            $query->where('assigned_client_id', $user->getCurrentClient()->id ?? null);
+            return;
+        }
+
+        $query->whereHas('parentGroups', function ($query) use ($user) {
+            $query->where('parent_groups.id', $user->getCurrentParentGroup()->id ?? null);
+        });
     }
 }

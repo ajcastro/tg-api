@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AdminLevel;
 use App\Http\Queries\ClientQuery;
 use App\Models\Contracts\AccessibleByUser;
 use App\Models\Contracts\RelatesToWebsite;
@@ -85,6 +86,7 @@ class Client extends Model implements RelatesToWebsite, AccessibleByUser
                 'name' => 'Admin User',
                 'email' => '',
                 'password' => bcrypt('password'),
+                'admin_level' => AdminLevel::CLIENT_SUPER_ADMIN,
                 'is_hidden' => true,
             ]),
             User::create([
@@ -93,6 +95,7 @@ class Client extends Model implements RelatesToWebsite, AccessibleByUser
                 'name' => "{$client->code} Admin",
                 'email' => '',
                 'password' => bcrypt('password'),
+                'admin_level' => AdminLevel::CLIENT_ADMIN,
             ])
         ]);
 
@@ -148,5 +151,10 @@ class Client extends Model implements RelatesToWebsite, AccessibleByUser
         }
 
         $query->where('id', $user->getCurrentClient()->id ?? null);
+    }
+
+    public function getDefaultParentGroup()
+    {
+        return $this->parentGroups()->where('code', $this->code)->first();
     }
 }

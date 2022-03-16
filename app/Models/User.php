@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AdminLevel;
 use App\Http\Queries\UserQuery;
 use App\Models\Contracts\AccessibleByUser;
 use App\Models\Contracts\RelatesToWebsite;
@@ -36,6 +37,7 @@ class User extends Authenticatable implements RelatesToWebsite, AccessibleByUser
         'password',
         'is_active',
         'is_hidden',
+        'admin_level',
     ];
 
     /**
@@ -141,6 +143,16 @@ class User extends Authenticatable implements RelatesToWebsite, AccessibleByUser
     public function isSuperAdmin(): bool
     {
         return $this->id === static::ADMIN_ID;
+    }
+
+    public function isClientSuperAdmin()
+    {
+        return $this->admin_level === AdminLevel::CLIENT_SUPER_ADMIN;
+    }
+
+    public function isClientAdmin()
+    {
+        return $this->admin_level === AdminLevel::CLIENT_ADMIN;
     }
 
     public function getCurrentClient(): ?Client

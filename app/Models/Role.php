@@ -89,6 +89,15 @@ class Role extends Model implements RelatesToWebsite, AccessibleByUser
 
     public function scopeAccessibleBy($query, User $user)
     {
+        if ($user->isSuperAdmin()) {
+            return;
+        }
+
+        if ($user->isClientSuperAdmin()) {
+            $query->whereIn('parent_group_id', $user->getCurrentClient()->parentGroups()->pluck('id'));
+            return;
+        }
+
         $query->where('parent_group_id', $user->getCurrentParentGroup()->id ?? null);
     }
 }

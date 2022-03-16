@@ -103,6 +103,11 @@ class ParentGroup extends Model implements Contracts\AccessibleByUser
         return $this->belongsTo(User::class);
     }
 
+    public function userAccesses()
+    {
+        return $this->hasMany(UserAccess::class);
+    }
+
     public function scopeSearch($query, $search)
     {
         $query->where(function ($query) use ($search) {

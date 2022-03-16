@@ -41,7 +41,7 @@ class UserController extends ResourceController
 
     public function parentGroups(User $user)
     {
-        return JsonResource::make($user->parentGroups);
+        return JsonResource::make($user->accesses);
     }
 
     public function syncParentGroups(Request $request, User $user)

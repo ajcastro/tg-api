@@ -100,6 +100,11 @@ class User extends Authenticatable implements RelatesToWebsite, AccessibleByUser
         return $this->belongsTo(User::class, 'updated_by_id');
     }
 
+    public function accesses()
+    {
+        return $this->hasMany(UserAccess::class);
+    }
+
     public function scopeSearch($query, $search)
     {
         $query->where(function ($query) use ($search) {

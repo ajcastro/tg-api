@@ -90,7 +90,7 @@ class Client extends Model implements RelatesToWebsite, AccessibleByUser
             User::create([
                 'client_id' => $client->id,
                 'username' => $pg->code.'_master',
-                'name' => 'Admin User',
+                'name' => "{$client->code} Admin",
                 'email' => '',
                 'password' => bcrypt('password'),
             ])

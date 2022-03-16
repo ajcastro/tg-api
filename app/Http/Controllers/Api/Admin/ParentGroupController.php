@@ -7,6 +7,8 @@ use App\Http\Controllers\Traits\SetActiveStatus;
 use App\Http\Queries\ParentGroupQuery;
 use App\Http\Requests\Api\Admin\ParentGroupRequest;
 use App\Models\ParentGroup;
+use App\Models\Website;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ParentGroupController extends ResourceController
@@ -40,5 +42,24 @@ class ParentGroupController extends ResourceController
         });
 
         return JsonResource::make($users);
+    }
+
+    public function websites(ParentGroup $parentGroup)
+    {
+        return JsonResource::make($parentGroup->websites);
+    }
+
+    public function addWebsite(Request $request, ParentGroup $parentGroup)
+    {
+        $request->validate([
+            'website_id' => 'required',
+        ]);
+
+        $parentGroup->websites()->syncWithoutDetaching($request->website_id);
+    }
+
+    public function removeWebsite(Request $request, ParentGroup $parentGroup, Website $website)
+    {
+        $parentGroup->websites()->detach($website);
     }
 }

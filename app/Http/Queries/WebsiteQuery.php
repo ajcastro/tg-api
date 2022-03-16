@@ -15,7 +15,7 @@ class WebsiteQuery extends BaseQuery implements QueryContract
 {
     public function __construct()
     {
-        parent::__construct(Website::query());
+        parent::__construct(Website::applyAccessibilityFilter());
     }
 
     public function withFields()

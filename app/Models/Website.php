@@ -91,6 +91,6 @@ class Website extends Model implements AccessibleByUser
 
     public function scopeAccessibleBy($query, User $user)
     {
-        $query->where('assigned_client_id', $user->parentGroup->client_id);
+        $query->where('assigned_client_id', $user->getCurrentClient()->id);
     }
 }

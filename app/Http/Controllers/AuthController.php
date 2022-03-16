@@ -29,7 +29,9 @@ class AuthController extends Controller
             // 'remember_me' => 'boolean'
         ]);
 
-        $credentials = $request->only(['username', 'password']);
+        $parentGroup = ParentGroup::findByCode($request->parent_group_code) ?? new ParentGroup();
+
+        $credentials = $request->only(['username', 'password']) + ['client_id' => $parentGroup->client_id];
 
         if (!auth()->attempt($credentials)) {
             return response()->json([
@@ -39,8 +41,6 @@ class AuthController extends Controller
 
         /** @var User */
         $user = $request->user();
-
-        $parentGroup = ParentGroup::findByCode($request->parent_group_code) ?? new ParentGroup();
 
         $userAccess = $user->findUserAccess($parentGroup);
 

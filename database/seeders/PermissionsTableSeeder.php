@@ -14,23 +14,18 @@ class PermissionsTableSeeder extends Seeder
      */
     public function run()
     {
-        $rows = [
-            ...require(__DIR__.'/permissions/users.php'),
-            ...require(__DIR__.'/permissions/members.php'),
-            ...require(__DIR__.'/permissions/transactions.php'),
+        $groups = [
+            'Menu - Users Management' => require(__DIR__ . '/permissions/users.php'),
+            'Menu - Members' => require(__DIR__ . '/permissions/members.php'),
+            'Menu - Transactions' => require(__DIR__ . '/permissions/transactions.php'),
         ];
 
-        foreach ($rows as $row) {
-            Permission::firstOrCreate([
-                'name' => $row['name'],
-            ], $row);
+        foreach ($groups as $groupDisplay => $rows) {
+            foreach ($rows as $row) {
+                Permission::firstOrCreate([
+                    'name' => $row['name'],
+                ], $row + ['group_display' => $groupDisplay]);
+            }
         }
     }
 }
-
-// special permission, i think for now are
-// can view detail users,
-// can activate member if suspend,
-// can edit member password,
-// can approve/reject deposit,
-// can approve/reject withdraw

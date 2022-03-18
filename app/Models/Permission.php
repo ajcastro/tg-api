@@ -35,16 +35,4 @@ class Permission extends Model
             $permission->name = $permission->name ?? Str::slug($permission->label, '_');
         });
     }
-
-    public function getGroupAttribute()
-    {
-        [$group] = explode('.', $this->name);
-
-        return $group;
-    }
-
-    public function getGroupDisplayAttribute()
-    {
-        return Str::title($this->group);
-    }
 }

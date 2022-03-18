@@ -202,4 +202,21 @@ class Member extends Model implements RelatesToWebsite
         $this->suspended_reason = null;
         $this->save();
     }
+
+    public function createActiveLog(Website $website, array $attributes = [])
+    {
+        $activeLog = $this->activeLog()->make($attributes + [
+            'website_id' => $website->id,
+            'login_date' => now(),
+            'activity' => 'login',
+            'ip_address' => '0.0.0.0',
+            'country' => '',
+            'city' => '',
+            'isp' => '',
+        ]);
+
+        $activeLog->save();
+
+        return $activeLog;
+    }
 }

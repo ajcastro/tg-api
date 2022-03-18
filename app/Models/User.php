@@ -67,7 +67,7 @@ class User extends Authenticatable implements RelatesToWebsite, AccessibleByUser
         static::observe(SetsCreatedByAndUpdatedBy::class);
 
         static::creating(function (User $user) {
-            $user->client_id = $user->client_id ?? request()->user()->getCurrentClient()->id ?? null;
+            $user->client_id = $user->client_id ?? optional(request()->user())->getCurrentClient()->id ?? null;
         });
     }
 

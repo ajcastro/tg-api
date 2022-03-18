@@ -71,6 +71,7 @@ class Client extends Model implements RelatesToWebsite, AccessibleByUser
             'is_hidden' => $client->is_hidden,
         ]);
 
+        /** @var Role */
         $role = Role::create([
             'parent_group_id' => $pg->id,
             'name' => 'Administrator',
@@ -78,6 +79,8 @@ class Client extends Model implements RelatesToWebsite, AccessibleByUser
             'created_by_id' => User::ADMIN_ID,
             'updated_by_id' => User::ADMIN_ID,
         ]);
+
+        $role->assignAllPermissions();
 
         $users = collect([
             User::create([
@@ -96,7 +99,7 @@ class Client extends Model implements RelatesToWebsite, AccessibleByUser
                 'email' => '',
                 'password' => bcrypt('password'),
                 'admin_level' => AdminLevel::CLIENT_ADMIN,
-            ])
+            ]),
         ]);
 
         $usersSync = $users->mapWithKeys(function ($user) use ($role) {

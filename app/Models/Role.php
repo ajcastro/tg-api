@@ -100,4 +100,10 @@ class Role extends Model implements RelatesToWebsite, AccessibleByUser
 
         $query->where('parent_group_id', $user->getCurrentParentGroup()->id ?? null);
     }
+
+    public function assignAllPermissions()
+    {
+        $permissions = Permission::get();
+        return $this->permissions()->sync($permissions);
+    }
 }

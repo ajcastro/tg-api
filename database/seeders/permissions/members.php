@@ -5,6 +5,7 @@ return [
     [
         'name' => 'members.view_member_list',
         'label' => 'Menu - Member List',
+        'admin_redirect' => '/members/list',
         'casl' => [
             'action' => 'read',
             'subject' => 'Member',
@@ -63,6 +64,7 @@ return [
     [
         'name' => 'members.view_member_online',
         'label' => 'Menu - Member Online',
+        'admin_redirect' => '/members/online',
         'casl' => [
             'action' => 'read_online',
             'subject' => 'Member',
@@ -89,6 +91,7 @@ return [
     [
         'name' => 'members.view_referral_list',
         'label' => 'Menu - Referral List',
+        'admin_redirect' => '/members/online',
         'casl' => [
             'action' => 'read_referrrals',
             'subject' => 'Member',
@@ -99,6 +102,7 @@ return [
     [
         'name' => 'members.view_blacklist',
         'label' => 'Menu - Blacklist',
+        'admin_redirect' => '/members/blacklist',
         'casl' => [
             'action' => 'read_blacklist',
             'subject' => 'Member',

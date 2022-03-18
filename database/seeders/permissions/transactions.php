@@ -5,6 +5,7 @@ return [
     [
         'name' => 'transactions.new_deposits.view',
         'label' => 'Menu - New Deposits',
+        'admin_redirect' => '/transactions/new_deposits',
         'casl' => [
             'action' => 'read_new_deposits',
             'subject' => 'MemberTransaction',
@@ -39,6 +40,7 @@ return [
     [
         'name' => 'transactions.deposit_list.view',
         'label' => 'Menu - Deposit List',
+        'admin_redirect' => '/transactions/deposit_list',
         'casl' => [
             'action' => 'read_new_withdrawals',
             'subject' => 'MemberTransaction',
@@ -65,6 +67,7 @@ return [
     [
         'name' => 'transactions.new_withdrawals.view',
         'label' => 'Menu - New Withdrawals',
+        'admin_redirect' => '/transactions/new_withdrawals',
         'casl' => [
             'action' => 'read_new_withdrawals',
             'subject' => 'MemberTransaction',
@@ -99,6 +102,7 @@ return [
     [
         'name' => 'transactions.withdrawal_list.view',
         'label' => 'Menu - Withdrawal List',
+        'admin_redirect' => '/transactions/withdrawal_list',
         'casl' => [
             'action' => 'read_withdrawal_list',
             'subject' => 'MemberTransaction',
@@ -125,6 +129,7 @@ return [
     [
         'name' => 'transactions.adjustments.view',
         'label' => 'Menu - Adjustments',
+        'admin_redirect' => '/transactions/adjustments',
         'casl' => [
             'action' => 'read_adjustments',
             'subject' => 'MemberTransaction',

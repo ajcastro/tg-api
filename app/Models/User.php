@@ -184,6 +184,23 @@ class User extends Authenticatable implements RelatesToWebsite, AccessibleByUser
         return $this;
     }
 
+    public function getUserAccess(): ?UserAccess
+    {
+        if (empty($this->userAccess) || empty($this->userAccess->role)) {
+            logger()->warning("User {$this->username} has no userAccess or role set when calling getCaslAbilities().");
+        }
+
+        return $this->userAccess;
+    }
+
+    public function getUserAccessRole(): ?Role
+    {
+        $role = $this->getUserAccess()->role ?? null;
+        $role && $role->makeHidden('permissions');
+
+        return $role;
+    }
+
     public function hasCaslAbilities()
     {
         return collect($this->getCaslAbilities())->isNotEmpty();
@@ -203,13 +220,25 @@ class User extends Authenticatable implements RelatesToWebsite, AccessibleByUser
             ]];
         }
 
-        if (empty($this->userAccess) || empty($this->userAccess->role)) {
-            logger()->warning("User {$this->username} has no userAccess or role set when calling getCaslAbilities().");
+        $role = $this->getUserAccessRole();
+
+        if (is_null($role)) {
             return [];
         }
 
-        $role = $this->userAccess->role;
-
         return $role->getCaslAbilities();
+    }
+
+    public function getAdminRedirect()
+    {
+        if ($this->isSuperAdmin()) {
+            return '/users';
+        }
+
+        $role = $this->getUserAccessRole();
+        /** @var Permission */
+        $permission = $role->permissions->first() ?? new Permission;
+
+        return $permission->admin_redirect;
     }
 }

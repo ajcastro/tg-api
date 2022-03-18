@@ -71,6 +71,7 @@ class AuthController extends Controller
                 'fullName' => $user->name,
                 'role' => 'admin',
                 'ability' => $user->getCaslAbilities(),
+                'admin_redirect' => $user->getAdminRedirect(),
             ],
             'token_type' => 'Bearer',
         ]);

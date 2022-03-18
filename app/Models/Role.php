@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
+/**
+ * @property \Illuminate\Database\Eloquent\Collection $permissions
+ */
 class Role extends Model implements RelatesToWebsite, AccessibleByUser
 {
     use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus, Traits\RelatesToWebsiteTrait, Traits\AccessibilityFilter;
@@ -111,6 +114,6 @@ class Role extends Model implements RelatesToWebsite, AccessibleByUser
 
     public function getCaslAbilities(): array
     {
-        return $this->caslAbilities ?? $this->caslAbilities = $this->permissions()->pluck('casl')->all();
+        return $this->caslAbilities ?? $this->caslAbilities = $this->permissions->pluck('casl')->all();
     }
 }

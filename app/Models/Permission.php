@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -31,5 +32,10 @@ class Permission extends Model
 
     public static function booted()
     {
+        static::creating(function (Permission $permission) {
+            if (Str::startsWith($permission->label, 'Menu -') && blank($permission->admin_redirect)) {
+                throw new Exception("Attribute admin_redirect is required for {$permission->label}.");
+            }
+        });
     }
 }

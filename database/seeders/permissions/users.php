@@ -5,6 +5,7 @@ return [
     [
         'name' => 'users.view_any',
         'label' => 'Menu - Users',
+        'admin_redirect' => '/users',
         'casl' => [
             'action' => 'read',
             'subject' => 'User',
@@ -54,6 +55,7 @@ return [
     [
         'name' => 'roles.view_any',
         'label' => 'Menu - Roles',
+        'admin_redirect' => '/roles',
         'casl' => [
             'action' => 'read',
             'subject' => 'Role',
@@ -96,6 +98,7 @@ return [
     [
         'name' => 'parent_groups.view_any',
         'label' => 'Menu - Parent Groups',
+        'admin_redirect' => '/parent_groups',
         'casl' => [
             'action' => 'read',
             'subject' => 'ParentGroup',

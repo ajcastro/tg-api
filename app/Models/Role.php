@@ -30,6 +30,8 @@ class Role extends Model implements RelatesToWebsite, AccessibleByUser
         'is_active' => true,
     ];
 
+    protected $caslAbilities;
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -109,6 +111,6 @@ class Role extends Model implements RelatesToWebsite, AccessibleByUser
 
     public function getCaslAbilities(): array
     {
-        return $this->permissions->pluck('casl')->all();
+        return $this->caslAbilities ?? $this->caslAbilities = $this->permissions()->pluck('casl')->all();
     }
 }

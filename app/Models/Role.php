@@ -106,4 +106,9 @@ class Role extends Model implements RelatesToWebsite, AccessibleByUser
         $permissions = Permission::get();
         return $this->permissions()->sync($permissions);
     }
+
+    public function getCaslAbilities(): array
+    {
+        return $this->permissions->pluck('casl')->all();
+    }
 }

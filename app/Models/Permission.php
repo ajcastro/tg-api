@@ -16,7 +16,6 @@ class Permission extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
         'label',
     ];
 
@@ -27,12 +26,10 @@ class Permission extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'casl' => 'json',
     ];
 
     public static function booted()
     {
-        static::creating(function (Permission $permission) {
-            $permission->name = $permission->name ?? Str::slug($permission->label, '_');
-        });
     }
 }

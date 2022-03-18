@@ -44,7 +44,12 @@ class AuthController extends Controller
 
         $userAccess = $user->findUserAccess($parentGroup);
 
-        if (empty($userAccess)) {
+        $user->setUserAccess($userAccess);
+
+        if (
+            empty($userAccess) ||
+            $user->hasNoCaslAbilities()
+        ) {
             return response()->json([
                 'message' => 'Unauthorized'
             ], 401);
@@ -65,10 +70,7 @@ class AuthController extends Controller
             'user' => $user->toArray() + [
                 'fullName' => $user->name,
                 'role' => 'admin',
-                'ability' => [[
-                    'action' => 'manage',
-                    'subject' => 'all',
-                ]]
+                'ability' => $user->getCaslAbilities(),
             ],
             'token_type' => 'Bearer',
         ]);

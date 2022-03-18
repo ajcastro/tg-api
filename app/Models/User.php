@@ -17,6 +17,9 @@ use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\NewAccessToken;
 
+/**
+ * @property UserAccess $userAccess
+ */
 class User extends Authenticatable implements RelatesToWebsite, AccessibleByUser
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -173,5 +176,40 @@ class User extends Authenticatable implements RelatesToWebsite, AccessibleByUser
     public function findUserAccess(ParentGroup $parentGroup): ?UserAccess
     {
         return UserAccess::where(['user_id' => $this->id, 'parent_group_id' => $parentGroup->id])->first();
+    }
+
+    public function setUserAccess(?UserAccess $userAccess)
+    {
+        $this->setRelation('userAccess', $userAccess);
+        return $this;
+    }
+
+    public function hasCaslAbilities()
+    {
+        return collect($this->getCaslAbilities())->isNotEmpty();
+    }
+
+    public function hasNoCaslAbilities()
+    {
+        return !$this->hasCaslAbilities();
+    }
+
+    public function getCaslAbilities(): array
+    {
+        if ($this->isSuperAdmin()) {
+            return [[
+                'action' => 'manage',
+                'subject' => 'all',
+            ]];
+        }
+
+        if (empty($this->userAccess) || empty($this->userAccess->role)) {
+            logger()->warning("User {$this->username} has no userAccess or role set when calling getCaslAbilities().");
+            return [];
+        }
+
+        $role = $this->userAccess->role;
+
+        return $role->getCaslAbilities();
     }
 }

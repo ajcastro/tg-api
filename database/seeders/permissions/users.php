@@ -36,6 +36,14 @@ return [
         ],
     ],
     [
+        'name' => 'users.set_access_code',
+        'label' => 'Action - Users - Set Access Code',
+        'casl' => [
+            'action' => 'set_access_code',
+            'subject' => 'User',
+        ],
+    ],
+    [
         'name' => 'users.set_active',
         'label' => 'Action - Users - Activate User',
         'casl' => [

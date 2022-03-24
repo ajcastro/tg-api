@@ -82,8 +82,11 @@ class Client extends Model implements RelatesToWebsite, AccessibleByUser
 
         $role->assignAllPermissions();
 
+        $isDefaultClient = $client->id === Client::DEFAULT_ID;
+
         $users = collect([
-            User::create([
+            User::create(
+                ($isDefaultClient ? ['id' => User::ADMIN_ID] : []) + [
                 'client_id' => $client->id,
                 'username' => 'adm_master',
                 'name' => 'Admin User',
@@ -109,13 +112,23 @@ class Client extends Model implements RelatesToWebsite, AccessibleByUser
         $pg->users()->sync($usersSync);
     }
 
-    public function resolveRouteBinding($value, $field = null)
+    // public function resolveRouteBinding($value, $field = null)
+    // {
+    //     return (new ClientQuery)
+    //         ->withFields()
+    //         ->withInclude()
+    //         ->withFilter()
+    //         ->findOrFail($value);
+    // }
+
+    public function getSuperAdmin(): User
     {
-        return (new ClientQuery)
-            ->withFields()
-            ->withInclude()
-            ->withFilter()
-            ->findOrFail($value);
+        return $this->users()->where('admin_level', AdminLevel::CLIENT_SUPER_ADMIN)->first();
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
     }
 
     public function parentGroups()

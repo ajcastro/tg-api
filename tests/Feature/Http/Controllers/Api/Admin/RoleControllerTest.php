@@ -8,21 +8,23 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
+use Tests\Traits\WithDefaultClientActingUser;
 
 /**
  * @see \App\Http\Controllers\Api\Admin\RoleController
  */
 class RoleControllerTest extends TestCase
 {
-    use AdditionalAssertions, RefreshDatabase, WithFaker;
-
-    protected $withActingUser = true;
+    use AdditionalAssertions, RefreshDatabase, WithFaker, WithDefaultClientActingUser;
 
     public function test_index_should_paginate_resource()
     {
-        Role::withoutEvents(function () {
-            Role::factory()->count(3)->create();
-        });
+        /** @var User */
+        $user = auth()->user();
+
+        Role::factory()->count(3)->create([
+            'parent_group_id' => $user->getCurrentAccessToken()->getParentGroup()->id,
+        ]);
 
         $response = $this->getJson(route('roles.index', []));
 
@@ -38,10 +40,16 @@ class RoleControllerTest extends TestCase
 
     public function test_store_should_create()
     {
-        $payload = Role::factory()->make()->toArray();
+        /** @var User */
+        $user = auth()->user();
+        $payload = [
+            'parent_group_id' => $user->getCurrentAccessToken()->getParentGroup()->id,
+            'name' => 'Writer',
+        ];
 
         $response = $this->postJson(route('roles.store'), $payload);
 
+        $response->assertCreated();
         $this->assertDatabaseHas('roles', $payload);
 
         $response->assertCreated();
@@ -51,8 +59,14 @@ class RoleControllerTest extends TestCase
 
     public function test_update_should_update()
     {
-        $payload = Role::factory()->make()->toArray();
-        $role = tap(Role::factory()->make())->saveQuietly();
+        /** @var User */
+        $user = auth()->user();
+        $payload = [
+            'parent_group_id' => $user->getCurrentAccessToken()->getParentGroup()->id,
+            'name' => 'Writer',
+        ];
+
+        $role = Role::factory()->create(['name' => 'Moderator']+$payload);
 
         $response = $this->putJson(route('roles.update', $role), $payload);
 
@@ -64,7 +78,12 @@ class RoleControllerTest extends TestCase
 
     public function test_destroy_should_delete()
     {
-        $role = Role::factory()->create();
+        /** @var User */
+        $user = auth()->user();
+        $role = Role::factory()->create([
+            'parent_group_id' => $user->getCurrentAccessToken()->getParentGroup()->id,
+            'name' => 'Writer',
+        ]);
 
         $response = $this->delete(route('roles.destroy', $role));
 
@@ -75,7 +94,13 @@ class RoleControllerTest extends TestCase
 
     public function test_set_active_should_set_active_true()
     {
-        $role = Role::factory()->create(['is_active' => false]);
+        /** @var User */
+        $user = auth()->user();
+        $role = Role::factory()->create([
+            'parent_group_id' => $user->getCurrentAccessToken()->getParentGroup()->id,
+            'name' => 'Writer',
+            'is_active' => false
+        ]);
 
         $response = $this->postJson(route('roles.set_active', $role));
         $response->assertSuccessful();
@@ -85,7 +110,13 @@ class RoleControllerTest extends TestCase
 
     public function test_set_active_should_set_active_false()
     {
-        $role = Role::factory()->create(['is_active' => true]);
+        /** @var User */
+        $user = auth()->user();
+        $role = Role::factory()->create([
+            'parent_group_id' => $user->getCurrentAccessToken()->getParentGroup()->id,
+            'name' => 'Writer',
+            'is_active' => true
+        ]);
 
         $response = $this->postJson(route('roles.set_active', $role), ['is_active' => false]);
         $response->assertSuccessful();

@@ -27,4 +27,14 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function getParentGroup()
+    {
+        return $this->parentGroup;
+    }
+
+    public function getRole()
+    {
+        return $this->role;
+    }
 }

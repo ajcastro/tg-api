@@ -9,21 +9,19 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
+use Tests\Traits\WithDefaultClientActingUser;
+use Tests\Traits\SanctumActingUser;
 
 /**
  * @see \App\Http\Controllers\Api\Admin\ClientController
  */
 class ClientControllerTest extends TestCase
 {
-    use AdditionalAssertions, RefreshDatabase, WithFaker;
-
-    protected $withActingUser = true;
+    use AdditionalAssertions, RefreshDatabase, WithFaker, WithDefaultClientActingUser;
 
     public function test_index_should_paginate_resource()
     {
-        Client::withoutEvents(function () {
-            Client::factory()->count(3)->create();
-        });
+        Client::factory()->count(3)->create();
 
         $response = $this->getJson(route('clients.index', ['include' => 'created_by,updated_by']));
 
@@ -51,11 +49,10 @@ class ClientControllerTest extends TestCase
         $response->assertJsonStructure(['data' => Client::allowableFields()]);
     }
 
-
     public function test_update_should_update()
     {
         $payload = Client::factory()->make()->only(['code', 'percentage_share', 'remarks']);
-        $client = tap(Client::factory()->make())->saveQuietly();
+        $client = tap(Client::factory()->make())->save();
 
         $response = $this->putJson(route('clients.update', $client), $payload);
 

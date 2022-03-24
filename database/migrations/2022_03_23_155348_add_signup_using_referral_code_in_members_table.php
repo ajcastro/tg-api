@@ -14,7 +14,7 @@ class AddSignupUsingReferralCodeInMembersTable extends Migration
     public function up()
     {
         Schema::table('members', function (Blueprint $table) {
-            $table->string('signup_using_referral_code')->nullable()->after('referral_code');
+            $table->string('signup_using_referral_code')->nullable()->after('referral_number');
         });
     }
 }

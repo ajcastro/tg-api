@@ -10,26 +10,23 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
+use Tests\Traits\WithDefaultClientActingUser;
 
 /**
  * @see \App\Http\Controllers\Api\Admin\MemberController
  */
 class MemberControllerTest extends TestCase
 {
-    use AdditionalAssertions, RefreshDatabase, WithFaker;
-
-    protected $withActingUser = true;
+    use AdditionalAssertions, RefreshDatabase, WithFaker, WithDefaultClientActingUser;
 
     public function test_index_should_paginate_resource()
     {
-        Member::withoutEvents(function () {
-            $upline = Member::factory()->has(MemberBank::factory(), 'banks')->create();
-            Member::factory()->count(3)
-                ->has(MemberBank::factory(), 'banks')
-                ->create([
-                    'upline_referral_id' => $upline->id,
-                ]);
-        });
+        $upline = Member::factory()->has(MemberBank::factory(), 'banks')->create();
+        Member::factory()->count(3)
+            ->has(MemberBank::factory(), 'banks')
+            ->create([
+                'upline_referral_id' => $upline->id,
+            ]);
 
         $response = $this->getJson(route('members.index', [
             'include' => 'website,banks,upline_referral,suspended_by,blacklisted_by',

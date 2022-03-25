@@ -6,6 +6,7 @@ use App\Enums\AdminLevel;
 use App\Http\Queries\UserQuery;
 use App\Models\Contracts\AccessibleByUser;
 use App\Models\Contracts\RelatesToWebsite;
+use App\Models\PersonalAccessToken;
 use App\Observers\SetsCreatedByAndUpdatedBy;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,6 +34,7 @@ class User extends Authenticatable implements RelatesToWebsite, AccessibleByUser
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'client_id',
         'username',
         'name',
@@ -145,7 +147,8 @@ class User extends Authenticatable implements RelatesToWebsite, AccessibleByUser
 
     public function isSuperAdmin(): bool
     {
-        return $this->id === static::ADMIN_ID;
+        return $this->admin_level === AdminLevel::CLIENT_SUPER_ADMIN
+            && $this->client_id === Client::DEFAULT_ID;
     }
 
     public function isClientSuperAdmin()
@@ -158,6 +161,11 @@ class User extends Authenticatable implements RelatesToWebsite, AccessibleByUser
         return $this->admin_level === AdminLevel::CLIENT_ADMIN;
     }
 
+    public function getCurrentAccessToken(): ?PersonalAccessToken
+    {
+        return $this->currentAccessToken();
+    }
+
     public function getCurrentClient(): ?Client
     {
         return $this->getCurrentParentGroup()->client;
@@ -165,12 +173,12 @@ class User extends Authenticatable implements RelatesToWebsite, AccessibleByUser
 
     public function getCurrentParentGroup(): ?ParentGroup
     {
-        return $this->currentAccessToken()->parentGroup;
+        return $this->getCurrentAccessToken()->getParentGroup();
     }
 
     public function getCurrentRole(): ?Role
     {
-        return $this->currentAccessToken()->role;
+        return $this->getCurrentAccessToken()->getRole();
     }
 
     public function findUserAccess(ParentGroup $parentGroup): ?UserAccess

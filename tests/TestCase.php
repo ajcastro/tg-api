@@ -2,26 +2,25 @@
 
 namespace Tests;
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Tests\Traits\WithDefaultClientActingUser;
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    protected $withActingUser = false;
-
     public function setUp(): void
     {
         parent::setUp();
-
-        if ($this->withActingUser && ($user = $this->createActingUser())) {
-            $this->actingAs($user);
-        }
     }
 
-    public function createActingUser(): ?User
+    protected function setUpTraits()
     {
-        return User::factory()->create();
+        parent::setUpTraits();
+
+        if (is_using(static::class, WithDefaultClientActingUser::class)) {
+            /** @var WithDefaultClientActingUser $this */
+            $this->setUpDefaultClientActingUser();
+        }
     }
 }

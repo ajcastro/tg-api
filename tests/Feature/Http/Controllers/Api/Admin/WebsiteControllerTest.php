@@ -8,21 +8,18 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
+use Tests\Traits\WithDefaultClientActingUser;
 
 /**
  * @see \App\Http\Controllers\Api\Admin\WebsiteController
  */
 class WebsiteControllerTest extends TestCase
 {
-    use AdditionalAssertions, RefreshDatabase, WithFaker;
-
-    protected $withActingUser = true;
+    use AdditionalAssertions, RefreshDatabase, WithFaker, WithDefaultClientActingUser;
 
     public function test_index_should_paginate_resource()
     {
-        Website::withoutEvents(function () {
-            Website::factory()->count(3)->create();
-        });
+        Website::factory()->count(3)->create();
 
         $response = $this->getJson(route('websites.index', ['include' => 'created_by,updated_by']));
 

@@ -20,19 +20,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(PermissionsTableSeeder::class);
-        $this->seedDefaultClientSetupWithAdminUser();
-    }
-
-    /** @see Client createDefaulParentGroupAndAdministratorUser() */
-    private function seedDefaultClientSetupWithAdminUser()
-    {
-        Client::firstOrCreate([
-            'id' => Client::DEFAULT_ID,
-            'code' => Client::DEFAULT_CODE,
-        ], [
-            'remarks' => 'Default client',
-            'is_active' => true,
-            'is_hidden' => true,
-        ]);
+        $this->call(DefaultClientSeeder::class);
     }
 }

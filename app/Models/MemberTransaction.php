@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Storage;
 
 class MemberTransaction extends Model implements RelatesToWebsite
 {
@@ -63,6 +64,10 @@ class MemberTransaction extends Model implements RelatesToWebsite
 
     protected $attributes = [
         'status' => MemberTransactionStatus::NEW
+    ];
+
+    protected $appends = [
+        'screenshot_url',
     ];
 
 
@@ -151,6 +156,13 @@ class MemberTransaction extends Model implements RelatesToWebsite
     public function getTicketIdAttribute()
     {
         return static::parseToTicketId($this->type, $this->website_id, $this->sequence);
+    }
+
+    public function getScreenshotUrlAttribute()
+    {
+        /** @var \Illuminate\Filesystem\FilesystemAdapter */
+        $storage = Storage::disk('public');
+        return $storage->url($this->screenshot_path);
     }
 
     public function setAmountAttribute($amount)

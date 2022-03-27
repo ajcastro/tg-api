@@ -170,6 +170,18 @@ class Member extends Authenticatable implements RelatesToWebsite
         $query->where('website_id', $website->id);
     }
 
+    public function incrementBalanceAmount($amount)
+    {
+        static::where('id', $this->id)
+            ->increment('balance_amount', $amount);
+    }
+
+    public function decrementBalanceAmount($amount)
+    {
+        static::where('id', $this->id)
+            ->decrement('balance_amount', $amount);
+    }
+
     public function getCurrentBalance()
     {
         return 10000;

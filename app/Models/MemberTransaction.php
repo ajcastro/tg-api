@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @property Member $member
+ */
 class MemberTransaction extends Model implements RelatesToWebsite, AccessibleByUser
 {
     use HasFactory, Traits\HasAllowableFields, Traits\RelatesToWebsiteTrait, Traits\AccessibilityFilter;

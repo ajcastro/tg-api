@@ -2,13 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Client;
-use App\Models\ParentGroup;
-use App\Models\Role;
-use App\Models\User;
-use finfo;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,5 +15,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(PermissionsTableSeeder::class);
         $this->call(DefaultClientSeeder::class);
+
+        if (app()->environment('local', 'staging')) {
+            $this->call(BanksTableSeeder::class);
+        }
     }
 }

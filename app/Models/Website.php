@@ -55,6 +55,13 @@ class Website extends Model implements AccessibleByUser
         });
     }
 
+    public static function getWebsiteId(): int
+    {
+        return config('website.id') ?? value(function () {
+           throw new \Exception("Config website.id or env WEBSITE_ID is not defined.");
+        });
+    }
+
     public function resolveRouteBinding($value, $field = null)
     {
         return (new WebsiteQuery)

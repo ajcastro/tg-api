@@ -8,10 +8,11 @@ use App\Http\Queries\MemberQuery;
 use App\Models\Contracts\RelatesToWebsite;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Str;
 
-class Member extends Model implements RelatesToWebsite
+class Member extends Authenticatable implements RelatesToWebsite
 {
     use HasFactory, Traits\HasAllowableFields, Traits\RelatesToWebsiteTrait, Traits\AccessibilityFilter;
 
@@ -80,11 +81,24 @@ class Member extends Model implements RelatesToWebsite
     ];
 
 
+    public static function booted()
+    {
+        static::creating(function (Member $member) {
+            $member->website_id = Website::getWebsiteId();
+            $member->referral_number = $member->referral_number ?? static::generateReferralCode();
+        });
+    }
+
     public static function kickAll()
     {
         return MemberLog::whereNull('kicked_at')->update([
             'kicked_at' => now(),
         ]);
+    }
+
+    public static function generateReferralCode()
+    {
+        return Website::getWebsiteId().Str::random(8);
     }
 
     public function resolveRouteBinding($value, $field = null)
@@ -126,6 +140,16 @@ class Member extends Model implements RelatesToWebsite
         return $this->hasMany(MemberBank::class);
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(MemberTransaction::class);
+    }
+
+    public function memberPromotions()
+    {
+        return $this->hasMany(MemberPromotion::class);
+    }
+
     public function activeLog()
     {
         return $this->hasOne(MemberLog::class)->whereNull('kicked_at');
@@ -144,6 +168,11 @@ class Member extends Model implements RelatesToWebsite
     public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
     {
         $query->where('website_id', $website->id);
+    }
+
+    public function getCurrentBalance()
+    {
+        return 10000;
     }
 
     public function getMemberLevelDisplayAttribute()

@@ -14,10 +14,15 @@ class PermissionsTableSeeder extends Seeder
      */
     public function run()
     {
+        if (app()->environment('local', 'testing')) {
+            Permission::truncate();
+        }
+
         $groups = [
             'Menu - Users Management' => require(__DIR__ . '/permissions/users.php'),
             'Menu - Members' => require(__DIR__ . '/permissions/members.php'),
             'Menu - Transactions' => require(__DIR__ . '/permissions/transactions.php'),
+            'Menu - Promotions' => require(__DIR__ . '/permissions/promotions.php'),
         ];
 
         foreach ($groups as $groupDisplay => $rows) {

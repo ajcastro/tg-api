@@ -163,7 +163,10 @@ class MemberTransaction extends Model implements RelatesToWebsite, AccessibleByU
     {
         /** @var \Illuminate\Filesystem\FilesystemAdapter */
         $storage = Storage::disk('public');
-        return $storage->url($this->screenshot_path);
+
+        return $this->screenshot_path
+            ? $storage->url($this->screenshot_path)
+            : null;
     }
 
     public function setAmountAttribute($amount)

@@ -27,7 +27,7 @@ class DefaultClientSeeder extends Seeder
             'is_hidden' => true,
         ]);
 
-        $this->seedDefaultWebsite($client);
+        // $this->seedDefaultWebsite($client);
     }
 
     public function seedDefaultWebsite($client)

@@ -26,21 +26,5 @@ class DefaultClientSeeder extends Seeder
             'is_active' => true,
             'is_hidden' => true,
         ]);
-
-        // $this->seedDefaultWebsite($client);
-    }
-
-    public function seedDefaultWebsite($client)
-    {
-        Website::firstOrCreate([
-            'assigned_client_id' => $client->id,
-            'code' => 'tg',
-        ], [
-            'ip_address' => '127.0.0.1',
-            'domain_name' => 'telegaming.net',
-            'is_active' => true,
-            'created_by_id' => User::ADMIN_ID,
-            'updated_by_id' => User::ADMIN_ID,
-        ]);
     }
 }

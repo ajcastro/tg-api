@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\MemberTransactionStatus;
+use App\Models\Contracts\AccessibleByUser;
 use App\Models\Contracts\RelatesToWebsite;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Storage;
 
-class MemberTransaction extends Model implements RelatesToWebsite
+class MemberTransaction extends Model implements RelatesToWebsite, AccessibleByUser
 {
     use HasFactory, Traits\HasAllowableFields, Traits\RelatesToWebsiteTrait, Traits\AccessibilityFilter;
 
@@ -209,5 +210,18 @@ class MemberTransaction extends Model implements RelatesToWebsite
         $this->approved_by_id = $user->id;
         $this->approved_at = now();
         $this->save();
+    }
+
+    public function scopeAccessibleBy($query, User $user)
+    {
+        if ($user->isSuperAdmin()) {
+            return;
+        }
+
+        $parentGroup = $user->getCurrentParentGroup();
+
+        $websiteIds = $parentGroup->websites()->pluck('id');
+
+        return $query->whereIn('id', $websiteIds);
     }
 }

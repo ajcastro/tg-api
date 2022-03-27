@@ -228,6 +228,6 @@ class MemberTransaction extends Model implements RelatesToWebsite, AccessibleByU
 
         $websiteIds = $parentGroup->websites()->pluck('websites.id');
 
-        return $query->whereIn('member_transactions.id', $websiteIds);
+        return $query->whereIn('member_transactions.website_id', $websiteIds);
     }
 }

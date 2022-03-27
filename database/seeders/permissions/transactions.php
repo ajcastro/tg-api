@@ -42,7 +42,7 @@ return [
         'label' => 'Menu - Deposit List',
         'admin_redirect' => '/transactions/deposit_list',
         'casl' => [
-            'action' => 'read_new_withdrawals',
+            'action' => 'read_deposit_list',
             'subject' => 'MemberTransaction',
         ],
     ],

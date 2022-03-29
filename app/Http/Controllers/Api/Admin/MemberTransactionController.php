@@ -29,7 +29,7 @@ class MemberTransactionController extends ResourceController
     public function approve(Request $request, MemberTransaction $memberTransaction)
     {
         $memberTransaction->approve($request->user());
-        $memberTransaction->member->incrementBalanceAmount($memberTransaction->amount);
+        $memberTransaction->member->incrementBalanceAmount($memberTransaction->credit_amount);
     }
 
     public function reject(Request $request, MemberTransaction $memberTransaction)

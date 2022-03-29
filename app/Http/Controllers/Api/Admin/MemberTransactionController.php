@@ -63,7 +63,7 @@ class MemberTransactionController extends ResourceController
         /** @var Member */
         $member = $memberTransaction->member;
         $member->decrementBalanceAmount($memberTransaction->credit_amount);
-        $member->decrementBalanceAmount($memberTransaction->memberPromotion->bonus_amount);
+        $member->decrementBalanceAmount($memberTransaction->memberPromotion->bonus_amount ?? 0);
     }
 
     public function reject(Request $request, MemberTransaction $memberTransaction)

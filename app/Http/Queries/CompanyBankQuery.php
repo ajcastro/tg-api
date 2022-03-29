@@ -38,6 +38,7 @@ class CompanyBankQuery extends BaseQuery implements QueryContract
     {
         $this->allowedFilters([
             AllowedFilter::exact('is_active'),
+            AllowedFilter::exact('bank_type'),
         ]);
 
         return $this;

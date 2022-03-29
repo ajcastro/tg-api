@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CompanyBank extends Model
 {
-    use HasFactory;
+    use HasFactory, Traits\SetActiveStatus, Traits\HasAllowableFields;
 
     /**
      * The attributes that are mass assignable.

@@ -22,14 +22,12 @@ class AutoCreditPromotionBonus
     {
         /** @var Member */
         $member = $event->memberTransaction->member;
-        /** @var MemberTransaction */
-        $memberTransaction = $event->memberTransaction;
         /** @var MemberPromotion */
         $memberPromotion = $event->memberTransaction->memberPromotion;
         /** @var Promotion */
-        $promotion = $event->memberTransaction->memberPromotion->promotion;
+        $promotion = $event->memberTransaction->memberPromotion->promotion ?? null;
 
-        if ($promotion->isGivenOnDeposit() && $promotion->isAutoRelease()) {
+        if ($promotion && $promotion->isGivenOnDeposit() && $promotion->isAutoRelease()) {
             $member->incrementBalanceAmount($memberPromotion->bonus_amount);
         }
     }

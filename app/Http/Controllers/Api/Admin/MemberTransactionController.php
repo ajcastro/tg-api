@@ -8,9 +8,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\ResourceController;
 use App\Http\Queries\MemberTransactionQuery;
 use App\Http\Requests\Api\Admin\MemberTransactionRequest;
+use App\Models\CompanyBank;
 use App\Models\Member;
 use App\Models\MemberTransaction;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class MemberTransactionController extends ResourceController
 {
@@ -31,6 +33,16 @@ class MemberTransactionController extends ResourceController
 
     public function approve(Request $request, MemberTransaction $memberTransaction)
     {
+        $request->validate([
+            'company_bank_id' => [
+                Rule::requiredIf($memberTransaction->isWithdraw()),
+                'exists:company_banks,id',
+            ],
+        ]);
+
+        /** @var CompanyBank */
+        $companyBank = CompanyBank::find($request->company_bank_id);
+        $memberTransaction->company_bank = $companyBank->bank_code;
         $memberTransaction->approve($request->user());
         $memberTransaction->member->incrementBalanceAmount($memberTransaction->credit_amount);
 

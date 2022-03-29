@@ -12,6 +12,8 @@ class Promotion extends Model
     const CALCULATION_TYPE_FIX_AMOUNT = 0;
     const CALCULATION_TYPE_PERCENTAGE = 1;
 
+    const GIVEN_ON_DEPOSIT = 0;
+    const GIVEN_AFTER_TURNOVER_REACHED = 1;
     /**
      * The attributes that are mass assignable.
      *

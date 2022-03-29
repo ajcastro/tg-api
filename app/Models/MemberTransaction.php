@@ -225,9 +225,10 @@ class MemberTransaction extends Model implements RelatesToWebsite, AccessibleByU
         $this->save();
     }
 
-    public function reject($user)
+    public function reject($user, $reason)
     {
         $this->status = MemberTransactionStatus::REJECTED;
+        $this->reject_reason = $reason;
         $this->approved_by_id = $user->id;
         $this->approved_at = now();
         $this->save();

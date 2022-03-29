@@ -37,11 +37,6 @@ class MemberTransactionController extends ResourceController
         event(new DepositApproved($memberTransaction));
     }
 
-    public function reject(Request $request, MemberTransaction $memberTransaction)
-    {
-        $memberTransaction->reject($request->user());
-    }
-
     public function enterRemarks(Request $request, MemberTransaction $memberTransaction)
     {
         $memberTransaction->remarks = $request->remarks;
@@ -69,5 +64,21 @@ class MemberTransactionController extends ResourceController
         $member = $memberTransaction->member;
         $member->decrementBalanceAmount($memberTransaction->credit_amount);
         $member->decrementBalanceAmount($memberTransaction->memberPromotion->bonus_amount);
+    }
+
+    public function reject(Request $request, MemberTransaction $memberTransaction)
+    {
+        $request->validate([
+            'id' => function ($attribute, $value, $fail) use ($memberTransaction) {
+                if (!$memberTransaction->isWithdraw()) {
+                    $fail('Reject is for withdraw only');
+                }
+            },
+            'reason' => [
+                'required',
+            ],
+        ]);
+
+        $memberTransaction->reject($request->user(), $request->reason);
     }
 }

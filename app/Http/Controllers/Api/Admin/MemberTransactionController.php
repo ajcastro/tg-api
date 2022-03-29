@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Events\DepositApproved;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ResourceController;
 use App\Http\Queries\MemberTransactionQuery;
@@ -30,6 +31,8 @@ class MemberTransactionController extends ResourceController
     {
         $memberTransaction->approve($request->user());
         $memberTransaction->member->incrementBalanceAmount($memberTransaction->credit_amount);
+
+        event(new DepositApproved($memberTransaction));
     }
 
     public function reject(Request $request, MemberTransaction $memberTransaction)

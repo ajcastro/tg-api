@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+// TODO: Move to Api\Admin namespace
 class AuthController extends Controller
 {
     /**

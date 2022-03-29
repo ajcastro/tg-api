@@ -86,7 +86,7 @@ class MemberTransaction extends Model implements RelatesToWebsite, AccessibleByU
     public static function getNextSequence($type, $website_id)
     {
         return static::where(['type' => $type, 'website_id' => $website_id])
-            ->orderByDesc('created_at')
+            ->orderByDesc('sequence')
             ->value('sequence')+1;
     }
 
@@ -108,6 +108,11 @@ class MemberTransaction extends Model implements RelatesToWebsite, AccessibleByU
     public function approvedBy()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function memberPromotion()
+    {
+        return $this->hasOne(MemberPromotion::class);
     }
 
     public function scopeSearch($query, $search)
@@ -200,6 +205,16 @@ class MemberTransaction extends Model implements RelatesToWebsite, AccessibleByU
         if ($this->status === MemberTransactionStatus::IN_PROGRESS) {
             return 'In-progress';
         }
+    }
+
+    public function isDeposit()
+    {
+        return $this->type === 'deposit';
+    }
+
+    public function isWithdraw()
+    {
+        return $this->type === 'withdraw';
     }
 
     public function approve($user)

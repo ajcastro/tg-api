@@ -40,9 +40,13 @@ class Promotion extends Model
         'is_active' => 'boolean',
     ];
 
-    public static function getPromotionsOfCurrentWebsite()
+    public static function getPromotionsOfCurrentWebsite(Member $member)
     {
-        return static::ofCurrentWebsite()
+        return static::query()
+            ->with('setting')
+            ->ofCurrentWebsite()
+            ->availableFor($member)
+            ->notExpired()
             ->orderBy('sort_order')
             ->get();
     }
@@ -67,6 +71,28 @@ class Promotion extends Model
         $query->where('website_id', Website::getWebsiteId());
     }
 
+    public function scopeAvailableFor($query, Member $member)
+    {
+        $query->where('is_active', 1);
+        $query->whereHas('setting', function ($query) use ($member) {
+
+            $query->where(function ($query) use ($member) {
+                $query->where('is_for_new_member_only', 0);
+                if ($member->isNewMember()) {
+                    $query->orWhere('is_for_new_member_only', 1);
+                }
+            });
+        });
+    }
+
+    public function scopeNotExpired($query)
+    {
+        $query->whereHas('setting', function ($query) {
+            $now = now()->format('Y-m-d H:i:s');
+            $query->whereRaw("('{$now}' between promotion_settings.valid_from and promotion_settings.valid_thru)");
+        });
+    }
+
     public function shouldIncludeBonusToCalculateObligation()
     {
         return $this->setting->is_include_bonus_to_calculate_obligation;
@@ -75,11 +101,11 @@ class Promotion extends Model
     public function calculateBonusAmount($deposit)
     {
         if ($this->setting->calculation_type === static::CALCULATION_TYPE_FIX_AMOUNT) {
-            return $this->calculation_fix_amount;
+            return $this->setting->calculation_fix_amount;
         }
 
         if ($this->setting->calculation_type === static::CALCULATION_TYPE_PERCENTAGE) {
-            return $deposit * $this->calculation_rate;
+            return $deposit * $this->setting->calculation_rate;
         }
 
         return 0;
@@ -87,10 +113,25 @@ class Promotion extends Model
 
     public function calculateObligationAmount($deposit)
     {
-        if ($this->shouldIncludeBonusToCalculateObligation()) {
-            return ($deposit + $this->calculateBonusAmount($deposit)) * $this->turn_over_obligation;
-        }
+        $amount = $this->shouldIncludeBonusToCalculateObligation()
+            ? $deposit + $this->calculateBonusAmount($deposit)
+            : $deposit;
 
-        return $deposit * $this->turn_over_obligation;
+        return $amount * $this->setting->turn_over_obligation;
+    }
+
+    public function isGivenOnDeposit()
+    {
+        return $this->setting->given_method === static::GIVEN_ON_DEPOSIT;
+    }
+
+    public function isAutoRelease()
+    {
+        return $this->setting->is_auto_release;
+    }
+
+    public function isPromotionType($promotion_type)
+    {
+        return $this->setting->promotion_type === $promotion_type;
     }
 }

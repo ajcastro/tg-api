@@ -14,7 +14,7 @@ class AddRejectReasonInMemberTransactionsTable extends Migration
     public function up()
     {
         Schema::table('member_transactions', function (Blueprint $table) {
-            $table->text('reject_reason')->after('cancel_reason');
+            $table->text('reject_reason')->nullable()->after('cancel_reason');
         });
     }
 }

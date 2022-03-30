@@ -24,14 +24,15 @@ class PromotionFactory extends Factory
     public function definition()
     {
         return [
-            'website_id' => Website::factory(),
+            'website_id' => Website::getWebsiteId(),
             'title' => $this->faker->sentence(4),
             'short_description' => $this->faker->word,
             'description' => $this->faker->text,
             'sort_order' => $this->faker->randomDigitNotNull,
-            'imgloc' => $this->faker->word,
+            'image' => null,
+            'image_thumb' => null,
             'slug' => $this->faker->slug,
-            'is_active' => $this->faker->boolean,
+            'is_active' => 1,
         ];
     }
 }

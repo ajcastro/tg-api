@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Storage;
 
-class Promotion extends Model
+class Promotion extends Model implements Contracts\RelatesToWebsite
 {
-    use HasFactory;
+    use HasFactory, Traits\HasAllowableFields, Traits\AccessibilityFilter, Traits\SetActiveStatus;
 
     const CALCULATION_TYPE_FIX_AMOUNT = 0;
     const CALCULATION_TYPE_PERCENTAGE = 1;
@@ -25,8 +28,9 @@ class Promotion extends Model
         'short_description',
         'description',
         'sort_order',
-        'imgloc',
         'slug',
+        'image',
+        'image_thumb',
         'is_active',
     ];
 
@@ -60,12 +64,12 @@ class Promotion extends Model
 
     public function setting()
     {
-        return $this->hasOne(PromotionSetting::class);
+        return $this->hasOne(PromotionSetting::class)->withDefault();
     }
 
     public function promotionSetting()
     {
-        return $this->hasOne(PromotionSetting::class);
+        return $this->setting();
     }
 
     public function scopeOfCurrentWebsite($query)
@@ -93,6 +97,40 @@ class Promotion extends Model
             $now = now()->format('Y-m-d H:i:s');
             $query->whereRaw("('{$now}' between promotion_settings.valid_from and promotion_settings.valid_thru)");
         });
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        $query->where(function ($query) use ($search) {
+            $query->where('title', 'like', "%{$search}%");
+            $query->orWhere('short_description', 'like', "%{$search}%");
+        });
+    }
+
+    public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
+    {
+        $query->where('website_id', $website->id);
+    }
+
+    public function getImageUrlAttribute()
+    {
+        /** @var \Illuminate\Filesystem\FilesystemAdapter */
+        $storage = Storage::disk('public');
+
+        return $this->image
+            ? $storage->url($this->image)
+            : null;
+    }
+
+    public function getImageThumbUrlAttribute()
+    {
+        /** @var \Illuminate\Filesystem\FilesystemAdapter */
+        $storage = Storage::disk('public');
+
+        // TODO: replace with image_thumb
+        return $this->image
+            ? $storage->url($this->image)
+            : null;
     }
 
     public function shouldIncludeBonusToCalculateObligation()

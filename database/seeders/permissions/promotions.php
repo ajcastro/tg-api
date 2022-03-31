@@ -59,7 +59,7 @@ return [
         'admin_redirect' => '/promotions/summary',
         'casl' => [
             'action' => 'read_summary',
-            'subject' => 'Promotion ',
+            'subject' => 'Promotion',
         ],
     ],
     // Promotion Release
@@ -69,7 +69,7 @@ return [
         'admin_redirect' => '/promotions/release',
         'casl' => [
             'action' => 'read_release',
-            'subject' => 'Promotion ',
+            'subject' => 'Promotion',
         ],
     ],
     // Manual Bonus
@@ -79,7 +79,7 @@ return [
         'admin_redirect' => '/promotions/manual',
         'casl' => [
             'action' => 'read_manual',
-            'subject' => 'Promotion ',
+            'subject' => 'Promotion',
         ],
     ],
     [

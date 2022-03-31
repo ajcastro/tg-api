@@ -11,15 +11,24 @@ trait PaginateOrListResource
 {
     protected QueryContract|Builder $query;
 
+    protected string $resource;
+
     public function index(Request $request)
     {
-        $query = $this->query->withAllDeclarations();
+        $query = $this->query instanceof QueryContract
+            ? $this->query->withAllDeclarations()
+            : $this->query; // can be an eloquent builder only not instance of QueryContract
 
         $collection = $this->shouldPaginateResource($request)
             ? $query->paginate($request->per_page ?? $request->limit)
             : $query->get();
 
-        return JsonResource::collection($collection);
+        return $this->resource()::collection($collection);
+    }
+
+    protected function resource(): string
+    {
+        return $this->resource ?? JsonResource::class;
     }
 
     protected function shouldPaginateResource(Request $request)

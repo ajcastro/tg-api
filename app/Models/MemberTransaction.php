@@ -70,10 +70,6 @@ class MemberTransaction extends Model implements RelatesToWebsite, AccessibleByU
         'status' => MemberTransactionStatus::NEW
     ];
 
-    protected $appends = [
-        'screenshot_url',
-    ];
-
 
     public static function booted()
     {

@@ -40,7 +40,7 @@ return [
         'label' => 'Action - Promotion - Deactivate Promotion',
         'casl' => [
             'action' => 'deactivate',
-            'subject' => 'Promotion',   
+            'subject' => 'Promotion',
         ],
     ],
     [
@@ -64,7 +64,7 @@ return [
     ],
     // Promotion Release
     [
-        'name' => 'promotion.summary',
+        'name' => 'promotion.release',
         'label' => 'Menu - Promotion Release',
         'admin_redirect' => '/promotions/release',
         'casl' => [

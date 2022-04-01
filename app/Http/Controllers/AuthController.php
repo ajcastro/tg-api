@@ -107,11 +107,13 @@ class AuthController extends Controller
 
     public function changePassword(Request $request)
     {
+        /** @var User */
+        $user = $request->user();
         $request->validate([
             'old_password' => [
                 'required',
-                function ($attributes, $value, $fail) use ($request) {
-                    if (!Hash::check($value, $request->user()->password) ){
+                function ($attributes, $value, $fail) use ($user) {
+                    if (!Hash::check($value, $user->password) ){
                         $fail('Invalid old password');
                     }
                 }
@@ -122,6 +124,10 @@ class AuthController extends Controller
                 'confirmed',
             ]
         ]);
+
+        $user = $request->user();
+        $user->password = bcrypt($request->new_password);
+        $user->save();
 
         return [];
     }

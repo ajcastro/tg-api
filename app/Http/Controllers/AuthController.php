@@ -6,6 +6,7 @@ use App\Models\ParentGroup;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Hash;
 
 // TODO: Move to Api\Admin namespace
 class AuthController extends Controller
@@ -102,5 +103,26 @@ class AuthController extends Controller
         return JsonResource::make([
             'message' => 'Successfully logged out'
         ]);
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => [
+                'required',
+                function ($attributes, $value, $fail) use ($request) {
+                    if (!Hash::check($value, $request->user()->password) ){
+                        $fail('Invalid old password');
+                    }
+                }
+            ],
+            'new_password' => [
+                'required',
+                'min:8',
+                'confirmed',
+            ]
+        ]);
+
+        return [];
     }
 }

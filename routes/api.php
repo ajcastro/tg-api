@@ -41,9 +41,11 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
 
+
     Route::group(['middleware' => 'auth:sanctum'], function() {
-      Route::post('logout', [AuthController::class, 'logout']);
-      Route::get('user', [AuthController::class, 'user']);
-      Route::get('me', [AuthController::class, 'user']); // alias of user
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::get('user', [AuthController::class, 'user']);
+        Route::get('me', [AuthController::class, 'user']); // alias of user
+        Route::post('change_password', [AuthController::class, 'changePassword']);
     });
 });

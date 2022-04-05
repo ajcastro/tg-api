@@ -33,9 +33,26 @@ class MemberTransactionController extends ResourceController
 
     public function approve(Request $request, MemberTransaction $memberTransaction)
     {
+        if ($memberTransaction->isWithdraw()) {
+            return $this->approveWithdraw($request, $memberTransaction);
+        }
+
+        return $this->approveDeposit($request, $memberTransaction);
+    }
+
+    protected function approveDeposit(Request $request, MemberTransaction $memberTransaction)
+    {
+        $memberTransaction->approve($request->user());
+        $memberTransaction->member->incrementBalanceAmount($memberTransaction->credit_amount);
+
+        event(new DepositApproved($memberTransaction));
+    }
+
+    protected function approveWithdraw(Request $request, MemberTransaction $memberTransaction)
+    {
         $request->validate([
             'company_bank_id' => [
-                Rule::requiredIf($memberTransaction->isWithdraw()),
+                'required',
                 'exists:company_banks,id',
             ],
         ]);
@@ -43,10 +60,9 @@ class MemberTransactionController extends ResourceController
         /** @var CompanyBank */
         $companyBank = CompanyBank::find($request->company_bank_id);
         $memberTransaction->company_bank = $companyBank->bank_code;
-        $memberTransaction->approve($request->user());
-        $memberTransaction->member->incrementBalanceAmount($memberTransaction->credit_amount);
 
-        event(new DepositApproved($memberTransaction));
+        $memberTransaction->approve($request->user());
+        $memberTransaction->member->decrementBalanceAmount($memberTransaction->amount);
     }
 
     public function enterRemarks(Request $request, MemberTransaction $memberTransaction)

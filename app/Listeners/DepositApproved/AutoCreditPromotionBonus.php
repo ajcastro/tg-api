@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\DepositApproved;
 
 use App\Events\DepositApproved;
 use App\Models\Member;

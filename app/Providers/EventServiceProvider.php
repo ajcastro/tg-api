@@ -3,7 +3,8 @@
 namespace App\Providers;
 
 use App\Events\DepositApproved;
-use App\Listeners\AutoCreditPromotionBonus;
+use App\Listeners\DepositApproved\AutoCreditPromotionBonus;
+use App\Listeners\DepositApproved\DeductWebsiteCredit;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -22,6 +23,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         DepositApproved::class => [
             AutoCreditPromotionBonus::class,
+            DeductWebsiteCredit::class,
         ],
     ];
 

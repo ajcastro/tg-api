@@ -135,4 +135,18 @@ class Website extends Model implements AccessibleByUser
 
         return $credit;
     }
+
+    public function incrementCredit($amount)
+    {
+        $credit = $this->credit;
+        $credit->credit = bcadd($credit->credit, $amount, 2);
+        $credit->save();
+    }
+
+    public function decrementCredit($amount)
+    {
+        $credit = $this->credit;
+        $credit->credit = bcsub($credit->credit, $amount, 2);
+        $credit->save();
+    }
 }

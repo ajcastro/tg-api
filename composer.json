@@ -17,6 +17,7 @@
         "spatie/laravel-query-builder": "^3"
     },
     "require-dev": {
+        "ajcastro/postman-tdd": "*",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "jasonmccreary/laravel-test-assertions": "^2.1",
@@ -38,6 +39,12 @@
             "Tests\\": "tests/"
         }
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./../ajcastro/postman-tdd"
+        }
+    ],
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

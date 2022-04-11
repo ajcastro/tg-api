@@ -144,4 +144,15 @@ return [
             'subject' => 'ParentGroup',
         ],
     ],
+
+    // Menu - Edit Website Credit
+    [
+        'name' => 'websites.set_credit',
+        'label' => 'Menu - Edit Website Credit',
+        'admin_redirect' => '/front_websites/set_credit',
+        'casl' => [
+            'action' => 'set_credit',
+            'subject' => 'Website',
+        ],
+    ],
 ];

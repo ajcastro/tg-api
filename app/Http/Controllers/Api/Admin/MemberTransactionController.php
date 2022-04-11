@@ -11,8 +11,10 @@ use App\Http\Requests\Api\Admin\MemberTransactionRequest;
 use App\Models\CompanyBank;
 use App\Models\Member;
 use App\Models\MemberTransaction;
+use App\Models\Website;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class MemberTransactionController extends ResourceController
 {
@@ -42,6 +44,15 @@ class MemberTransactionController extends ResourceController
 
     protected function approveDeposit(Request $request, MemberTransaction $memberTransaction)
     {
+        /** @var Website */
+        $website = $memberTransaction->website;
+
+        if ($website->getCredit() === 0) {
+            throw ValidationException::withMessages(['id' => [
+                'Cannot accept deposit if website credit is zero'
+            ]]);
+        }
+
         $memberTransaction->approve($request->user());
         $memberTransaction->member->incrementBalanceAmount($memberTransaction->credit_amount);
 

@@ -136,6 +136,11 @@ class Website extends Model implements AccessibleByUser
         return $credit;
     }
 
+    public function getCredit()
+    {
+        return $this->credit->credit ?? 0;
+    }
+
     public function incrementCredit($amount)
     {
         $credit = $this->credit;

@@ -101,6 +101,11 @@ class Website extends Model implements AccessibleByUser
         return $this->belongsTo(User::class);
     }
 
+    public function credit()
+    {
+        return $this->hasOne(WebsiteCredit::class)->withDefault();
+    }
+
     public function scopeSearch($query, $search)
     {
         $query->where('code', 'like', "%{$search}%");
@@ -120,5 +125,14 @@ class Website extends Model implements AccessibleByUser
         $query->whereHas('parentGroups', function ($query) use ($user) {
             $query->where('parent_groups.id', $user->getCurrentParentGroup()->id ?? null);
         });
+    }
+
+    public function updateCredit($amount)
+    {
+        $credit = $this->credit;
+        $credit->credit = $amount;
+        $credit->save();
+
+        return $credit;
     }
 }

@@ -49,7 +49,7 @@ class MemberTransactionController extends ResourceController
 
         if ($website->getCredit() === 0) {
             throw ValidationException::withMessages(['id' => [
-                'Cannot accept deposit if website credit is zero'
+                'Balance is not enough.'
             ]]);
         }
 

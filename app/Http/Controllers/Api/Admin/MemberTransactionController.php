@@ -109,4 +109,20 @@ class MemberTransactionController extends ResourceController
 
         $memberTransaction->reject($request->user(), $request->reason);
     }
+
+    public function changeStatus(MemberTransaction $memberTransaction, Request $request)
+    {
+        $request->validate([
+            'status' => [
+                'required',
+                Rule::in([
+                    MemberTransactionStatus::PENDING,
+                    MemberTransactionStatus::IN_PROGRESS,
+                ]),
+            ]
+        ]);
+
+        $memberTransaction->status = $request->status;
+        $memberTransaction->save();
+    }
 }

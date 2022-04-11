@@ -11,7 +11,7 @@ trait ResolvesRequest
 
     public function request(): FormRequest|Request
     {
-        return $this->request
+        return isset($this->request)
             ? app($this->request)
             : request();
     }

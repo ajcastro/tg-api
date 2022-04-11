@@ -6,9 +6,10 @@ use BenSampo\Enum\Enum;
 
 final class MemberTransactionStatus extends Enum
 {
-    const NEW =   0;
-    const APPROVED =   1;
-    const REJECTED = 2;
+    const NEW         = 0;
+    const PENDING     = 0;
+    const APPROVED    = 1;
+    const REJECTED    = 2;
     const IN_PROGRESS = 3;
-    const CANCELED = 4;
+    const CANCELED    = 4;
 }

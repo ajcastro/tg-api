@@ -57,10 +57,15 @@ class MemberTransactionQuery extends BaseQuery implements QueryContract
                 $query->whereBetween('member_transactions.created_at', [$start_date, $end_date]);
             }),
             AllowedFilter::callback('new', function ($query, $value) {
+                $newStatuses = [
+                    MemberTransactionStatus::NEW,
+                    MemberTransactionStatus::IN_PROGRESS,
+                ];
+
                 if (boolean($value)) {
-                    $query->where('member_transactions.status', MemberTransactionStatus::NEW);
+                    $query->whereIn('member_transactions.status', $newStatuses);
                 } else {
-                    $query->where('member_transactions.status', '!=', MemberTransactionStatus::NEW);
+                    $query->whereNotIn('member_transactions.status', $newStatuses);
                 }
             }),
             AllowedFilter::callback('ticket_id', function ($query, $value) {

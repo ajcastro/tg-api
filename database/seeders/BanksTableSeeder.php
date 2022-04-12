@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Bank;
+use App\Models\BankGroup;
 use App\Models\Website;
 use Illuminate\Database\Seeder;
 
@@ -14,25 +16,88 @@ class BanksTableSeeder extends Seeder
      */
     public function run()
     {
+        if (app()->environment('local', 'staging')) {
+            Bank::truncate();
+        }
+
         $banks = [
-            ['code' => 'BCA', 'group' => 'BANK', 'is_active' => 1, 'is_require_account_no' => 1],
-            ['code' => 'BNI', 'group' => 'BANK', 'is_active' => 1, 'is_require_account_no' => 1],
-            ['code' => 'BRI', 'group' => 'BANK', 'is_active' => 1, 'is_require_account_no' => 1],
-            ['code' => 'MANDIRI', 'group' => 'BANK', 'is_active' => 1, 'is_require_account_no' => 1],
-            ['code' => 'CIMB', 'group' => 'BANK', 'is_active' => 1, 'is_require_account_no' => 1],
-            ['code' => 'PERMATA', 'group' => 'BANK', 'is_active' => 1, 'is_require_account_no' => 1],
-            ['code' => 'SAKUKU', 'group' => 'ePAYMENT', 'is_active' => 1, 'is_require_account_no' => 0],
-            ['code' => 'GOPAY', 'group' => 'ePAYMENT', 'is_active' => 1, 'is_require_account_no' => 0],
-            ['code' => 'LinkAJA', 'group' => 'ePAYMENT', 'is_active' => 1, 'is_require_account_no' => 0],
-            ['code' => 'DANA', 'group' => 'ePAYMENT', 'is_active' => 1, 'is_require_account_no' => 0],
-            ['code' => 'OVO', 'group' => 'ePAYMENT', 'is_active' => 1, 'is_require_account_no' => 0],
-            ['code' => 'JENIUS', 'group' => 'ePAYMENT', 'is_active' => 1, 'is_require_account_no' => 0],
+            [
+                'code' => 'BCA',
+                'name' => 'BCA',
+                'bank_group_id' => BankGroup::BANK,
+                'is_active' => 1,
+            ],
+            [
+                'code' => 'BNI',
+                'name' => 'BNI',
+                'bank_group_id' => BankGroup::BANK,
+                'is_active' => 1,
+            ],
+            [
+                'code' => 'BRI',
+                'name' => 'BRI',
+                'bank_group_id' => BankGroup::BANK,
+                'is_active' => 1,
+            ],
+            [
+                'code' => 'MANDIRI',
+                'name' => 'MANDIRI',
+                'bank_group_id' => BankGroup::BANK,
+                'is_active' => 1,
+            ],
+            [
+                'code' => 'CIMB',
+                'name' => 'CIMB',
+                'bank_group_id' => BankGroup::BANK,
+                'is_active' => 1,
+            ],
+            [
+                'code' => 'PERMATA',
+                'name' => 'PERMATA',
+                'bank_group_id' => BankGroup::BANK,
+                'is_active' => 1,
+            ],
+            [
+                'code' => 'SAKUKU',
+                'name' => 'SAKUKU',
+                'bank_group_id' => BankGroup::EPAYMENT,
+                'is_active' => 1,
+            ],
+            [
+                'code' => 'GOPAY',
+                'name' => 'GOPAY',
+                'bank_group_id' => BankGroup::EPAYMENT,
+                'is_active' => 1,
+            ],
+            [
+                'code' => 'LinkAJA',
+                'name' => 'LinkAJA',
+                'bank_group_id' => BankGroup::EPAYMENT,
+                'is_active' => 1,
+            ],
+            [
+                'code' => 'DANA',
+                'name' => 'DANA',
+                'bank_group_id' => BankGroup::EPAYMENT,
+                'is_active' => 1,
+            ],
+            [
+                'code' => 'OVO',
+                'name' => 'OVO',
+                'bank_group_id' => BankGroup::EPAYMENT,
+                'is_active' => 1,
+            ],
+            [
+                'code' => 'JENIUS',
+                'name' => 'JENIUS',
+                'bank_group_id' => BankGroup::EPAYMENT,
+                'is_active' => 1,
+            ],
         ];
 
         foreach ($banks as $bank) {
-            \App\Models\Bank::firstOrCreate(['code' => $bank['code']], $bank+[
-                'website_id' => Website::getWebsiteId(),
-            ]);
+            Bank::firstOrCreate(['code' => $bank['code']], $bank);
+            Bank::firstOrCreate(['name' => $bank['code']], $bank);
         }
     }
 }

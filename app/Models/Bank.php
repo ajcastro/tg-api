@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Bank extends Model
 {
-    use HasFactory;
+    use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus;
 
     /**
      * The attributes that are mass assignable.
@@ -15,11 +16,12 @@ class Bank extends Model
      * @var array
      */
     protected $fillable = [
-        'website_id',
+        'bank_group_id',
         'code',
-        'group',
+        'name',
+        'website',
+        'logo',
         'is_active',
-        'is_require_account_no',
     ];
 
     /**
@@ -29,28 +31,40 @@ class Bank extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'website_id' => 'integer',
+        'bank_group_id' => 'integer',
         'is_active' => 'boolean',
-        'is_require_account_no' => 'boolean',
     ];
 
 
     public static function getBanksOfCurrentWebsite()
     {
         return memo(__METHOD__, function () {
-            return static::ofCurrentWebsite()
+            return static::query()
                 ->orderBy('code')
                 ->get();
         });
     }
 
-    public function website()
+    public function bankGroup()
     {
-        return $this->belongsTo(Website::class);
+        return $this->belongsTo(BankGroup::class);
     }
 
-    public function scopeOfCurrentWebsite($query)
+    public function scopeSearch($query, $search)
     {
-        $query->where('website_id', Website::getWebsiteId());
+        $query->where(function ($query) use ($search) {
+            $query->where('code', 'like', "%{$search}%");
+            $query->orWhere('name', 'like', "%{$search}%");
+        });
+    }
+
+    public function getLogoUrlAttribute()
+    {
+        /** @var \Illuminate\Filesystem\FilesystemAdapter */
+        $storage = Storage::disk('public');
+
+        return $this->logo
+            ? $storage->url($this->logo)
+            : null;
     }
 }

@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(PermissionsTableSeeder::class);
         $this->call(DefaultClientSeeder::class);
+        $this->call(BankGroupsTableSeeder::class);
 
         if (app()->environment('local', 'staging')) {
             $this->call(BanksTableSeeder::class);

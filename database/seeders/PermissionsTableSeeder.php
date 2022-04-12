@@ -23,6 +23,7 @@ class PermissionsTableSeeder extends Seeder
             'Menu - Members' => require(__DIR__ . '/permissions/members.php'),
             'Menu - Transactions' => require(__DIR__ . '/permissions/transactions.php'),
             'Menu - Promotions' => require(__DIR__ . '/permissions/promotions.php'),
+            'Menu - Banking System' => require(__DIR__ . '/permissions/banking.php'),
         ];
 
         foreach ($groups as $groupDisplay => $rows) {

@@ -35,6 +35,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function (
     require __DIR__.'/admin/company_banks.php';
     require __DIR__.'/admin/promotions.php';
     require __DIR__.'/admin/promotion_releases.php';
+    require __DIR__.'/admin/bank_groups.php';
+    require __DIR__.'/admin/banks.php';
 });
 
 Route::group(['prefix' => 'auth'], function () {

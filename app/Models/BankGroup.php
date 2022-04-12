@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class BankGroup extends Model
 {
-    use HasFactory;
+    use HasFactory, Traits\HasAllowableFields;
+
+    const BANK = 1;
+    const EPAYMENT = 2;
 
     /**
      * The attributes that are mass assignable.
@@ -28,4 +31,11 @@ class BankGroup extends Model
         'id' => 'integer',
         'is_require_account_no' => 'boolean',
     ];
+
+    public function scopeSearch($query, $search)
+    {
+        $query->where(function ($query) use ($search) {
+            $query->where('code', 'like', "%{$search}%");
+        });
+    }
 }

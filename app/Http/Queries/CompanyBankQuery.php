@@ -14,7 +14,7 @@ class CompanyBankQuery extends BaseQuery implements QueryContract
 {
     public function __construct()
     {
-        parent::__construct(CompanyBank::query());
+        parent::__construct(CompanyBank::applyAccessibilityFilter());
     }
 
     public function withFields()
@@ -39,6 +39,7 @@ class CompanyBankQuery extends BaseQuery implements QueryContract
         $this->allowedFilters([
             AllowedFilter::exact('is_active'),
             AllowedFilter::exact('bank_type'),
+            AllowedFilter::scope('search'),
         ]);
 
         return $this;

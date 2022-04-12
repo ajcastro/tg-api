@@ -20,7 +20,7 @@ class CreateCompanyBanksTable extends Migration
             $table->string('bank_code');
             $table->string('bank_acc_no');
             $table->string('bank_acc_name');
-            $table->boolean('is_active');
+            $table->boolean('is_active')->default(1);
             $table->boolean('is_auto_update_balance');
             $table->decimal('bank_factor', 5, 2)->default(0);
             $table->unsignedInteger('min_amount')->nullable();

@@ -21,4 +21,14 @@ return [
             'subject' => 'Bank',
         ],
     ],
+    // Menu - Bank Accounts
+    [
+        'name' => 'company_banks.view_any',
+        'label' => 'Menu - Bank Accounts',
+        'admin_redirect' => '/banks/accounts',
+        'casl' => [
+            'action' => 'read',
+            'subject' => 'CompanyBank',
+        ],
+    ],
 ];

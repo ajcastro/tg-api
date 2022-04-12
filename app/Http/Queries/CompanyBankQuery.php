@@ -14,7 +14,13 @@ class CompanyBankQuery extends BaseQuery implements QueryContract
 {
     public function __construct()
     {
-        parent::__construct(CompanyBank::applyAccessibilityFilter());
+        $query = CompanyBank::applyAccessibilityFilter()
+            ->when(!request()->filled('sort'), function ($query) {
+                $query->orderBy('bank_code');
+                $query->orderBy('bank_type');
+            });
+
+        parent::__construct($query);
     }
 
     public function withFields()

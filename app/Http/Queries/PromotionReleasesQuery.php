@@ -19,7 +19,9 @@ class PromotionReleasesQuery extends BaseQuery implements QueryContract
         $query = MemberTransaction::applyAccessibilityFilter()
             ->where('member_transactions.status', MemberTransactionStatus::APPROVED)
             ->where('type', 'deposit') // TODO: change deposit and withdraw values into constant or enums
-            ->whereHas('memberPromotion')
+            ->whereHas('memberPromotion', function ($query) {
+                $query->where('is_lock', 1);
+            })
             ->with([
                 'member:id,username',
                 'memberPromotion:id,promotion_id,member_transaction_id,deposit_amount,bonus_amount,obligation_amount,turn_over_amount',

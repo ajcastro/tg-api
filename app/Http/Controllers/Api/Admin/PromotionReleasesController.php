@@ -11,6 +11,7 @@ use App\Http\Queries\PromotionReleasesQuery;
 use App\Http\Requests\Api\Admin\PromotionRequest;
 use App\Http\Resources\PromotionRelease;
 use App\Http\Resources\PromotionReleaseResource;
+use App\Models\MemberPromotion;
 use App\Models\MemberTransaction;
 use App\Models\Promotion;
 use Illuminate\Http\UploadedFile;
@@ -25,5 +26,11 @@ class PromotionReleasesController extends Controller
             $this->query = new PromotionReleasesQuery;
             $this->resource = PromotionReleaseResource::class;
         })->only(['index']);
+    }
+
+    public function release(MemberPromotion $memberPromotion)
+    {
+        $memberPromotion->is_lock = false;
+        $memberPromotion->save();
     }
 }

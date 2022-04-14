@@ -13,7 +13,7 @@ class AddIsShownInBannerInPromotionSettings extends Migration
      */
     public function up()
     {
-        Schema::table('banner_in_promotion_settings', function (Blueprint $table) {
+        Schema::table('promotion_settings', function (Blueprint $table) {
             $table->boolean('is_shown_in_banner')->default(0)->after('is_lock_withdrawal');
         });
     }

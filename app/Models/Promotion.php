@@ -72,6 +72,16 @@ class Promotion extends Model implements Contracts\RelatesToWebsite
         return $this->setting();
     }
 
+    public function bankGroups()
+    {
+        return $this->belongsToMany(BankGroup::class, 'promotions_bank_groups');
+    }
+
+    public function games()
+    {
+        return $this->belongsToMany(Menu::class, 'promotions_games', 'promotion_id', 'game_id');
+    }
+
     public function scopeOfCurrentWebsite($query)
     {
         $query->where('website_id', Website::getWebsiteId());

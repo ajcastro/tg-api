@@ -62,8 +62,18 @@ class PromotionSetting extends Model
         'is_shown_in_banner' => 'boolean',
     ];
 
+    protected $appends = [
+        'no_valid_thru_date',
+    ];
+
+
     public function promotion()
     {
         return $this->belongsTo(Promotion::class);
+    }
+
+    public function getNoValidThruDateAttribute()
+    {
+        return is_null($this->valid_thru);
     }
 }

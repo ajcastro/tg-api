@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\GameListController;
 use App\Http\Controllers\AuthController;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -37,6 +38,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function (
     require __DIR__.'/admin/promotion_releases.php';
     require __DIR__.'/admin/bank_groups.php';
     require __DIR__.'/admin/banks.php';
+
+    Route::get('game_list', GameListController::class)->name('game_list');
 });
 
 Route::group(['prefix' => 'auth'], function () {

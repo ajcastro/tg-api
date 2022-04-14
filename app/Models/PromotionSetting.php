@@ -32,6 +32,7 @@ class PromotionSetting extends Model
         'max_given_amount',
         'is_auto_release',
         'is_lock_withdrawal',
+        'is_shown_in_banner',
     ];
 
     /**
@@ -58,6 +59,7 @@ class PromotionSetting extends Model
         'max_given_amount' => 'decimal:2',
         'is_auto_release' => 'boolean',
         'is_lock_withdrawal' => 'boolean',
+        'is_shown_in_banner' => 'boolean',
     ];
 
     public function promotion()

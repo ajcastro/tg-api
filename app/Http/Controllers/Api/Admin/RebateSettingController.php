@@ -4,20 +4,27 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Admin\PromotionSettingRequest;
-use App\Models\Promotion;
-use App\Models\PromotionSetting;
 use App\Models\RebateSetting;
+use App\Models\Website;
 use Illuminate\Http\Request;
 
 class RebateSettingController extends Controller
 {
-    public function index()
+    public function index(Website $website)
     {
-        return RebateSetting::with('category')->get();
+        $rebate = $website->rebate;
+        $rebate->load('settings.gameCategory');
+
+        return $rebate;
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Website $website)
     {
+        $rebate = $website->rebate;
+
+        $rebate->fill($request->all());
+        $rebate->save();
+
         $inputs = collect($request->rebate_settings);
 
         $settings = RebateSetting::find($inputs->pluck('id'));

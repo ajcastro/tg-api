@@ -16,6 +16,7 @@ class Game extends Model
      */
     protected $fillable = [
         'game_category_id',
+        'menu_id',
         'title',
     ];
 
@@ -32,5 +33,10 @@ class Game extends Model
     public function gameCategory()
     {
         return $this->belongsTo(GameCategory::class);
+    }
+
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
     }
 }

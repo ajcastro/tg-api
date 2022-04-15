@@ -8,6 +8,9 @@ use App\Observers\SetsCreatedByAndUpdatedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property \App\Models\Rebate $rebate
+ */
 class Website extends Model implements AccessibleByUser
 {
     use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus, Traits\AccessibilityFilter;
@@ -104,6 +107,15 @@ class Website extends Model implements AccessibleByUser
     public function credit()
     {
         return $this->hasOne(WebsiteCredit::class)->withDefault();
+    }
+
+    public function rebate()
+    {
+        return $this->hasOne(Rebate::class)->withDefault([
+            'content' => '',
+            'is_active' => false,
+            'is_shown' => false,
+        ]);
     }
 
     public function scopeSearch($query, $search)

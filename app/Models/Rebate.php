@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property \Illuminate\Database\Eloquent\Collection $settings
+ */
 class Rebate extends Model
 {
     use HasFactory;
@@ -36,5 +39,10 @@ class Rebate extends Model
     public function website()
     {
         return $this->belongsTo(Website::class);
+    }
+
+    public function settings()
+    {
+        return $this->hasMany(RebateSetting::class);
     }
 }

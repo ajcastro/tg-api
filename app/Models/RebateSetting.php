@@ -15,9 +15,11 @@ class RebateSetting extends Model
      * @var array
      */
     protected $fillable = [
-        'category_id',
-        'new_member',
-        'regular_member',
+        'rebate_id',
+        'game_category_id',
+        'percentage_level_0',
+        'percentage_level_1',
+        'percentage_level_2',
         'pay_out_by',
         'min_amount',
         'max_amount',
@@ -38,8 +40,8 @@ class RebateSetting extends Model
         'max_amount' => 'decimal:2',
     ];
 
-    public function category()
+    public function gameCategory()
     {
-        return $this->belongsTo(Menu::class);
+        return $this->belongsTo(GameCategory::class);
     }
 }

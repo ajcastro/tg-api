@@ -98,4 +98,14 @@ return [
             'subject' => 'Promotion',
         ],
     ],
+    // Rebate Settings
+    [
+        'name' => 'rebate_settings.read',
+        'label' => 'Menu - Rebate Settings',
+        'admin_redirect' => '/rebate_settings',
+        'casl' => [
+            'action' => 'read',
+            'subject' => 'RebateSetting',
+        ],
+    ],
 ];

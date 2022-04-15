@@ -38,6 +38,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function (
     require __DIR__.'/admin/promotion_releases.php';
     require __DIR__.'/admin/bank_groups.php';
     require __DIR__.'/admin/banks.php';
+    require __DIR__.'/admin/rebate_settings.php';
 
     Route::get('game_list', GameListController::class)->name('game_list');
 });

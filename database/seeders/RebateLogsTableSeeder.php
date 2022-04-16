@@ -17,9 +17,9 @@ class RebateLogsTableSeeder extends Seeder
      */
     public function run()
     {
-        if (app()->environment('local', 'testing')) {
-            Permission::truncate();
-        } else return;
+        if (app()->environment('production')) {
+            return;
+        }
 
         $websites = Website::get();
         $gameCategories = GameCategory::get();

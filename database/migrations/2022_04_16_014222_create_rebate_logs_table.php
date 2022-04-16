@@ -22,8 +22,8 @@ class CreateRebateLogsTable extends Migration
             $table->decimal('turn_over_amount', 15, 2);
             $table->decimal('rebate_percentage', 3, 2);
             $table->decimal('rebate_amount', 15, 2);
-            $table->timestamp('paid_period_from')->index();
-            $table->timestamp('paid_period_thru')->index();
+            $table->timestamp('paid_period_from')->nullable()->index();
+            $table->timestamp('paid_period_thru')->nullable()->index();
             $table->timestamps();
         });
     }

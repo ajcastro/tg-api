@@ -46,6 +46,23 @@ class RebateLog extends Model implements Contracts\RelatesToWebsite
         'paid_period_thru' => 'datetime',
     ];
 
+
+    public static function booted()
+    {
+        static::saving(function (RebateLog $rebateLog) {
+            $rebateLog->rebate_amount = static::calculateRebateAmount(
+                $rebateLog->turn_over_amount,
+                $rebateLog->rebate_percentage
+            );
+        });
+    }
+
+    public static function calculateRebateAmount($turn_over_amount, $rebate_percentage)
+    {
+        $result = bcmul($turn_over_amount, $rebate_percentage, 2);
+        return bcdiv($result, 100, 2);
+    }
+
     public function website()
     {
         return $this->belongsTo(Website::class);

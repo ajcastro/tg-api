@@ -31,9 +31,8 @@ class RebateLogFactory extends Factory
             'rebate_id' => Rebate::factory(),
             'game_category_id' => GameCategory::factory(),
             'member_id' => Member::factory(),
-            'turn_over_amount' => $this->faker->randomFloat(2, 0, 9999999999999.99),
+            'turn_over_amount' => $this->faker->randomFloat(2, 0, 99_999_999 ),
             'rebate_percentage' => $this->faker->randomFloat(2, 0, 9.99),
-            'rebate_amount' => $this->faker->randomFloat(2, 0, 9999999999999.99),
             'paid_period_from' => $this->faker->dateTime(),
             'paid_period_thru' => $this->faker->dateTime(),
         ];

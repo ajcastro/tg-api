@@ -108,4 +108,14 @@ return [
             'subject' => 'RebateSetting',
         ],
     ],
+    // Rebate Logs
+    [
+        'name' => 'rebate_logs.read',
+        'label' => 'Menu - Rebate Logs',
+        'admin_redirect' => '/rebate_logs',
+        'casl' => [
+            'action' => 'read',
+            'subject' => 'RebateLog',
+        ],
+    ],
 ];

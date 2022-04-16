@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property int $id
  * @property \App\Models\Rebate $rebate
  */
 class Website extends Model implements AccessibleByUser

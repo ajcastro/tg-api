@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class GameCategory extends Model
 {
-    use HasFactory;
+    use HasFactory, Traits\HasAllowableFields;
 
     /**
      * The attributes that are mass assignable.

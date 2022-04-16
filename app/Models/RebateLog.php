@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class RebateLog extends Model
+class RebateLog extends Model implements Contracts\RelatesToWebsite
 {
-    use HasFactory;
+    use HasFactory, Traits\HasAllowableFields, Traits\AccessibilityFilter;
 
     /**
      * The attributes that are mass assignable.
@@ -62,5 +64,17 @@ class RebateLog extends Model
     public function member()
     {
         return $this->belongsTo(Member::class);
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        $query->whereHas('member', function ($query) use ($search) {
+            $query->where('username', 'like', "%{$search}%");
+        });
+    }
+
+    public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
+    {
+        $query->where('website_id', $website->id);
     }
 }

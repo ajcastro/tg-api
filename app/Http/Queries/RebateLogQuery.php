@@ -16,7 +16,7 @@ class RebateLogQuery extends BaseQuery implements QueryContract
 {
     public function __construct()
     {
-        parent::__construct(RebateLog::query());
+        parent::__construct(RebateLog::applyAccessibilityFilter());
     }
 
     public function withFields()

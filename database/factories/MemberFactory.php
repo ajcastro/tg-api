@@ -29,7 +29,7 @@ class MemberFactory extends Factory
         return [
             'website_id' => Website::factory(),
             'upline_referral_id' => null,
-            'referral_number' => $this->faker->unique()->words(3, true),
+            'referral_number' => Str::random(16),
             'username' => $this->faker->userName.Str::random(8),
             'password' => bcrypt('password'),
             'email' => $this->faker->safeEmail,

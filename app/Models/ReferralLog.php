@@ -39,21 +39,6 @@ class ReferralLog extends Model implements RelatesToWebsite
         'paid_period_thru' => 'datetime',
     ];
 
-    public static function booted()
-    {
-        static::saving(function (ReferralLog $referralLog) {
-            $referralLog->referral_amount = static::calculateReferralAmount(
-                $referralLog->turn_over_amount,
-                $referralLog->referral_percentage
-            );
-        });
-    }
-
-    public static function calculateReferralAmount($turn_over_amount, $referral_percentage)
-    {
-        $result = bcmul($turn_over_amount, $referral_percentage, 2);
-        return bcdiv($result, 100, 2);
-    }
 
     public function website()
     {
@@ -85,5 +70,10 @@ class ReferralLog extends Model implements RelatesToWebsite
     public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
     {
         $query->where('website_id', $website->id);
+    }
+
+    public function details()
+    {
+        return $this->hasMany(ReferralLogDetail::class);
     }
 }

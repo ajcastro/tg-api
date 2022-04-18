@@ -2,12 +2,12 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
-use App\Models\DownlinkMember;
 use App\Models\GameCategory;
+use App\Models\Member;
 use App\Models\ReferralLog;
 use App\Models\ReferralLogDetail;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class ReferralLogDetailFactory extends Factory
 {
@@ -27,13 +27,14 @@ class ReferralLogDetailFactory extends Factory
     {
         return [
             'referral_log_id' => ReferralLog::factory(),
-            'downlink_member_id' => DownlinkMember::factory(),
+            'downlink_member_id' => Member::factory(),
             'game_category_id' => GameCategory::factory(),
-            'turn_over_amount' => $this->faker->randomFloat(2, 0, 9999999999999.99),
+            'turn_over_amount' => $this->faker->randomFloat(2, 0, 99_999_999),
             'referral_percentage' => $this->faker->randomFloat(2, 0, 9.99),
-            'referral_amount' => $this->faker->randomFloat(2, 0, 9999999999999.99),
-            'paid_period_from' => $this->faker->dateTime(),
-            'paid_period_thru' => $this->faker->dateTime(),
+            'paid_period_from' => $this->faker->dateTimeBetween('-1 month'),
+            'paid_period_thru' => function ($data) {
+                return carbon($data['paid_period_from'])->addMonthNoOverflow();
+            },
         ];
     }
 }

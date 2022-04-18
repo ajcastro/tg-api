@@ -42,6 +42,22 @@ class ReferralLogDetail extends Model
         'paid_period_thru' => 'datetime',
     ];
 
+    public static function booted()
+    {
+        static::saving(function (ReferralLogDetail $model) {
+            $model->referral_amount = static::calculateReferralAmount(
+                $model->turn_over_amount,
+                $model->referral_percentage
+            );
+        });
+    }
+
+    public static function calculateReferralAmount($turn_over_amount, $referral_percentage)
+    {
+        $result = bcmul($turn_over_amount, $referral_percentage, 2);
+        return bcdiv($result, 100, 2);
+    }
+
     public function referralLog()
     {
         return $this->belongsTo(ReferralLog::class);

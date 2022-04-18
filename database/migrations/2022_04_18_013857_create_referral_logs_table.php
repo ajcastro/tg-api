@@ -22,8 +22,8 @@ class CreateReferralLogsTable extends Migration
             $table->decimal('turn_over_amount', 15, 2)->default(0);
             $table->decimal('referral_percentage', 3, 2)->default(0);
             $table->decimal('referral_amount', 15, 2)->default(0);
-            $table->timestamp('paid_period_from')->index();
-            $table->timestamp('paid_period_thru')->index();
+            $table->timestamp('paid_period_from')->index()->nullable();
+            $table->timestamp('paid_period_thru')->index()->nullable();
             $table->timestamps();
         });
     }

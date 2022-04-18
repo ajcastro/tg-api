@@ -118,4 +118,14 @@ return [
             'subject' => 'RebateLog',
         ],
     ],
+    // Referral Settings
+    [
+        'name' => 'referral_settings.read',
+        'label' => 'Menu - Referral Settings',
+        'admin_redirect' => '/referral_settings',
+        'casl' => [
+            'action' => 'read',
+            'subject' => 'ReferralSetting',
+        ],
+    ],
 ];

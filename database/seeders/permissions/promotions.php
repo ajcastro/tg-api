@@ -132,7 +132,7 @@ return [
     [
         'name' => 'referral_logs.read',
         'label' => 'Menu - Referral Logs',
-        'admin_redirect' => '/rebate_logs',
+        'admin_redirect' => '/referral_logs',
         'casl' => [
             'action' => 'read',
             'subject' => 'ReferralLog',

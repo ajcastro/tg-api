@@ -4,10 +4,11 @@ namespace Database\Factories;
 
 use App\Enums\MemberLevel;
 use App\Enums\WarningStatus;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Member;
 use App\Models\User;
 use App\Models\Website;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class MemberFactory extends Factory
 {
@@ -29,7 +30,7 @@ class MemberFactory extends Factory
             'website_id' => Website::factory(),
             'upline_referral_id' => null,
             'referral_number' => $this->faker->unique()->words(3, true),
-            'username' => $this->faker->userName,
+            'username' => $this->faker->userName.Str::random(8),
             'password' => bcrypt('password'),
             'email' => $this->faker->safeEmail,
             'phone_number' => $this->faker->phoneNumber,

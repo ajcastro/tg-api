@@ -128,4 +128,14 @@ return [
             'subject' => 'ReferralSetting',
         ],
     ],
+    // Referral Logs
+    [
+        'name' => 'referral_logs.read',
+        'label' => 'Menu - Referral Logs',
+        'admin_redirect' => '/rebate_logs',
+        'casl' => [
+            'action' => 'read',
+            'subject' => 'ReferralLog',
+        ],
+    ],
 ];

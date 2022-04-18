@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function () {
     require __DIR__.'/admin/clients.php';
+    require __DIR__.'/admin/game_categories.php';
     require __DIR__.'/admin/parent_groups.php';
     require __DIR__.'/admin/websites.php';
     require __DIR__.'/admin/members.php';
@@ -41,6 +42,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function (
     require __DIR__.'/admin/rebate_settings.php';
     require __DIR__.'/admin/rebate_logs.php';
     require __DIR__.'/admin/referral_settings.php';
+    require __DIR__.'/admin/referral_logs.php';
 
     Route::get('game_list', GameListController::class)->name('game_list');
 });

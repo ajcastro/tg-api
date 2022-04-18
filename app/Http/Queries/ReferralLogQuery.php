@@ -52,9 +52,6 @@ class ReferralLogQuery extends BaseQuery implements QueryContract
                 $end_date = carbon($end_date)->endOfDay();
                 $query->whereBetween('referral_logs.created_at', [$start_date, $end_date]);
             }),
-            AllowedFilter::callback('game_category_ids', function ($query, array $value) {
-                $query->whereIn('referral_logs.game_category_id', $value);
-            }),
         ]);
 
         return $this;

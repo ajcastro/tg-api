@@ -19,11 +19,7 @@ class ReferralLog extends Model implements RelatesToWebsite
      */
     protected $fillable = [
         'website_id',
-        'game_category_id',
         'member_id',
-        'uplink_member_id',
-        'turn_over_amount',
-        'referral_percentage',
         'referral_amount',
         'paid_period_from',
         'paid_period_thru',
@@ -37,11 +33,7 @@ class ReferralLog extends Model implements RelatesToWebsite
     protected $casts = [
         'id' => 'integer',
         'website_id' => 'integer',
-        'game_category_id' => 'integer',
         'member_id' => 'integer',
-        'uplink_member_id' => 'integer',
-        'turn_over_amount' => 'decimal:2',
-        'referral_percentage' => 'decimal:2',
         'referral_amount' => 'decimal:2',
         'paid_period_from' => 'datetime',
         'paid_period_thru' => 'datetime',

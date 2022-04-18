@@ -119,6 +119,15 @@ class Website extends Model implements AccessibleByUser
         ]);
     }
 
+    public function referral()
+    {
+        return $this->hasOne(Referral::class)->withDefault([
+            'content' => '',
+            'is_active' => false,
+            'is_shown' => false,
+        ]);
+    }
+
     public function scopeSearch($query, $search)
     {
         $query->where('code', 'like', "%{$search}%");

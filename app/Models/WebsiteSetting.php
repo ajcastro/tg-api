@@ -47,6 +47,15 @@ class WebsiteSetting extends Model
         'jackpot_image_url',
     ];
 
+
+    public static function booted()
+    {
+        static::saving(function (WebsiteSetting $setting) {
+            $setting->website->is_active = !$setting->on_maintenance_mode;
+            $setting->website->saveQuietly();
+        });
+    }
+
     public function website()
     {
         return $this->belongsTo(Website::class);

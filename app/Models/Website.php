@@ -58,6 +58,13 @@ class Website extends Model implements AccessibleByUser
             $pg = $website->client->getDefaultParentGroup();
             $pg && $pg->websites()->attach($website);
         });
+
+        static::saving(function (Website $website) {
+            if ($website->setting->exists) {
+                $website->setting->on_maintenance_mode = !$website->is_active;
+                $website->setting->saveQuietly();
+            }
+        });
     }
 
     public static function getWebsiteId(): int

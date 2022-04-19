@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property \App\Models\Rebate $rebate
+ * @property \App\Models\WebsiteSetting $setting
  */
 class Website extends Model implements AccessibleByUser
 {
@@ -56,6 +57,13 @@ class Website extends Model implements AccessibleByUser
         static::created(function (Website $website) {
             $pg = $website->client->getDefaultParentGroup();
             $pg && $pg->websites()->attach($website);
+        });
+
+        static::saving(function (Website $website) {
+            if ($website->setting->exists) {
+                $website->setting->on_maintenance_mode = !$website->is_active;
+                $website->setting->saveQuietly();
+            }
         });
     }
 
@@ -126,6 +134,11 @@ class Website extends Model implements AccessibleByUser
             'is_active' => false,
             'is_shown' => false,
         ]);
+    }
+
+    public function setting()
+    {
+        return $this->hasOne(WebsiteSetting::class)->withDefault();
     }
 
     public function scopeSearch($query, $search)

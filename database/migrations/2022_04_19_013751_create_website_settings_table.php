@@ -17,13 +17,15 @@ class CreateWebsiteSettingsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('website_id')->index();
             $table->string('title');
-            $table->string('logo');
-            $table->string('favicon');
-            $table->string('jackpot_image');
-            $table->string('livechat_url');
-            $table->string('livechat_code');
+            $table->string('brand_name');
+            $table->string('logo')->nullable();
+            $table->string('favicon')->nullable();
+            $table->string('jackpot_image')->nullable();
+            $table->string('running_text_announcement')->nullable();
+            $table->string('livechat_url')->nullable();
+            $table->string('livechat_code')->nullable();
             $table->boolean('on_maintenance_mode')->default(0);
-            $table->tinyInteger('timezone')->default(0);
+            $table->string('timezone')->nullable();
             $table->timestamps();
         });
     }

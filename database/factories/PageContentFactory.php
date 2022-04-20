@@ -25,13 +25,14 @@ class PageContentFactory extends Factory
     {
         return [
             'website_id' => Website::factory(),
-            'short_description' => $this->faker->word,
-            'is_shown' => $this->faker->boolean,
-            'meta_title' => $this->faker->word,
-            'meta_keyword' => $this->faker->word,
-            'meta_description' => $this->faker->word,
+            'short_description' => $this->faker->word(),
+            'url' => $this->faker->url(),
+            'is_shown' => 1,
+            'meta_title' => $this->faker->word(),
+            'meta_keyword' => $this->faker->word(),
+            'meta_description' => $this->faker->word(),
             'content' => $this->faker->paragraphs(3, true),
-            'is_footer_displayed' => $this->faker->boolean,
+            'is_footer_displayed' => 1,
         ];
     }
 }

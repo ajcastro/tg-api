@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Contracts\RelatesToWebsite;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class ContactSetting extends Model
+class ContactSetting extends Model implements RelatesToWebsite
 {
-    use HasFactory;
-
+    use HasFactory, Traits\AccessibilityFilter, Traits\HasAllowableFields, Traits\SetActiveStatus;
     /**
      * The attributes that are mass assignable.
      *
@@ -18,7 +20,7 @@ class ContactSetting extends Model
         'website_id',
         'title',
         'value',
-        'status',
+        'is_active',
         'is_shown',
     ];
 
@@ -30,12 +32,25 @@ class ContactSetting extends Model
     protected $casts = [
         'id' => 'integer',
         'website_id' => 'integer',
-        'status' => 'boolean',
+        'is_active' => 'boolean',
         'is_shown' => 'boolean',
     ];
 
     public function website()
     {
         return $this->belongsTo(Website::class);
+    }
+
+    public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
+    {
+        $query->where('website_id', $website->id);
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        $query->where(function ($query) use ($search) {
+            $query->where('title', 'like', "%{$search}%");
+            $query->orWhere('value', 'like', "%{$search}%");
+        });
     }
 }

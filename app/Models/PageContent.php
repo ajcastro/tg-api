@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Contracts\RelatesToWebsite;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class PageContent extends Model
+class PageContent extends Model implements RelatesToWebsite
 {
-    use HasFactory;
+    use HasFactory, Traits\AccessibilityFilter, Traits\HasAllowableFields;
 
     /**
      * The attributes that are mass assignable.
@@ -17,6 +20,7 @@ class PageContent extends Model
     protected $fillable = [
         'website_id',
         'short_description',
+        'url',
         'is_shown',
         'meta_title',
         'meta_keyword',
@@ -40,5 +44,18 @@ class PageContent extends Model
     public function website()
     {
         return $this->belongsTo(Website::class);
+    }
+
+    public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
+    {
+        $query->where('website_id', $website->id);
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        $query->where(function ($query) use ($search) {
+            $query->where('short_description', 'like', "%{$search}%");
+            $query->orWhere('url', 'like', "%{$search}%");
+        });
     }
 }

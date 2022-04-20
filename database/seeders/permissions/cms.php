@@ -52,7 +52,7 @@ return [
         'label' => 'Action - Create Contact Setting',
         'casl' => [
             'action' => 'create',
-            'subject' => 'PageContent',
+            'subject' => 'ContactSetting',
         ],
     ],
     [
@@ -60,6 +60,22 @@ return [
         'label' => 'Action - Update Contact Setting',
         'casl' => [
             'action' => 'update',
+            'subject' => 'ContactSetting',
+        ],
+    ],
+    [
+        'name' => 'contact_settings.set_active',
+        'label' => 'Action - Activate Contact Setting',
+        'casl' => [
+            'action' => 'activate',
+            'subject' => 'ContactSetting',
+        ],
+    ],
+    [
+        'name' => 'contact_settings.set_inactive',
+        'label' => 'Action - Deactivate Contact Setting',
+        'casl' => [
+            'action' => 'deactivate',
             'subject' => 'ContactSetting',
         ],
     ],

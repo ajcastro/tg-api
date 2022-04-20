@@ -22,8 +22,6 @@ class ContactSettingsTableSeeder extends Seeder
             return;
         }
 
-        ContactSetting::truncate();
-
         $websites = Website::get();
 
         foreach ($websites as $website) {

@@ -22,8 +22,6 @@ class PageContentsTableSeeder extends Seeder
             return;
         }
 
-        PageContent::truncate();
-
         $websites = Website::get();
 
         foreach ($websites as $website) {

@@ -26,7 +26,7 @@ class PageContentFactory extends Factory
         return [
             'website_id' => Website::factory(),
             'short_description' => $this->faker->word(),
-            'url' => $this->faker->url(),
+            'url' => $this->faker->slug(),
             'is_shown' => 1,
             'meta_title' => $this->faker->word(),
             'meta_keyword' => $this->faker->word(),

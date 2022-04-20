@@ -27,7 +27,7 @@ class ContactSettingFactory extends Factory
             'website_id' => Website::factory(),
             'title' => $this->faker->sentence(4),
             'value' => $this->faker->word,
-            'status' => $this->faker->boolean,
+            'is_active' => $this->faker->boolean,
             'is_shown' => $this->faker->boolean,
         ];
     }

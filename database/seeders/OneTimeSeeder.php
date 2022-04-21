@@ -13,6 +13,6 @@ class OneTimeSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(ContactSettingsTableSeeder::class);
+        $this->call(GuideListsTableSeeder::class);
     }
 }

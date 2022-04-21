@@ -18,7 +18,7 @@ class CreateGuideContentsTable extends Migration
             $table->unsignedBigInteger('website_id')->index();
             $table->unsignedBigInteger('guide_list_id')->index();
             $table->longText('content')->nullable();
-            $table->boolean('is_active')->default(0);
+            $table->boolean('is_active')->default(0)->index();
             $table->timestamps();
         });
     }

@@ -152,7 +152,7 @@ return [
         'label' => 'Action - Deactivate Guide List',
         'casl' => [
             'action' => 'deactivate',
-            'subject' => 'GuideList',
+            'subject' => 'GuideContent',
         ],
     ],
 ];

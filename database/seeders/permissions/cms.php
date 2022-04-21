@@ -79,4 +79,80 @@ return [
             'subject' => 'ContactSetting',
         ],
     ],
+    // Guide Lists
+    [
+        'name' => 'guide_lists.read',
+        'label' => 'Menu - Guide Lists',
+        'admin_redirect' => '/guide_lists',
+        'casl' => [
+            'action' => 'read',
+            'subject' => 'GuideList',
+        ],
+    ],
+    [
+        'name' => 'guide_lists.create',
+        'label' => 'Action - Create Guide List',
+        'casl' => [
+            'action' => 'create',
+            'subject' => 'GuideList',
+        ],
+    ],
+    [
+        'name' => 'guide_lists.update',
+        'label' => 'Action - Update Guide List',
+        'casl' => [
+            'action' => 'update',
+            'subject' => 'GuideList',
+        ],
+    ],
+    [
+        'name' => 'guide_lists.set_active',
+        'label' => 'Action - Activate Guide List',
+        'casl' => [
+            'action' => 'activate',
+            'subject' => 'GuideList',
+        ],
+    ],
+    [
+        'name' => 'guide_lists.set_inactive',
+        'label' => 'Action - Deactivate Guide List',
+        'casl' => [
+            'action' => 'deactivate',
+            'subject' => 'GuideList',
+        ],
+    ],
+    // Guide Contents
+    [
+        'name' => 'guide_contents.read',
+        'label' => 'Menu - Guide Contents',
+        'admin_redirect' => '/guide_contents',
+        'casl' => [
+            'action' => 'read',
+            'subject' => 'GuideContent',
+        ],
+    ],
+    [
+        'name' => 'guide_contents.update',
+        'label' => 'Action - Update Guide List',
+        'casl' => [
+            'action' => 'update',
+            'subject' => 'GuideContent',
+        ],
+    ],
+    [
+        'name' => 'guide_contents.set_active',
+        'label' => 'Action - Activate Guide List',
+        'casl' => [
+            'action' => 'activate',
+            'subject' => 'GuideContent',
+        ],
+    ],
+    [
+        'name' => 'guide_contents.set_inactive',
+        'label' => 'Action - Deactivate Guide List',
+        'casl' => [
+            'action' => 'deactivate',
+            'subject' => 'GuideContent',
+        ],
+    ],
 ];

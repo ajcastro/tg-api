@@ -25,6 +25,7 @@ class GuideListFactory extends Factory
         return [
             'title' => $this->faker->sentence(4),
             'category' => $this->faker->word,
+            'is_active' => $this->faker->boolean(),
         ];
     }
 }

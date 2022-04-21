@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class GuideContent extends Model
 {
-    use HasFactory;
+    use HasFactory, Traits\SetActiveStatus;
 
     /**
      * The attributes that are mass assignable.
@@ -29,6 +29,7 @@ class GuideContent extends Model
         'id' => 'integer',
         'website_id' => 'integer',
         'guide_list_id' => 'integer',
+        'is_active' => 'boolean',
     ];
 
     public function website()

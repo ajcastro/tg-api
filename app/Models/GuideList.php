@@ -5,9 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
+/**
+ * @property GuideContent $guideContent
+ */
 class GuideList extends Model
 {
-    use HasFactory;
+    use HasFactory, Traits\HasAllowableFields, Traits\SetActiveStatus;
 
     /**
      * The attributes that are mass assignable.
@@ -26,5 +30,20 @@ class GuideList extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'is_active' => 'boolean',
     ];
+
+    public function guideContent()
+    {
+        // hasOne in conjunction with a website_id selection
+        return $this->hasOne(GuideContent::class)->withDefault();
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        $query->where(function ($query) use ($search) {
+            $query->where('title', 'like', "%{$search}%");
+            $query->orWhere('category', 'like', "%{$search}%");
+        });
+    }
 }

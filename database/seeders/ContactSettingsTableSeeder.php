@@ -24,10 +24,45 @@ class ContactSettingsTableSeeder extends Seeder
 
         $websites = Website::get();
 
+        $items = [
+            [
+                'title' => '+12025550185',
+                'value' => 'https://api.whatsapp.com/send?phone=+12025550185',
+            ],
+            [
+                'title' => 'Facebook',
+                'value' => 'https://www.facebook.com/TeleGaming',
+            ],
+            [
+                'title' => 'Twitter',
+                'value' => 'https://twitter.com/TeleGaming',
+            ],
+            [
+                'title' => 'Instagram',
+                'value' => 'https://www.instagram.com/TeleGaming',
+            ],
+            [
+                'title' => 'Google',
+                'value' => 'https://www.google.com/?q=TeleGaming',
+            ],
+            [
+                'title' => 'Youtube',
+                'value' => 'https://www.youtube.com/?q=TeleGaming',
+            ],
+            [
+                'title' => 'TeleGaming',
+                'value' => 'https://t.me/TeleGaming',
+            ],
+        ];
+
         foreach ($websites as $website) {
-            ContactSetting::factory(10)->create([
-                'website_id' => $website->id,
-            ]);
+            foreach ($items as $item) {
+                ContactSetting::factory()->create([
+                    'website_id' => $website->id,
+                    'is_active' => 1,
+                    'is_shown' => 1,
+                ] + $item);
+            }
         }
     }
 }

@@ -21,7 +21,7 @@ class TransferLogsTableSeeder extends Seeder
             return;
         }
 
-        $websites = Website::get();
+        $websites = Website::limit(5)->get();
 
         foreach ($websites as $website) {
             TransferLog::factory(10)->create([

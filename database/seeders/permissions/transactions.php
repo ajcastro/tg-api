@@ -167,4 +167,14 @@ return [
             'subject' => 'MemberTransaction',
         ],
     ],
+    // Transfer Logs
+    [
+        'name' => 'transfer_logs.viewAny',
+        'label' => 'Menu - Transfer Logs',
+        'admin_redirect' => '/transfer_logs',
+        'casl' => [
+            'action' => 'read',
+            'subject' => 'TransferLog',
+        ],
+    ],
 ];

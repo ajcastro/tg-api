@@ -46,7 +46,7 @@ class TransferLogQuery extends BaseQuery implements QueryContract
                 [$start_date, $end_date] = $value;
                 $start_date = carbon($start_date)->startOfDay();
                 $end_date = carbon($end_date)->endOfDay();
-                $query->whereBetween('transfer_logs.date', [$start_date, $end_date]);
+                $query->whereBetween('transfer_logs.from', [$start_date, $end_date]);
             }),
         ]);
 

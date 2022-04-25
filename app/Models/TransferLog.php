@@ -20,7 +20,6 @@ class TransferLog extends Model implements RelatesToWebsite
     protected $fillable = [
         'website_id',
         'member_id',
-        'date',
         'from',
         'to',
         'amount',
@@ -36,9 +35,8 @@ class TransferLog extends Model implements RelatesToWebsite
         'id' => 'integer',
         'website_id' => 'integer',
         'member_id' => 'integer',
-        'date' => 'date',
-        'from' => 'date',
-        'to' => 'date',
+        'from' => 'datetime',
+        'to' => 'datetime',
         'amount' => 'decimal:2',
     ];
 

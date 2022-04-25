@@ -27,12 +27,9 @@ class TransferLogFactory extends Factory
         return [
             'website_id' => Website::factory(),
             'member_id' => Member::factory(),
-            'date' => $this->faker->dateTimeBetween('-1 month'),
-            'from' => function ($data) {
-                return $data['date'];
-            },
+            'from' => $this->faker->dateTimeBetween('-1 month'),
             'to' => function ($data) {
-                return carbon($data['from'])->addMonthNoOverflow();
+                return carbon($data['from'])->addHour();
             },
             'amount' => $this->faker->randomFloat(2, 0, 99_999),
             'description' => $this->makeDescription(),

@@ -17,9 +17,9 @@ class CreateTransferLogsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('website_id')->index();
             $table->unsignedBigInteger('member_id')->index();
-            $table->date('date')->nullable();
-            $table->date('from')->nullable();
-            $table->date('to')->nullable();
+            $table->date('date')->nullable()->index();
+            $table->date('from')->nullable()->index();
+            $table->date('to')->nullable()->index();
             $table->decimal('amount', 15, 2)->default(0);
             $table->text('description')->nullable();
             $table->timestamps();

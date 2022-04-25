@@ -27,11 +27,25 @@ class TransferLogFactory extends Factory
         return [
             'website_id' => Website::factory(),
             'member_id' => Member::factory(),
-            'date' => $this->faker->date(),
-            'from' => $this->faker->date(),
-            'to' => $this->faker->date(),
-            'amount' => $this->faker->randomFloat(2, 0, 9999999999999.99),
-            'description' => $this->faker->text,
+            'date' => $this->faker->dateTimeBetween('-1 month'),
+            'from' => function ($data) {
+                return $data['date'];
+            },
+            'to' => function ($data) {
+                return carbon($data['from'])->addMonthNoOverflow();
+            },
+            'amount' => $this->faker->randomFloat(2, 0, 99_999),
+            'description' => $this->makeDescription(),
         ];
+    }
+
+    private function makeDescription()
+    {
+        $collect = collect(['Main', 'PG Slot', 'Sports', 'Slot']);
+
+        $first = $collect->random();
+        $second = $collect->reject($first)->random();
+
+        return "From {$first} to {$second}";
     }
 }

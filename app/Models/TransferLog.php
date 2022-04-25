@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Contracts\RelatesToWebsite;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class TransferLog extends Model
+class TransferLog extends Model implements RelatesToWebsite
 {
-    use HasFactory;
+    use HasFactory, Traits\HasAllowableFields, Traits\AccessibilityFilter;
 
     /**
      * The attributes that are mass assignable.
@@ -47,5 +50,17 @@ class TransferLog extends Model
     public function member()
     {
         return $this->belongsTo(Member::class);
+    }
+
+    public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
+    {
+        $query->where('website_id', $website->id);
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        $query->whereHas('member', function ($query) use ($search) {
+            $query->where('username', 'like', "%{$search}%");
+        });
     }
 }

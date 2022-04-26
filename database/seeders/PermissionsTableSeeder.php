@@ -25,6 +25,7 @@ class PermissionsTableSeeder extends Seeder
             'Menu - Promotions' => require(__DIR__ . '/permissions/promotions.php'),
             'Menu - Banking System' => require(__DIR__ . '/permissions/banking.php'),
             'Menu - CMS' => require(__DIR__ . '/permissions/cms.php'),
+            'Menu - Report Logs' => require(__DIR__ . '/permissions/report_logs.php'),
         ];
 
         foreach ($groups as $groupDisplay => $rows) {

@@ -28,13 +28,15 @@ class UserLogFactory extends Factory
         return [
             'website_id' => Website::factory(),
             'user_id' => User::factory(),
-            'date' => $this->faker->dateTime(),
+            'date' => $this->faker->dateTimeBetween('-1 month'),
             'user_ip' => $this->faker->ipv4,
             'user_info' => $this->faker->word,
             'member_id' => Member::factory(),
-            'category' => $this->faker->word,
-            'activity' => $this->faker->word,
-            'detail' => $this->faker->text,
+            'category' => $this->faker->randomElement(['ADD', 'EDIT', 'APPROVE', 'REJECT', 'GENERAL', 'PROMO']),
+            'activity' => function ($data) {
+                return 'DEPOSIT #'.$this->faker->randomNumber(3);
+            },
+            'detail' => $this->faker->words(3, true),
         ];
     }
 }

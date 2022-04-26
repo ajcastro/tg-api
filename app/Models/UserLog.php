@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Contracts\RelatesToWebsite;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class UserLog extends Model
+class UserLog extends Model implements RelatesToWebsite
 {
-    use HasFactory;
+    use HasFactory, Traits\HasAllowableFields, Traits\AccessibilityFilter;
 
     /**
      * The attributes that are mass assignable.
@@ -35,7 +38,7 @@ class UserLog extends Model
         'id' => 'integer',
         'website_id' => 'integer',
         'user_id' => 'integer',
-        'date' => 'timestamp',
+        'date' => 'datetime',
         'member_id' => 'integer',
     ];
 
@@ -52,5 +55,23 @@ class UserLog extends Model
     public function member()
     {
         return $this->belongsTo(Member::class);
+    }
+
+    public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
+    {
+        $query->where('website_id', $website->id);
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        $query->where(function ($query) use ($search) {
+            $query->whereHas('user', function ($query) use ($search) {
+                $query->where('users.username', 'like', "%{$search}%");
+            })
+            ->orWhereHas('member', function ($query) use ($search) {
+                $query->where('members.username', 'like', "%{$search}%");
+            })
+            ->orWhere('category', 'like', "%{$search}%");
+        });
     }
 }

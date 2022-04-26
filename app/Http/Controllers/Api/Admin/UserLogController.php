@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PaginateOrListResource;
 use App\Http\Queries\UserLogQuery;
-use App\Models\TransferLog;
+use App\Models\UserLog;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserLogController extends Controller
@@ -19,7 +19,7 @@ class UserLogController extends Controller
         })->only(['index']);
     }
 
-    public function show(TransferLog $transferLog)
+    public function show(UserLog $transferLog)
     {
         $transferLog->load([
             'member',

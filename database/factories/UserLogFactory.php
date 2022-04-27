@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Member;
+use App\Models\MemberTransaction;
 use App\Models\User;
 use App\Models\UserLog;
 use App\Models\Website;
@@ -30,11 +31,15 @@ class UserLogFactory extends Factory
             'user_id' => User::factory(),
             'date' => $this->faker->dateTimeBetween('-1 month'),
             'user_ip' => $this->faker->ipv4,
-            'user_info' => $this->faker->word,
+            'user_info' => 'Windows,WebKit,Chrome99.0.4844.84',
             'member_id' => Member::factory(),
             'category' => $this->faker->randomElement(['ADD', 'EDIT', 'APPROVE', 'REJECT', 'GENERAL', 'PROMO']),
             'activity' => function ($data) {
-                return 'DEPOSIT #'.$this->faker->randomNumber(3);
+                return 'DEPOSIT #'.MemberTransaction::parseToTicketId(
+                    $this->faker->randomElement(['D', 'W']),
+                    1,
+                    $this->faker->randomNumber(3)
+                );
             },
             'detail' => $this->faker->words(3, true),
         ];

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 /**
  * @property Member $member
+ * @property string $ticket_id
  */
 class MemberTransaction extends Model implements RelatesToWebsite, AccessibleByUser
 {

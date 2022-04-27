@@ -19,6 +19,7 @@ class PermissionsTableSeeder extends Seeder
         }
 
         $groups = [
+            'Menu - Dashboard' => require(__DIR__ . '/permissions/dashboard.php'),
             'Menu - Users Management' => require(__DIR__ . '/permissions/users.php'),
             'Menu - Members' => require(__DIR__ . '/permissions/members.php'),
             'Menu - Transactions' => require(__DIR__ . '/permissions/transactions.php'),

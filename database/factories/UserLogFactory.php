@@ -35,8 +35,11 @@ class UserLogFactory extends Factory
             'member_id' => Member::factory(),
             'category' => $this->faker->randomElement(['ADD', 'EDIT', 'APPROVE', 'REJECT', 'GENERAL', 'PROMO']),
             'activity' => function ($data) {
-                return 'DEPOSIT #'.MemberTransaction::parseToTicketId(
-                    $this->faker->randomElement(['D', 'W']),
+                $type = $this->faker->randomElement(['D', 'W']);
+                $typeText = $type === 'D' ? 'DEPOSIT' : 'WITHDRAW';
+
+                return $typeText.' #'.MemberTransaction::parseToTicketId(
+                    $type,
                     1,
                     $this->faker->randomNumber(3)
                 );

@@ -18,7 +18,7 @@ class UserFactory extends Factory
     {
         return [
             'client_id' => Client::DEFAULT_ID,
-            'username' => 'a'.Str::random(4).$this->faker->unique()->safeEmail(),
+            'username' => 'a'.Str::random(4).'@'.($this->faker->randomElement(['yahoo.com', 'google.com', 'hotmail.com', 'example.com', 'example.org', 'example.net'])),
             'name' => $this->faker->name(),
             'email' => 'a'.Str::random(10).$this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),

@@ -7,8 +7,9 @@ use App\Http\Queries\Contracts\QueryContract;
 use App\Http\Queries\CustomSorts\SortBySub;
 use App\Models\GameCategory;
 use App\Models\Member;
-use App\Models\UserLog;
 use App\Models\User;
+use App\Models\UserLog;
+use App\Models\Website;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 
@@ -23,6 +24,7 @@ class UserLogQuery extends BaseQuery implements QueryContract
     {
         $this->allowedFields([
             ...UserLog::allowableFields(),
+            ...fields('website', Website::allowableFields()),
             ...fields('user', User::allowableFields()),
             ...fields('member', Member::allowableFields()),
         ]);
@@ -33,7 +35,7 @@ class UserLogQuery extends BaseQuery implements QueryContract
     public function withInclude()
     {
         $this->allowedIncludes([
-            'user', 'member',
+            'website', 'user', 'member',
         ]);
 
         return $this;
@@ -58,6 +60,12 @@ class UserLogQuery extends BaseQuery implements QueryContract
     {
         $this->allowedSorts([
             ...UserLog::allowableFields(),
+            AllowedSort::custom('website', SortBySub::make(
+                '__website',
+                Website::query()
+                ->select('code')
+                ->whereColumn('user_logs.website_id', 'websites.id')
+            )),
             AllowedSort::custom('user', SortBySub::make(
                 '__user',
                 User::query()

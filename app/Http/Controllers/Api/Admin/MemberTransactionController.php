@@ -11,6 +11,7 @@ use App\Http\Requests\Api\Admin\MemberTransactionRequest;
 use App\Models\CompanyBank;
 use App\Models\Member;
 use App\Models\MemberTransaction;
+use App\Models\UserLog;
 use App\Models\Website;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -31,6 +32,44 @@ class MemberTransactionController extends ResourceController
         $this->hook(function () {
             $this->request = MemberTransactionRequest::class;
         })->only(['store']);
+
+        $this->hook(function (Request $request) {
+            UserLog::canResolveWebsiteId($request) && UserLog::fromRequest($request)
+                ->fill([
+                    'category' => $this->resolveIndexCategory($request),
+                    'activity' => $this->resolveIndexActivity($request),
+                    'detail' => '',
+                ])
+                ->save();
+        })->only(['index']);
+    }
+
+    private function resolveIndexCategory(Request $request)
+    {
+        if ($request->boolean('filter.is_adjustment')) {
+            return 'ADJUSTMENT';
+        }
+
+        return strtoupper($request->input('filter.type'));
+    }
+
+    private function resolveIndexActivity(Request $request)
+    {
+        if ($request->boolean('filter.is_adjustment')) {
+            return 'View Adjustments';
+        }
+
+        $type = ucfirst($request->input('filter.type'));
+
+        if ($request->filled('filter.new') && $request->boolean('filter.new') === false) {
+            return "View {$type} List";
+        }
+
+        if ($request->input('filter.status') == 0) {
+            return "View New {$type}s";
+        }
+
+        return "View list of {$type}";
     }
 
     public function approve(Request $request, MemberTransaction $memberTransaction)

@@ -247,7 +247,7 @@ class MemberTransaction extends Model implements RelatesToWebsite, AccessibleByU
     public function getUserLogCategory()
     {
         if ($this->is_adjustment) {
-            return 'ADJUSTMENTS';
+            return 'ADJUSTMENT';
         }
 
         return strtoupper($this->type);

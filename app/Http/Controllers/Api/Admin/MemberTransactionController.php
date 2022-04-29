@@ -13,7 +13,9 @@ use App\Models\Member;
 use App\Models\MemberTransaction;
 use App\Models\UserLog;
 use App\Models\Website;
+use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
@@ -239,5 +241,25 @@ class MemberTransactionController extends ResourceController
 
         $memberTransaction->status = $request->status;
         $memberTransaction->save();
+    }
+
+    public function store()
+    {
+        $resource = parent::store();
+
+        /** @var MemberTransaction */
+        $record = $resource->resource;
+
+        UserLog::fromRequest(request())
+            ->fill([
+                'website_id' => $record->website_id,
+                'member_id' => $record->member_id,
+                'category' => 'ADJUSTMENT',
+                'activity' => 'Create '.$record->getUserLogCategoryNormalText(),
+                'detail' => "#{$record->ticket_id}, {$record->member->username}",
+            ])
+            ->save();
+
+        return new JsonResource($record);
     }
 }

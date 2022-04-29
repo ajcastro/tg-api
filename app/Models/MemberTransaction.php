@@ -243,4 +243,18 @@ class MemberTransaction extends Model implements RelatesToWebsite, AccessibleByU
 
         return $query->whereIn('member_transactions.website_id', $websiteIds);
     }
+
+    public function getUserLogCategory()
+    {
+        if ($this->is_adjustment) {
+            return 'ADJUSTMENTS';
+        }
+
+        return strtoupper($this->type);
+    }
+
+    public function getUserLogCategoryNormalText()
+    {
+        return ucfirst(strtolower($this->getUserLogCategory()));
+    }
 }

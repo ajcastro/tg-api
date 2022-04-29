@@ -42,6 +42,71 @@ class MemberTransactionController extends ResourceController
                 ])
                 ->save();
         })->only(['index']);
+
+        $this->hook(function (Request $request) {
+            /** @var MemberTransaction */
+            $record = $request->route('member_transaction');
+            UserLog::fromRequest($request)
+                ->fill([
+                    'website_id' => $record->website_id,
+                    'member_id' => $record->member_id,
+                    'category' => $record->getUserLogCategory(),
+                    'activity' => 'Approve  New '.$record->getUserLogCategoryNormalText(),
+                    'detail' => "#{$record->ticket_id}, {$record->member->username}",
+                ])
+                ->save();
+        })->only(['approve']);
+
+        $this->hook(function (Request $request) {
+            /** @var MemberTransaction */
+            $record = $request->route('member_transaction');
+            UserLog::fromRequest($request)
+                ->fill([
+                    'website_id' => $record->website_id,
+                    'member_id' => $record->member_id,
+                    'category' => $record->getUserLogCategory(),
+                    'activity' => 'Reject  New '.$record->getUserLogCategoryNormalText(),
+                    'detail' => "#{$record->ticket_id}, {$record->member->username}",
+                ])
+                ->save();
+        })->only(['reject']);
+
+        $this->hook(function (Request $request) {
+            /** @var MemberTransaction */
+            $record = $request->route('member_transaction');
+            UserLog::fromRequest($request)
+                ->fill([
+                    'website_id' => $record->website_id,
+                    'member_id' => $record->member_id,
+                    'category' => $record->getUserLogCategory(),
+                    'activity' => 'Cancel '.$record->getUserLogCategoryNormalText(),
+                    'detail' => "#{$record->ticket_id}, {$record->member->username}",
+                ])
+                ->save();
+        })->only(['cancel']);
+
+        $this->hook(function (Request $request) {
+            /** @var MemberTransaction */
+            $record = $request->route('member_transaction');
+            UserLog::fromRequest($request)
+                ->fill([
+                    'website_id' => $record->website_id,
+                    'member_id' => $record->member_id,
+                    'category' => $record->getUserLogCategory(),
+                    'activity' => $this->resolveChangeStatusAction($request).' '.$record->getUserLogCategoryNormalText(),
+                    'detail' => "#{$record->ticket_id}, {$record->member->username}",
+                ])
+                ->save();
+        })->only(['changeStatus']);
+    }
+
+    private function resolveChangeStatusAction(Request $request)
+    {
+        if (intval($request->status) === MemberTransactionStatus::IN_PROGRESS) {
+            return 'Process';
+        }
+
+        return 'Approve';
     }
 
     private function resolveIndexCategory(Request $request)

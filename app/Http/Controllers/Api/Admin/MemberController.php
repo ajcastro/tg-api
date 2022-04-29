@@ -104,6 +104,26 @@ class MemberController extends ResourceController
                 ])
                 ->save();
         })->only(['kick']);
+
+        $this->hook(function (Request $request) {
+            UserLog::canResolveWebsiteId($request) && UserLog::fromRequest($request)
+                ->fill([
+                    'category' => 'MEMBER',
+                    'activity' => 'View Members',
+                    'detail' => '',
+                ])
+                ->save();
+        })->only(['index']);
+
+        $this->hook(function (Request $request) {
+            UserLog::canResolveWebsiteId($request) && UserLog::fromRequest($request)
+                ->fill([
+                    'category' => 'MEMBER',
+                    'activity' => 'Kick All Members',
+                    'detail' => '',
+                ])
+                ->save();
+        })->only(['kickAll']);
     }
 
     protected function resolveRecord(Request $request)

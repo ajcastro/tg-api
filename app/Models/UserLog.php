@@ -56,6 +56,11 @@ class UserLog extends Model implements RelatesToWebsite
         ]);
     }
 
+    public static function canResolveWebsiteId(Request $request): bool
+    {
+        return filled(static::resolveWebsiteIdForUserLog($request));
+    }
+
     public static function resolveWebsiteIdForUserLog(Request $request)
     {
         return $request->input('website_selector_website_id');

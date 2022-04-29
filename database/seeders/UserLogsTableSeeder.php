@@ -17,7 +17,7 @@ class UserLogsTableSeeder extends Seeder
      */
     public function run()
     {
-        if (app()->environment('production')) {
+        if (UserLog::query()->count() > 0) {
             return;
         }
 

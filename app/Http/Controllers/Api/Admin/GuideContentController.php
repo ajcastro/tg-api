@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\ResourceController;
 use App\Http\Queries\GuideListQuery;
 use App\Http\Requests\Api\Admin\GuideContentRequest;
+use App\Http\UserLogAttributes\GuideContentUserLog;
 use App\Models\GuideContent;
 use App\Models\GuideList;
 use Illuminate\Http\Request;
@@ -15,7 +16,8 @@ class GuideContentController extends ResourceController
     public function __construct()
     {
         $this->hook(function () {
-        })->only('show');
+            $this->crudUserLog = new GuideContentUserLog;
+        });
 
         $this->hook(function ($request) {
             $this->query = $this->buildQuery($request);
@@ -24,6 +26,15 @@ class GuideContentController extends ResourceController
         $this->hook(function () {
             $this->request = GuideContentRequest::class;
         })->only(['update']);
+
+        $this->setUpCrudUserLog();
+    }
+
+    protected function resolveRecord(Request $request)
+    {
+        return $this->getRecord(
+            $request->route('guide_list') ?? $request->route('guide_content')
+        );
     }
 
     private function requireSelectedWebsiteId(Request $request)
@@ -46,6 +57,11 @@ class GuideContentController extends ResourceController
     public function getGuideList($id): GuideList
     {
         return $this->buildQuery(request())->findOrFail($id);
+    }
+
+    public function getRecord($id)
+    {
+        return $this->getGuideList($id);
     }
 
     public function setActiveStatus($id, Request $request)

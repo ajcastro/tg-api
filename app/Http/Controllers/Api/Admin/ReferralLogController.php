@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PaginateOrListResource;
 use App\Http\Queries\ReferralLogQuery;
 use App\Models\ReferralLog;
+use App\Models\UserLog;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ReferralLogController extends Controller
@@ -16,6 +17,15 @@ class ReferralLogController extends Controller
     {
         $this->hook(function () {
             $this->query = new ReferralLogQuery;
+        })->only(['index']);
+
+        $this->hook(function ($request) {
+            UserLog::fromRequest($request)
+                ->fill([
+                    'category' => 'REFERRAL',
+                    'activity' => 'View Referral Logs',
+                ])
+                ->save();
         })->only(['index']);
     }
 

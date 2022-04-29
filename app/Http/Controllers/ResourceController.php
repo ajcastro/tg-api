@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\CrudUserLog;
 use App\Http\Controllers\Traits\DeleteResource;
 use App\Http\Controllers\Traits\FillResource;
 use App\Http\Controllers\Traits\GetsModel;
@@ -25,4 +26,5 @@ class ResourceController extends Controller
     use FillResource;
     use SaveResource;
     use DeleteResource;
+    use CrudUserLog;
 }

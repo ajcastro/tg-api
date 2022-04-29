@@ -6,9 +6,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 trait ShowResource
 {
+    use GetsRecord;
+
     public function show($id)
     {
-        $instance = $this->model()->resolveRouteBinding($id);
-        return new JsonResource($instance);
+        $record = $this->getRecord($id);
+        return new JsonResource($record);
     }
 }

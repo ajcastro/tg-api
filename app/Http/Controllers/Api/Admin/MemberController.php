@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\ResourceController;
 use App\Http\Queries\MemberQuery;
+use App\Http\UserLogAttributes\MemberUserLog;
 use App\Models\Member;
+use App\Models\UserLog;
 use Illuminate\Http\Request;
 
 class MemberController extends ResourceController
@@ -18,6 +20,115 @@ class MemberController extends ResourceController
         $this->hook(function () {
             $this->query = new MemberQuery;
         })->only(['index', 'show']);
+
+        $this->hook(function (Request $request) {
+            $record = $this->resolveRecord($request);
+
+            UserLog::fromRequest($request)
+                ->fill([
+                    'website_id' => $record->website_id,
+                    'member_id' => $record->id,
+                    'category' => 'MEMBER',
+                    'activity' => 'View Member',
+                    'detail' => "#{$record->id}, {$record->username}",
+                ])
+                ->save();
+        })->only(['show']);
+
+        $this->hook(function (Request $request) {
+            $record = $this->resolveRecord($request);
+
+            UserLog::fromRequest($request)
+                ->fill([
+                    'website_id' => $record->website_id,
+                    'member_id' => $record->id,
+                    'category' => 'MEMBER',
+                    'activity' => 'Suspend Member',
+                    'detail' => "#{$record->id}, {$record->username}",
+                ])
+                ->save();
+        })->only(['suspend']);
+
+        $this->hook(function (Request $request) {
+            $record = $this->resolveRecord($request);
+
+            UserLog::fromRequest($request)
+                ->fill([
+                    'website_id' => $record->website_id,
+                    'member_id' => $record->id,
+                    'category' => 'MEMBER',
+                    'activity' => 'Blacklist Member',
+                    'detail' => "#{$record->id}, {$record->username}",
+                ])
+                ->save();
+        })->only(['blacklist']);
+
+        $this->hook(function (Request $request) {
+            $record = $this->resolveRecord($request);
+
+            UserLog::fromRequest($request)
+                ->fill([
+                    'website_id' => $record->website_id,
+                    'member_id' => $record->id,
+                    'category' => 'MEMBER',
+                    'activity' => 'Blacklist Member',
+                    'detail' => "#{$record->id}, {$record->username}",
+                ])
+                ->save();
+        })->only(['blacklist']);
+
+        $this->hook(function (Request $request) {
+            $record = $this->resolveRecord($request);
+
+            UserLog::fromRequest($request)
+                ->fill([
+                    'website_id' => $record->website_id,
+                    'member_id' => $record->id,
+                    'category' => 'MEMBER',
+                    'activity' => 'Remove Suspension',
+                    'detail' => "#{$record->id}, {$record->username}",
+                ])
+                ->save();
+        })->only(['removeSuspension']);
+
+        $this->hook(function (Request $request) {
+            $record = $this->resolveRecord($request);
+
+            UserLog::fromRequest($request)
+                ->fill([
+                    'website_id' => $record->website_id,
+                    'member_id' => $record->id,
+                    'category' => 'MEMBER',
+                    'activity' => 'Kick Member',
+                    'detail' => "#{$record->id}, {$record->username}",
+                ])
+                ->save();
+        })->only(['kick']);
+
+        $this->hook(function (Request $request) {
+            UserLog::canResolveWebsiteId($request) && UserLog::fromRequest($request)
+                ->fill([
+                    'category' => 'MEMBER',
+                    'activity' => 'View Members',
+                    'detail' => '',
+                ])
+                ->save();
+        })->only(['index']);
+
+        $this->hook(function (Request $request) {
+            UserLog::canResolveWebsiteId($request) && UserLog::fromRequest($request)
+                ->fill([
+                    'category' => 'MEMBER',
+                    'activity' => 'Kick All Members',
+                    'detail' => '',
+                ])
+                ->save();
+        })->only(['kickAll']);
+    }
+
+    protected function resolveRecord(Request $request)
+    {
+        return $this->getRecord($request->route('member'));
     }
 
     public function suspend(Request $request, Member $member)

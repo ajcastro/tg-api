@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\PaginateOrListResource;
 use App\Http\Queries\PromotionReleasesQuery;
 use App\Http\Resources\PromotionReleaseResource;
 use App\Models\MemberPromotion;
+use App\Models\UserLog;
 
 class PromotionReleasesController extends Controller
 {
@@ -14,9 +15,16 @@ class PromotionReleasesController extends Controller
 
     public function __construct()
     {
-        $this->hook(function () {
+        $this->hook(function ($request) {
             $this->query = new PromotionReleasesQuery;
             $this->resource = PromotionReleaseResource::class;
+
+            UserLog::fromRequest($request)
+                ->fill([
+                    'category' => 'PROMO',
+                    'activity' => 'View Promotion Releases',
+                ])
+                ->save();
         })->only(['index']);
     }
 

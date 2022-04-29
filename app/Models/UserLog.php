@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Http\Request;
 
 class UserLog extends Model implements RelatesToWebsite
 {
@@ -41,6 +42,34 @@ class UserLog extends Model implements RelatesToWebsite
         'date' => 'datetime',
         'member_id' => 'integer',
     ];
+
+
+    public static function fromRequest(Request $request)
+    {
+        return UserLog::make([
+            'website_id' => static::resolveWebsiteIdForUserLog($request),
+            'user_id' => $request->user()->id,
+            'date' => now(),
+            'user_ip' => $request->ip(),
+            'user_info' => agent_user_info(),
+            'member_id' => static::resolveMemberIdForUserLog($request),
+        ]);
+    }
+
+    public static function canResolveWebsiteId(Request $request): bool
+    {
+        return filled(static::resolveWebsiteIdForUserLog($request));
+    }
+
+    public static function resolveWebsiteIdForUserLog(Request $request)
+    {
+        return $request->input('website_selector_website_id');
+    }
+
+    public static function resolveMemberIdForUserLog(Request $request)
+    {
+        return $request->input('member_id');
+    }
 
     public function website()
     {

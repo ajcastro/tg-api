@@ -11,8 +11,11 @@ use App\Http\Requests\Api\Admin\MemberTransactionRequest;
 use App\Models\CompanyBank;
 use App\Models\Member;
 use App\Models\MemberTransaction;
+use App\Models\UserLog;
 use App\Models\Website;
+use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
@@ -31,6 +34,109 @@ class MemberTransactionController extends ResourceController
         $this->hook(function () {
             $this->request = MemberTransactionRequest::class;
         })->only(['store']);
+
+        $this->hook(function (Request $request) {
+            UserLog::canResolveWebsiteId($request) && UserLog::fromRequest($request)
+                ->fill([
+                    'category' => $this->resolveIndexCategory($request),
+                    'activity' => $this->resolveIndexActivity($request),
+                    'detail' => '',
+                ])
+                ->save();
+        })->only(['index']);
+
+        $this->hook(function (Request $request) {
+            /** @var MemberTransaction */
+            $record = $request->route('member_transaction');
+            UserLog::fromRequest($request)
+                ->fill([
+                    'website_id' => $record->website_id,
+                    'member_id' => $record->member_id,
+                    'category' => $record->getUserLogCategory(),
+                    'activity' => 'Approve  New '.$record->getUserLogCategoryNormalText(),
+                    'detail' => "#{$record->ticket_id}, {$record->member->username}",
+                ])
+                ->save();
+        })->only(['approve']);
+
+        $this->hook(function (Request $request) {
+            /** @var MemberTransaction */
+            $record = $request->route('member_transaction');
+            UserLog::fromRequest($request)
+                ->fill([
+                    'website_id' => $record->website_id,
+                    'member_id' => $record->member_id,
+                    'category' => $record->getUserLogCategory(),
+                    'activity' => 'Reject  New '.$record->getUserLogCategoryNormalText(),
+                    'detail' => "#{$record->ticket_id}, {$record->member->username}",
+                ])
+                ->save();
+        })->only(['reject']);
+
+        $this->hook(function (Request $request) {
+            /** @var MemberTransaction */
+            $record = $request->route('member_transaction');
+            UserLog::fromRequest($request)
+                ->fill([
+                    'website_id' => $record->website_id,
+                    'member_id' => $record->member_id,
+                    'category' => $record->getUserLogCategory(),
+                    'activity' => 'Cancel '.$record->getUserLogCategoryNormalText(),
+                    'detail' => "#{$record->ticket_id}, {$record->member->username}",
+                ])
+                ->save();
+        })->only(['cancel']);
+
+        $this->hook(function (Request $request) {
+            /** @var MemberTransaction */
+            $record = $request->route('member_transaction');
+            UserLog::fromRequest($request)
+                ->fill([
+                    'website_id' => $record->website_id,
+                    'member_id' => $record->member_id,
+                    'category' => $record->getUserLogCategory(),
+                    'activity' => $this->resolveChangeStatusAction($request).' '.$record->getUserLogCategoryNormalText(),
+                    'detail' => "#{$record->ticket_id}, {$record->member->username}",
+                ])
+                ->save();
+        })->only(['changeStatus']);
+    }
+
+    private function resolveChangeStatusAction(Request $request)
+    {
+        if (intval($request->status) === MemberTransactionStatus::IN_PROGRESS) {
+            return 'Process';
+        }
+
+        return 'Approve';
+    }
+
+    private function resolveIndexCategory(Request $request)
+    {
+        if ($request->boolean('filter.is_adjustment')) {
+            return 'ADJUSTMENT';
+        }
+
+        return strtoupper($request->input('filter.type'));
+    }
+
+    private function resolveIndexActivity(Request $request)
+    {
+        if ($request->boolean('filter.is_adjustment')) {
+            return 'View Adjustments';
+        }
+
+        $type = ucfirst($request->input('filter.type'));
+
+        if ($request->filled('filter.new') && $request->boolean('filter.new') === false) {
+            return "View {$type} List";
+        }
+
+        if ($request->input('filter.status') == 0) {
+            return "View New {$type}s";
+        }
+
+        return "View list of {$type}";
     }
 
     public function approve(Request $request, MemberTransaction $memberTransaction)
@@ -135,5 +241,25 @@ class MemberTransactionController extends ResourceController
 
         $memberTransaction->status = $request->status;
         $memberTransaction->save();
+    }
+
+    public function store()
+    {
+        $resource = parent::store();
+
+        /** @var MemberTransaction */
+        $record = $resource->resource;
+
+        UserLog::fromRequest(request())
+            ->fill([
+                'website_id' => $record->website_id,
+                'member_id' => $record->member_id,
+                'category' => 'ADJUSTMENT',
+                'activity' => 'Create '.$record->getUserLogCategoryNormalText(),
+                'detail' => "#{$record->ticket_id}, {$record->member->username}",
+            ])
+            ->save();
+
+        return new JsonResource($record);
     }
 }

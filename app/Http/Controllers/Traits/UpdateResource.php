@@ -12,10 +12,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 trait UpdateResource
 {
+    use GetsRecord;
+
     public function update($id)
     {
         $request = $this->request();
-        $model = $this->model()->resolveRouteBinding($id);
+        $model = $this->getRecord($id);
 
         $this->fill($model, $request);
         $this->save($model);

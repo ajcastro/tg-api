@@ -6,7 +6,9 @@ use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\Traits\SetActiveStatus;
 use App\Http\Queries\BankQuery;
 use App\Http\Requests\Api\Admin\BankRequest;
+use App\Http\UserLogAttributes\BankUserLog;
 use App\Models\Bank;
+use Illuminate\Http\Request;
 
 class BankController extends ResourceController
 {
@@ -16,6 +18,7 @@ class BankController extends ResourceController
     {
         $this->hook(function () {
             $this->model = Bank::class;
+            $this->crudUserLog = new BankUserLog;
         });
 
         $this->hook(function () {
@@ -25,16 +28,12 @@ class BankController extends ResourceController
         $this->hook(function () {
             $this->request = BankRequest::class;
         })->only(['store', 'update']);
+
+        $this->setUpCrudUserLog();
     }
 
-    protected function fill($promotion, $request)
+    protected function resolveRecord(Request $request)
     {
-        parent::fill($promotion, $request);
-
-        /** @var UploadedFile */
-        $uploadedFile = $request->file('logo');
-        if ($uploadedFile) {
-            $promotion->logo = $uploadedFile->store("banks/logos");
-        }
+        return $this->getRecord($request->route('bank'));
     }
 }

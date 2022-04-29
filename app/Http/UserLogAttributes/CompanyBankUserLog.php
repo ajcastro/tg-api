@@ -4,13 +4,13 @@ namespace App\Http\UserLogAttributes;
 
 use Illuminate\Http\Request;
 
-class PromotionUserLog implements Contracts\CrudUserLogContract
+class CompanyBankUserLog implements Contracts\CrudUserLogContract
 {
     public function index(Request $request): array
     {
         return [
-            'category' => 'PROMO',
-            'activity' => 'View list of Promotions',
+            'category' => 'BANK',
+            'activity' => 'View list of Bank Accounts',
             'detail' => '',
         ];
     }
@@ -18,8 +18,8 @@ class PromotionUserLog implements Contracts\CrudUserLogContract
     public function show(Request $request, $record): array
     {
         return [
-            'category' => 'PROMO',
-            'activity' => "View Promo ",
+            'category' => 'BANK',
+            'activity' => "View Record",
             'detail' => "#{$record->id}, {$record->title}",
         ];
     }
@@ -27,8 +27,8 @@ class PromotionUserLog implements Contracts\CrudUserLogContract
     public function store(Request $request): array
     {
         return [
-            'category' => 'PROMO',
-            'activity' => "Add Promo",
+            'category' => 'BANK',
+            'activity' => "Add Bank Account ",
             'detail' => "{$request->title}",
         ];
     }
@@ -36,8 +36,8 @@ class PromotionUserLog implements Contracts\CrudUserLogContract
     public function update(Request $request, $record): array
     {
         return [
-            'category' => 'PROMO',
-            'activity' => "Update Promo",
+            'category' => 'BANK',
+            'activity' => "Update Bank Account",
             'detail' => "#{$record->id}, {$record->title}",
         ];
     }
@@ -45,8 +45,8 @@ class PromotionUserLog implements Contracts\CrudUserLogContract
     public function activate(Request $request, $record): array
     {
         return [
-            'category' => 'PROMO',
-            'activity' => "Activate Promo",
+            'category' => 'BANK',
+            'activity' => "Activate Bank Account",
             'detail' => "#{$record->id}, {$record->title}",
         ];
     }
@@ -54,8 +54,8 @@ class PromotionUserLog implements Contracts\CrudUserLogContract
     public function deactivate(Request $request, $record): array
     {
         return [
-            'category' => 'PROMO',
-            'activity' => "Deactivate Promo",
+            'category' => 'BANK',
+            'activity' => "Deactivate Bank Account",
             'detail' => "#{$record->id}, {$record->title}",
         ];
     }

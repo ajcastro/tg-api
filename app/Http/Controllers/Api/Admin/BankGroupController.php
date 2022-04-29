@@ -6,7 +6,9 @@ use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\Traits\SetActiveStatus;
 use App\Http\Queries\BankGroupQuery;
 use App\Http\Requests\Api\Admin\BankGroupRequest;
+use App\Http\UserLogAttributes\BankGroupUserLog;
 use App\Models\BankGroup;
+use Illuminate\Http\Request;
 
 class BankGroupController extends ResourceController
 {
@@ -16,6 +18,7 @@ class BankGroupController extends ResourceController
     {
         $this->hook(function () {
             $this->model = BankGroup::class;
+            $this->crudUserLog = new BankGroupUserLog;
         });
 
         $this->hook(function () {
@@ -25,5 +28,12 @@ class BankGroupController extends ResourceController
         $this->hook(function () {
             $this->request = BankGroupRequest::class;
         })->only(['store', 'update']);
+
+        $this->setUpCrudUserLog();
+    }
+
+    protected function resolveRecord(Request $request)
+    {
+        return $this->getRecord($request->route('bank'));
     }
 }

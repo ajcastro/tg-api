@@ -54,12 +54,6 @@ class AuthController extends Controller
             ], 401);
         }
 
-        if ($user->hasNoCaslAbilities()) {
-            return response()->json([
-                'message' => 'User role has no permissions set.'
-            ], 401);
-        }
-
         $tokenResult = $user->createToken($this->getTokenName($request), ['*'], [
             'parent_group_id' => $userAccess->parent_group_id,
             'role_id' => $userAccess->role_id,

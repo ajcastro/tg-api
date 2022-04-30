@@ -152,11 +152,6 @@ class Website extends Model implements AccessibleByUser
             return;
         }
 
-        if ($user->isClientSuperAdmin()) {
-            $query->where('assigned_client_id', $user->getCurrentClient()->id ?? null);
-            return;
-        }
-
         $query->whereHas('parentGroups', function ($query) use ($user) {
             $query->where('parent_groups.id', $user->getCurrentParentGroup()->id ?? null);
         });

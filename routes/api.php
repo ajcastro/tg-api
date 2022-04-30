@@ -50,6 +50,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function (
     require __DIR__.'/admin/guide_contents.php';
     require __DIR__.'/admin/transfer_logs.php';
     require __DIR__.'/admin/user_logs.php';
+    require __DIR__.'/admin/broadcast_messages.php';
 
     Route::get('game_list', GameListController::class)->name('game_list');
 });

@@ -37,7 +37,7 @@ class AuthController extends Controller
 
         if (!auth()->attempt($credentials)) {
             return response()->json([
-                'message' => 'Unauthorized'
+                'message' => 'Credentials not found.'
             ], 401);
         }
 
@@ -48,12 +48,15 @@ class AuthController extends Controller
 
         $user->setUserAccess($userAccess);
 
-        if (
-            empty($userAccess) ||
-            $user->hasNoCaslAbilities()
-        ) {
+        if (empty($userAccess)) {
             return response()->json([
-                'message' => 'Unauthorized'
+                'message' => 'User access not found.'
+            ], 401);
+        }
+
+        if ($user->hasNoCaslAbilities()) {
+            return response()->json([
+                'message' => 'User role has no permissions set.'
             ], 401);
         }
 

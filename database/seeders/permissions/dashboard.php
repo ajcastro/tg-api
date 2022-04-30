@@ -1,7 +1,7 @@
 <?php
 
 return [
-    // Menu - Bank Groups
+    // Menu - Dashboard
     [
         'name' => 'dashboard.view',
         'label' => 'Menu - Dashboard',

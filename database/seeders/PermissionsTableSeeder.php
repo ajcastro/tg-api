@@ -19,6 +19,7 @@ class PermissionsTableSeeder extends Seeder
         }
 
         $groups = [
+            'General - Broadcast Messages' => require(__DIR__ . '/permissions/broadcast_messages.php'),
             'Menu - Dashboard' => require(__DIR__ . '/permissions/dashboard.php'),
             'Menu - Users Management' => require(__DIR__ . '/permissions/users.php'),
             'Menu - Members' => require(__DIR__ . '/permissions/members.php'),

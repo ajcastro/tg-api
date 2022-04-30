@@ -240,13 +240,10 @@ class User extends Authenticatable implements RelatesToWebsite, AccessibleByUser
     public function getAdminRedirect()
     {
         if ($this->isSuperAdmin()) {
-            return '/users';
+            return '/dashboard';
         }
 
         $role = $this->getUserAccessRole();
-        /** @var Permission */
-        $permission = $role->permissions->first() ?? new Permission;
-
-        return $permission->admin_redirect;
+        return $role->getFirstMenuPermission()?->admin_redirect;
     }
 }

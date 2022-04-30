@@ -5,11 +5,13 @@ namespace App\Models;
 use App\Http\Queries\RoleQuery;
 use App\Models\Contracts\AccessibleByUser;
 use App\Models\Contracts\RelatesToWebsite;
+use App\Models\Permission;
 use App\Observers\SetsCreatedByAndUpdatedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Str;
 
 /**
  * @property \Illuminate\Database\Eloquent\Collection $permissions
@@ -115,5 +117,13 @@ class Role extends Model implements RelatesToWebsite, AccessibleByUser
     public function getCaslAbilities(): array
     {
         return $this->caslAbilities ?? $this->caslAbilities = $this->permissions->pluck('casl')->all();
+    }
+
+    public function getFirstMenuPermission(): ?Permission
+    {
+        return $this->permissions
+            ->first(function ($permission) {
+                return filled($permission->admin_redirect) && Str::startsWith($permission->label, 'Menu');
+            });
     }
 }

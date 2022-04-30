@@ -122,8 +122,8 @@ class Role extends Model implements RelatesToWebsite, AccessibleByUser
     public function getFirstMenuPermission(): ?Permission
     {
         return $this->permissions
-            ->first(function ($permission) {
-                return filled($permission->admin_redirect) && Str::startsWith($permission->label, 'Menu');
+            ->first(function (Permission $permission) {
+                return filled($permission->admin_redirect) && $permission->isMenuPermission();
             });
     }
 }

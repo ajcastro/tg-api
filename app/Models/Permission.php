@@ -38,4 +38,9 @@ class Permission extends Model
             }
         });
     }
+
+    public function isMenuPermission()
+    {
+        return Str::startsWith($this->label, 'Menu');
+    }
 }

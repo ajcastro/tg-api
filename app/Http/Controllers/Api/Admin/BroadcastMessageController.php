@@ -38,4 +38,14 @@ class BroadcastMessageController extends Controller
 
         Notification::send($parentGroup->users, $notif);
     }
+
+    public function markAsRead(Request $request)
+    {
+        /** @var User */
+        $user = $request->user();
+        $user->notifications()
+            ->where('type', BroadcastMessage::class)
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+    }
 }

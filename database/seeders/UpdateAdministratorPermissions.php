@@ -15,9 +15,9 @@ class UpdateAdministratorPermissions extends Seeder
      */
     public function run()
     {
-        if (app()->environment('local', 'staging', 'testing')) {
-            Permission::truncate();
-        }
+        // if (app()->environment('local', 'staging', 'testing')) {
+        //     Permission::truncate();
+        // }
 
         $this->call(PermissionsTableSeeder::class);
         $roles = Role::where('name', 'Administrator')->get();

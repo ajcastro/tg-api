@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Market extends Model
 {
-    use HasFactory;
+    use HasFactory, Traits\HasAllowableFields;
 
     /**
      * The attributes that are mass assignable.
@@ -28,4 +28,12 @@ class Market extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    public function scopeSearch($query, $search)
+    {
+        $query->where(function ($query) use ($search) {
+            $query->where('code', 'like', "%{$search}%");
+            $query->orWhere('name', 'like', "%{$search}%");
+        });
+    }
 }

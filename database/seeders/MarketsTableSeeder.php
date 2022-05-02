@@ -70,18 +70,19 @@ class MarketsTableSeeder extends Seeder
             ], $row+['status' => collect(['online', 'offline'])->random()]);
         });
 
-        $websites = Website::limit($markets->count())->get();
+        $websites = Website::limit(10)->get();
 
-        foreach ($markets as $index => $market) {
-            $website = $websites[$index];
-            $marketWebsite = $market->marketWebsite()->where(['website_id' => $website->id])->first()
-                ?? MarketWebsite::factory()
-                    ->make([
-                        'market_id' => $market->id,
-                        'website_id' => $website->id,
-                    ]);
+        foreach ($markets as $market) {
+            foreach ($websites as $website) {
+                $marketWebsite = $market->marketWebsite()->where(['website_id' => $website->id])->first()
+                    ?? MarketWebsite::factory()
+                        ->make([
+                            'market_id' => $market->id,
+                            'website_id' => $website->id,
+                        ]);
 
-            $marketWebsite->save();
+                $marketWebsite->save();
+            }
         }
     }
 }

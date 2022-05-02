@@ -28,11 +28,11 @@ class MarketWebsiteFactory extends Factory
         return [
             'market_id' => Market::factory(),
             'website_id' => Website::factory(),
-            'period' => $this->faker->word,
-            'result_day' => $this->faker->word,
-            'off_day' => $this->faker->word,
-            'close_time' => $this->faker->word,
-            'result_time' => $this->faker->word,
+            'period' => $this->faker->randomNumber(),
+            'result_day' => collect(MarketWebsite::DAYS)->random(3)->all(),
+            'off_day' => collect(MarketWebsite::DAYS)->random(3)->all(),
+            'close_time' => $this->faker->time('H:i'),
+            'result_time' => $this->faker->time('H:i'),
             'updated_by_id' => User::factory(),
         ];
     }

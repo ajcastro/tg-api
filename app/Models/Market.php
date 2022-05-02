@@ -29,6 +29,15 @@ class Market extends Model
         'id' => 'integer',
     ];
 
+
+    /**
+     * This is a hasOne relation in conjunction with a website.
+     */
+    public function marketWebsite()
+    {
+        return $this->hasOne(MarketWebsite::class);
+    }
+
     public function scopeSearch($query, $search)
     {
         $query->where(function ($query) use ($search) {

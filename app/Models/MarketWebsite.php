@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class MarketWebsite extends Model
+class MarketWebsite extends Model implements Contracts\RelatesToWebsite
 {
-    use HasFactory;
+    use HasFactory, Traits\HasAllowableFields, Traits\AccessibilityFilter;
+
+    const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
     /**
      * The attributes that are mass assignable.
@@ -35,7 +39,31 @@ class MarketWebsite extends Model
         'market_id' => 'integer',
         'website_id' => 'integer',
         'updated_by_id' => 'integer',
+        'result_day' => 'array',
+        'off_day' => 'array',
+        'is_result_day_everyday' => 'boolean',
+        'is_off_day_everyday' => 'boolean',
     ];
+
+
+    public static function booted()
+    {
+        static::saving(function (MarketWebsite $marketWebsite) {
+            $marketWebsite->updated_by_id = auth()->user()->id ?? 1;
+            $marketWebsite->is_result_day_everyday = static::isEveryday($marketWebsite->result_day);
+            $marketWebsite->is_off_day_everyday = static::isEveryday($marketWebsite->off_day);
+        });
+    }
+
+    public static function sortDays($days)
+    {
+        $flippedDays = array_flip(static::DAYS);
+        return collect($days)->sortBy(function ($day) use ($flippedDays) {
+            return $flippedDays[$day];
+        })
+        ->values()
+        ->all();
+    }
 
     public function market()
     {
@@ -50,5 +78,33 @@ class MarketWebsite extends Model
     public function updatedBy()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
+    {
+        $query->where('website_id', $website->id);
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        $query->whereHas('market', function ($query) use ($search) {
+            $query->where('markets.code', 'like', "%{$search}%");
+            $query->orWhere('markets.name', 'like', "%{$search}%");
+        });
+    }
+
+    public function setResultDayAttribute($value)
+    {
+        $this->attributes['result_day'] = json_encode(static::sortDays($value));
+    }
+
+    public function setOffDayAttribute($value)
+    {
+        $this->attributes['off_day'] = json_encode(static::sortDays($value));
+    }
+
+    public static function isEveryday($days)
+    {
+        return static::sortDays($days) === static::DAYS;
     }
 }

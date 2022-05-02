@@ -13,11 +13,20 @@ return [
     ],
     // Menu - Market Websites
     [
-        'name' => 'markets.websites',
+        'name' => 'market_websites.viewAny',
         'label' => 'Menu - Market Websites',
         'admin_redirect' => '/markets/websites',
         'casl' => [
             'action' => 'read',
+            'subject' => 'MarketWebsite',
+        ],
+    ],
+    [
+        'name' => 'market_websites.update',
+        'label' => 'Action - Update Market Website',
+        'admin_redirect' => '/markets/websites',
+        'casl' => [
+            'action' => 'update',
             'subject' => 'MarketWebsite',
         ],
     ],

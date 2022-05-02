@@ -18,8 +18,10 @@ class CreateMarketWebsitesTable extends Migration
             $table->unsignedBigInteger('market_id')->index();
             $table->unsignedBigInteger('website_id')->index();
             $table->string('period');
-            $table->string('result_day')->nullable();
-            $table->string('off_day')->nullable();
+            $table->json('result_day')->nullable();
+            $table->boolean('is_result_day_everyday')->default(0);
+            $table->json('off_day')->nullable();
+            $table->boolean('is_off_day_everyday')->default(0);
             $table->string('close_time')->nullable();
             $table->string('result_time')->nullable();
             $table->unsignedBigInteger('updated_by_id')->index();

@@ -23,7 +23,7 @@ class MarketWebsite extends Model implements Contracts\RelatesToWebsite
         'website_id',
         'period',
         'result_day',
-        'off_day',
+        // 'off_day', not fillable, auto-filled by the diff of result_day and static::DAYS
         'close_time',
         'result_time',
         'updated_by_id',
@@ -95,12 +95,11 @@ class MarketWebsite extends Model implements Contracts\RelatesToWebsite
 
     public function setResultDayAttribute($value)
     {
-        $this->attributes['result_day'] = json_encode(static::sortDays($value));
-    }
+        $result_day = static::sortDays($value);
+        $off_day = collect(static::DAYS)->diff($result_day)->values()->all();
 
-    public function setOffDayAttribute($value)
-    {
-        $this->attributes['off_day'] = json_encode(static::sortDays($value));
+        $this->attributes['result_day'] = json_encode($result_day);
+        $this->attributes['off_day'] = json_encode($off_day);
     }
 
     public static function isEveryday($days)

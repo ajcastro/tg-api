@@ -14,9 +14,9 @@ class PermissionsTableSeeder extends Seeder
      */
     public function run()
     {
-        if (app()->environment('local', 'testing')) {
-            Permission::truncate();
-        }
+        // if (app()->environment('local', 'testing')) {
+        //     Permission::truncate();
+        // }
 
         $groups = [
             'General - Broadcast Messages' => require(__DIR__ . '/permissions/broadcast_messages.php'),
@@ -28,6 +28,7 @@ class PermissionsTableSeeder extends Seeder
             'Menu - Banking System' => require(__DIR__ . '/permissions/banking.php'),
             'Menu - CMS' => require(__DIR__ . '/permissions/cms.php'),
             'Menu - Report Logs' => require(__DIR__ . '/permissions/report_logs.php'),
+            'Menu - 4D Setting' => require(__DIR__ . '/permissions/4d_settings.php'),
         ];
 
         foreach ($groups as $groupDisplay => $rows) {

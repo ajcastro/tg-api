@@ -30,4 +30,14 @@ return [
             'subject' => 'MarketWebsite',
         ],
     ],
+    // Menu - Market Limit Settings
+    [
+        'name' => 'market_limit_settings.view',
+        'label' => 'Menu - Market Limit Settings',
+        'admin_redirect' => '/markets/limit_settings',
+        'casl' => [
+            'action' => 'read',
+            'subject' => 'MarketLimitSetting',
+        ],
+    ],
 ];

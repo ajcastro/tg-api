@@ -49,4 +49,9 @@ class FourdGameTransaction extends Model
     {
         return $this->belongsTo(Member::class);
     }
+
+    public function fourdEntries()
+    {
+        return $this->hasMany(FourdGameEntry4d3d2d::class);
+    }
 }

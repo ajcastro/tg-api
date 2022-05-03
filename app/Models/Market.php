@@ -38,6 +38,14 @@ class Market extends Model
         return $this->hasOne(MarketWebsite::class);
     }
 
+    /**
+     * This is a hasOne relation in conjunction with a website.
+     */
+    public function limitSetting()
+    {
+        return $this->hasOne(MarketLimitSetting::class)->withDefault();
+    }
+
     public function scopeSearch($query, $search)
     {
         $query->where(function ($query) use ($search) {

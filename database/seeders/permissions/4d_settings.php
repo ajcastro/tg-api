@@ -40,4 +40,13 @@ return [
             'subject' => 'MarketLimitSetting',
         ],
     ],
+    [
+        'name' => 'market_limit_settings.update',
+        'label' => 'Action - Update Market Limit Settings',
+        'admin_redirect' => '/markets/limit_settings',
+        'casl' => [
+            'action' => 'update',
+            'subject' => 'MarketLimitSetting',
+        ],
+    ],
 ];

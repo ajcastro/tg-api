@@ -49,4 +49,23 @@ return [
             'subject' => 'MarketLimitSetting',
         ],
     ],
+    // Menu - Game Settings
+    [
+        'name' => 'game_settings.view',
+        'label' => 'Menu - Game Settings',
+        'admin_redirect' => '/games/settings',
+        'casl' => [
+            'action' => 'read',
+            'subject' => 'GameSetting',
+        ],
+    ],
+    [
+        'name' => 'game_settings.update',
+        'label' => 'Action - Update Game Settings',
+        'admin_redirect' => '/games/settings',
+        'casl' => [
+            'action' => 'update',
+            'subject' => 'GameSetting',
+        ],
+    ],
 ];

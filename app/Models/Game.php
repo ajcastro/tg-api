@@ -39,4 +39,12 @@ class Game extends Model
     {
         return $this->belongsTo(Menu::class);
     }
+
+    /**
+     * This is a hasOne relation in conjunction with a website.
+     */
+    public function setting()
+    {
+        return $this->hasOne(GameSetting::class)->withDefault();
+    }
 }

@@ -35,9 +35,9 @@ class GameSetting extends Model
         'id' => 'integer',
         'website_id' => 'integer',
         'game_id' => 'integer',
-        'win_multiplier' => 'decimal',
-        'percentage_discount' => 'decimal',
-        'percentage_kei' => 'decimal',
+        'win_multiplier' => 'decimal:2',
+        'percentage_discount' => 'decimal:2',
+        'percentage_kei' => 'decimal:2',
     ];
 
     public function website()

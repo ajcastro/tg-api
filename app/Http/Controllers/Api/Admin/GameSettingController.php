@@ -39,7 +39,6 @@ class GameSettingController extends Controller
     {
         return Game::query()
             ->with([
-                'gameCategory',
                 'setting' => function ($query) use ($website) {
                     $query->where('website_id', $website->id);
                 },

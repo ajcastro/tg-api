@@ -32,7 +32,7 @@ class GameSettingController extends Controller
                     'activity' => 'Update Game Settings',
                 ])
                 ->save();
-        })->only(['store']);
+        })->only(['store', 'storeOne']);
     }
 
     private function queryGames(Website $website)
@@ -63,5 +63,11 @@ class GameSettingController extends Controller
             $item = $items->where('game_id', $game->id)->first() ?? [];
             $game->setting->fill(['website_id' => $website->id] + $item)->save();
         }
+    }
+
+    public function storeOne(Request $request, Website $website, $game_id)
+    {
+        $game = $this->queryGames($website)->find($game_id);
+        $game->setting->fill(['website_id' => $website->id] + $request->all())->save();
     }
 }

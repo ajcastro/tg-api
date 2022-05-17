@@ -71,3 +71,7 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('change_password', [AuthController::class, 'changePassword']);
     });
 });
+
+Route::prefix('v1')->group(function () {
+    require __DIR__.'/api/v1.php';
+});

@@ -17,7 +17,6 @@ class Market extends Model
     protected $fillable = [
         'code',
         'name',
-        'status',
     ];
 
     /**

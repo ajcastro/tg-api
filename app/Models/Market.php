@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * TODO: Sync markets table from game4d
+ */
 class Market extends Model
 {
     use HasFactory, Traits\HasAllowableFields;

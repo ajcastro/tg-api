@@ -24,27 +24,34 @@ class GamesTableSeeder extends Seeder
 
         $rows = [
             [
-                'title' => '4D'
+                'code' => '4D',
+                'title' => '4D',
             ],
             [
-                'title' => '3D'
+                'code' => '3D',
+                'title' => '3D',
             ],
             [
-                'title' => '2D'
+                'code' => '2D',
+                'title' => '2D',
             ],
             [
-                'title' => '2D Depan'
+                'code' => '2DD',
+                'title' => '2D Depan',
             ],
             [
-                'title' => '2D Tengah'
+                'code' => '2DT',
+                'title' => '2D Tengah',
             ],
         ];
 
 
         $games = collect($rows)->map(function ($row) {
             return Game::firstOrCreate([
+                'code' => $row['code']
+            ], [
                 'title' => $row['title'],
-                'game_category_id' => 4,
+                'category' => null,
                 'menu_id' => 4,
             ]);
         });

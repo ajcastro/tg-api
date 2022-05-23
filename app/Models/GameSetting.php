@@ -23,7 +23,7 @@ class GameSetting extends Model
         'percentage_discount',
         'percentage_kei',
         'limit',
-        'limit_total',
+        'game_parameter',
     ];
 
     /**

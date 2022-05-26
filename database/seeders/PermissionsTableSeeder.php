@@ -29,6 +29,7 @@ class PermissionsTableSeeder extends Seeder
             'Menu - CMS' => require(__DIR__ . '/permissions/cms.php'),
             'Menu - Report Logs' => require(__DIR__ . '/permissions/report_logs.php'),
             'Menu - 4D Setting' => require(__DIR__ . '/permissions/4d_settings.php'),
+            'Menu - Reports' => require(__DIR__ . '/permissions/reports.php'),
         ];
 
         foreach ($groups as $groupDisplay => $rows) {

@@ -55,6 +55,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum']], function (
     require __DIR__.'/admin/market_websites.php';
     require __DIR__.'/admin/market_limit_settings.php';
     require __DIR__.'/admin/game_settings.php';
+    require __DIR__.'/admin/profit_loss_by_members.php';
 
     Route::get('game_list', GameListController::class)->name('game_list');
 });

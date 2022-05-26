@@ -13,6 +13,6 @@ class OneTimeSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(GamesTableSeeder::class);
+        $this->call(ProfitLossByMemberTableSeeder::class);
     }
 }

@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Contracts\RelatesToWebsite;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class ProfitLossByMember extends Model
+class ProfitLossByMember extends Model implements RelatesToWebsite
 {
-    use HasFactory;
+    use HasFactory, Traits\HasAllowableFields, Traits\AccessibilityFilter;
 
     /**
      * The attributes that are mass assignable.
@@ -51,7 +54,7 @@ class ProfitLossByMember extends Model
         'member_id' => 'integer',
         'provider_id' => 'integer',
         'game_id' => 'integer',
-        'datetime' => 'timestamp',
+        'datetime' => 'datetime',
         'deposit_count' => 'integer',
         'deposit_amount' => 'decimal:2',
         'withdraw_count' => 'integer',
@@ -90,5 +93,17 @@ class ProfitLossByMember extends Model
     public function game()
     {
         return $this->belongsTo(Game::class);
+    }
+
+    public function scopeOfWebsite(Builder|QueryBuilder $query, Website $website)
+    {
+        $query->where('website_id', $website->id);
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        $query->whereHas('member', function ($query) use ($search) {
+            $query->where('members.username', 'like', "%{$search}%");
+        });
     }
 }
